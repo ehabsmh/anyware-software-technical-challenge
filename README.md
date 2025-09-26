@@ -8,7 +8,7 @@ The goal is to simulate a small student portal where a user can log in (without 
 
 ## 📂 Project Structure
 
-````bash
+```bash
 anyware-software-technical-challenge/
 │
 ├── backend/                  # Express + TypeScript + MongoDB
@@ -29,7 +29,7 @@ anyware-software-technical-challenge/
 │   └── ...
 │
 └── README.md
-
+```
 
 ---
 
@@ -89,7 +89,7 @@ cd backend
 npm install
 npm run dev        # start backend server on http://localhost:5000
 npm run seed       # seed the database with demo data
-````
+```
 
 ### 2. Frontend
 
