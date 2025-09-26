@@ -13,8 +13,8 @@ anyware-software-technical-challenge/
 │
 ├── backend/                  # Express + TypeScript + MongoDB
 │   ├── src/
-│   │   ├── controllers/      # Controllers for business logic
-│   │   ├── database/         # DB connection & seed data
+│   │   ├── controllers/      # Controllers for handling requests
+│   │   ├── database/         # Database layer (connection + entity classes + seed)
 │   │   ├── interfaces/       # TypeScript interfaces
 │   │   ├── models/           # Mongoose models
 │   │   ├── routes/           # API routes
