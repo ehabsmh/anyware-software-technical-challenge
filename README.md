@@ -8,26 +8,28 @@ The goal is to simulate a small student portal where a user can log in (without 
 
 ## 📂 Project Structure
 
+````bash
 anyware-software-technical-challenge/
 │
-├── backend/ # Express + TypeScript + MongoDB
-│ ├── src/
-│ │ ├── controllers/ # Controllers for business logic
-│ │ ├── database/ # DB connection & seed data
-│ │ ├── interfaces/ # TypeScript interfaces
-│ │ ├── models/ # Mongoose models
-│ │ ├── routes/ # API routes
-│ │ ├── utils/ # Logger and helpers
-│ │ └── index.ts # App entry point
-│ ├── package.json
-│ └── tsconfig.json
+├── backend/                  # Express + TypeScript + MongoDB
+│   ├── src/
+│   │   ├── controllers/      # Controllers for business logic
+│   │   ├── database/         # DB connection & seed data
+│   │   ├── interfaces/       # TypeScript interfaces
+│   │   ├── models/           # Mongoose models
+│   │   ├── routes/           # API routes
+│   │   ├── utils/            # Logger and helpers
+│   │   └── index.ts          # App entry point
+│   ├── package.json
+│   └── tsconfig.json
 │
-├── frontend/ # React/Next.js (to be built later)
-│ ├── components/ # UI Components
-│ ├── pages/ # Pages (Announcements, Quizzes, Login)
-│ └── ...
+├── frontend/                 # React/Next.js (to be built later)
+│   ├── components/           # UI Components
+│   ├── pages/                # Pages (Announcements, Quizzes, Login)
+│   └── ...
 │
 └── README.md
+
 
 ---
 
@@ -87,7 +89,7 @@ cd backend
 npm install
 npm run dev        # start backend server on http://localhost:5000
 npm run seed       # seed the database with demo data
-```
+````
 
 ### 2. Frontend
 
