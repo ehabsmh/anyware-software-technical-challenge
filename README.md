@@ -33,6 +33,26 @@ anyware-software-technical-challenge/
 
 ---
 
+✨ Strengths & Highlights
+
+## Backend
+
+- **Clean architecture**: Separated into controllers, services, models, and routes for maintainability.
+
+- **Service layer (OOP approach)**: Business logic is encapsulated in service classes (e.g., AnnouncementService) with clear responsibilities.
+
+- **Centralized models**: Collected in a single models/index.ts file to avoid Mongoose schema registration errors and simplify imports.
+
+- **Custom error handling**: Implemented AppError class + global errorHandler middleware for consistent error responses.
+
+- **Async error wrapper**: Added asyncHandler utility to remove repetitive try/catch in controllers and keep them clean.
+
+- **Database seeding**: Automatic seeding with realistic demo data (Semester, Course, Announcements, Quiz).
+
+- **Scalable structure**: Easy to extend with new entities (e.g., Users, Auth) without breaking the current design.
+
+---
+
 ## ⚙️ Technologies Used
 
 ### Backend
