@@ -33,23 +33,23 @@ anyware-software-technical-challenge/
 
 ---
 
-✨ Strengths & Highlights
+## ✨ Strengths & Highlights
 
-## Backend
+### Backend
 
-- **Clean architecture**: Separated into controllers, services, models, and routes for maintainability.
+- **Clean architecture:** Separated into controllers, services, models, and routes for maintainability.
 
-- **Service layer (OOP approach)**: Business logic is encapsulated in service classes (e.g., AnnouncementService) with clear responsibilities.
+- **Service layer (OOP approach):** Business logic is encapsulated in service classes (e.g., AnnouncementService) with clear responsibilities.
 
-- **Centralized models**: Collected in a single models/index.ts file to avoid Mongoose schema registration errors and simplify imports.
+- **Centralized models:** Collected in a single models/index.ts file to avoid Mongoose schema registration errors and simplify imports.
 
-- **Custom error handling**: Implemented AppError class + global errorHandler middleware for consistent error responses.
+- **Custom error handling:** Implemented AppError class + global errorHandler middleware for consistent error responses.
 
-- **Async error wrapper**: Added asyncHandler utility to remove repetitive try/catch in controllers and keep them clean.
+- **Async error wrapper:** Added asyncHandler utility to remove repetitive try/catch in controllers and keep them clean.
 
-- **Database seeding**: Automatic seeding with realistic demo data (Semester, Course, Announcements, Quiz).
+- **Database seeding:** Automatic seeding with realistic demo data (Semester, Course, Announcements, Quiz).
 
-- **Scalable structure**: Easy to extend with new entities (e.g., Users, Auth) without breaking the current design.
+- **Scalable structure:** Easy to extend with new entities (e.g., Users, Auth) without breaking the current design.
 
 ---
 
@@ -86,13 +86,14 @@ anyware-software-technical-challenge/
   - 1 Quiz with 3 questions
 - Added **colored logger** for clean console output
 - Added health check route (`/api/health`)
+- Implement API endpoints:
+  - **Announcements** (latest, all, by id)
 
 ---
 
 ## 🎯 Next Steps (Planned)
 
 - Implement API endpoints:
-  - **Announcements** (latest, all, by id)
   - **Quizzes** (list, details, submit answers)
   - **Auth** (dummy login, no password)
 - Connect frontend with backend
