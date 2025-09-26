@@ -2,10 +2,11 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import "dotenv/config";
+import "./models/index";
+import router from "./routes/api";
 import { connectDB } from "./database/connection";
 import log from "./utils/logger";
-import router from "./routes/api";
-
+import { errorHandler } from "./middlewares/errorHandler";
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -15,12 +16,14 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api/v1", router);
+app.use("/api/", router);
 
 // test route
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
+
+app.use(errorHandler);
 
 const startServer = async () => {
   try {

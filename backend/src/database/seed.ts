@@ -1,10 +1,7 @@
-import Semester from "../models/semester";
-import Course from "../models/course";
-import Announcement from "../models/announcement";
-import Quiz from "../models/quiz";
 import "dotenv/config";
 import { connectDB, disconnectDB } from "./connection";
 import log from "../utils/logger";
+import { Announcement, Course, Quiz, Semester } from "../models";
 
 const seed = async () => {
   try {
@@ -36,6 +33,7 @@ const seed = async () => {
       description:
         "Introduction to fundamental concepts in physics including mechanics, waves, and thermodynamics.",
       instructor: "Dr. John Doe",
+      semester: semester._id,
     });
     log.success("Course created.");
 
