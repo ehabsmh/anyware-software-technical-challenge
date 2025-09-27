@@ -6,9 +6,10 @@ export interface IQuiz extends Document {
   topic: string;
   dueDate: Date;
   questions: {
+    _id: Schema.Types.ObjectId;
     question: string;
     options: string[];
-    answer: number;
+    answer?: number;
   }[];
   semester: Schema.Types.ObjectId;
 }
