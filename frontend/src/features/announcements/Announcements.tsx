@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Announcement from "./Announcement";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { getLatest, loadLatest } from "./announcementsSlice";
+import { Link } from "react-router-dom";
 
 function Announcements() {
   const dispatch = useAppDispatch();
@@ -22,9 +23,12 @@ function Announcements() {
             Lorem ipsum dolor sit amet consectetur adipisicing.
           </p>
         </div>
-        <button className="text-gradient-2 font-bold text-sm px-4 py-2 rounded-lg shadow-md hover:opacity-95 transition">
+        <Link
+          to="/announcements"
+          className="text-gradient-2 font-bold text-sm px-4 py-2 rounded-lg shadow-md hover:opacity-95 transition"
+        >
           All
-        </button>
+        </Link>
       </div>
       {loading && <div>Loading...</div>}
       {latest.map((announcement) => (

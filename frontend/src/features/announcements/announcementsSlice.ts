@@ -127,3 +127,8 @@ export const getLatest = (state: RootState) => ({
   latest: state.announcements.latest,
   loading: state.announcements.loading,
 });
+
+export const getAllAnnouncements = (state: RootState) => ({
+  all: state.announcements.all,
+  loading: state.announcements.loading,
+});

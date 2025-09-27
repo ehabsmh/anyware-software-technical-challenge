@@ -5,7 +5,9 @@ export default function Dashboard() {
   return (
     <div className="overflow-y-auto w-full h-[calc(100vh-86px)] p-5">
       <ExamsTimeBanner />
-      <Announcements />
+      <div>
+        <Announcements />
+      </div>
     </div>
   );
 }
