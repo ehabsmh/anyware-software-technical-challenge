@@ -32,6 +32,12 @@ class QuizController {
     res.json(quizzes);
   }
 
+  static async getUpcomingDue(req: Request, res: Response) {
+    const limit = req.query.limit ? Number(req.query.limit) : undefined;
+    const quizzes = await QuizService.getUpcomingDue(limit);
+    res.json(quizzes);
+  }
+
   static async submitAnswers(req: Request, res: Response) {
     const { id } = req.params;
     const { answers } = req.body;

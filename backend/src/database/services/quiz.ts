@@ -50,6 +50,18 @@ class QuizService {
     return { items, total, page, limit, totalPages: Math.ceil(total / limit) };
   }
 
+  static async getUpcomingDue(limit = 2) {
+    const today = new Date();
+
+    const quizzes = await Quiz.find({ dueDate: { $gte: today } })
+      .sort({ dueDate: 1 })
+      .limit(limit)
+      .populate("course", "_id name instructor")
+      .populate("semester", "_id name startDate endDate");
+
+    return quizzes;
+  }
+
   static async create(data: IQuiz) {
     const quiz = new Quiz(data);
     return quiz.save();
