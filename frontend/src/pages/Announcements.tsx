@@ -5,6 +5,8 @@ import {
   loadAll,
 } from "../features/announcements/announcementsSlice";
 import Announcement from "../features/announcements/Announcement";
+import { Stack } from "@mui/system";
+import { Pagination } from "@mui/material";
 
 export default function Announcements() {
   const dispatch = useAppDispatch();
@@ -12,7 +14,7 @@ export default function Announcements() {
   const [page, setPage] = useState(all.page || 1);
 
   useEffect(() => {
-    dispatch(loadAll({ page, limit: 10 }));
+    dispatch(loadAll({ page, limit: 2 }));
   }, [dispatch, page]);
 
   if (loading) return <div>Loading...</div>;
@@ -33,21 +35,13 @@ export default function Announcements() {
       </div>
 
       <div className="flex justify-between items-center mt-6">
-        <button
-          onClick={() => setPage(Math.max(1, page - 1))}
-          disabled={page === 1}
-        >
-          Prev
-        </button>
-        <div>
-          Page {all.page} / {all.totalPages}
-        </div>
-        <button
-          onClick={() => setPage(page + 1)}
-          disabled={page >= all.totalPages}
-        >
-          Next
-        </button>
+        <Stack spacing={2}>
+          <Pagination
+            count={all.totalPages}
+            page={page}
+            onChange={(event, value) => setPage(value)}
+          />
+        </Stack>
       </div>
     </div>
   );

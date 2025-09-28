@@ -16,7 +16,7 @@ class AnnouncementService {
 
     const [items, total] = await Promise.all([
       Announcement.find()
-        .sort({ createdAt: -1 })
+        .sort({ createdAt: -1, _id: -1 })
         .skip(skip)
         .limit(limit)
         .populate("course", "_id name instructor")
@@ -37,7 +37,7 @@ class AnnouncementService {
     return announcement;
   }
 
-  static async create(data: IAnnouncement) {
+  static async create(data: Partial<IAnnouncement>) {
     const announcement = new Announcement(data);
     return announcement.save();
   }

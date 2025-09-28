@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { loadUpcomingQuizzes, upcomingQuizzes } from "./quizzesSlice";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { format } from "date-fns/esm";
 
 function WhatsDue() {
   const dispatch = useAppDispatch();
@@ -43,12 +44,13 @@ function WhatsDue() {
                 Topic: {item.topic}
               </Typography>
               <Typography variant="body2" className="text-gray-500">
-                Due Date: {item.dueDate.toString()}
+                Due Date: {format(new Date(item.dueDate), "PPP p")}
               </Typography>
               <Button
                 component={Link}
                 to={`/quizzes/${item._id}`}
                 variant="outlined"
+                sx={{ mt: 2 }}
               >
                 Start Quiz
               </Button>

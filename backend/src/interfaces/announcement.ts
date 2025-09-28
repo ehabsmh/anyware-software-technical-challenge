@@ -8,3 +8,8 @@ export interface IAnnouncement extends Document {
   course: Schema.Types.ObjectId;
   semester: Schema.Types.ObjectId;
 }
+
+// export type IAnnouncementInput = Omit<
+//   IAnnouncement,
+//   "_id" | "createdAt" | "updatedAt"
+// >;

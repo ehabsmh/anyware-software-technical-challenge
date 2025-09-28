@@ -1,11 +1,13 @@
 import api from "../config/axios.config";
 
-export async function fetchLatestAnnouncements() {
-  const { data } = await api.get("/announcements/latest");
+export async function fetchLatestAnnouncements(limit = 4) {
+  const { data } = await api.get("/announcements/latest", {
+    params: { limit },
+  });
   return data;
 }
 
-export async function fetchAllAnnouncements(page = 1, limit = 10) {
+export async function fetchAllAnnouncements(page = 1, limit = 8) {
   const { data } = await api.get("/announcements", {
     params: { page, limit },
   });

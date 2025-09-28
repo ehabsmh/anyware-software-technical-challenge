@@ -46,6 +46,23 @@ class QuizController {
 
     res.json(result);
   }
+
+  static async create(req: Request, res: Response) {
+    const quiz = await QuizService.create(req.body);
+    res.status(201).json(quiz);
+  }
+
+  static async update(req: Request, res: Response) {
+    const { id } = req.params;
+    const updatedQuiz = await QuizService.update(id!, req.body);
+    res.json(updatedQuiz);
+  }
+
+  static async delete(req: Request, res: Response) {
+    const { id } = req.params;
+    await QuizService.delete(id!);
+    res.status(204).send();
+  }
 }
 
 export default QuizController;
