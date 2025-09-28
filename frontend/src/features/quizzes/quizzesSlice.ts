@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
 import type { IQuizUpcoming } from "../../interfaces/quiz";
 import { fetchQuizById, fetchUpcomingQuizzes } from "../../services/apiQuizzes";
 import type { RootState } from "../../store/store";
@@ -77,7 +81,11 @@ const quizzesSlice = createSlice({
 export const { clearCurrentQuiz } = quizzesSlice.actions;
 export const quizzesReducer = quizzesSlice.reducer;
 
-export const upcomingQuizzes = (state: RootState) => ({
-  upcoming: state.quizzes.upcoming,
-  loading: state.quizzes.loading,
-});
+export const upcomingQuizzes = createSelector(
+  (state: RootState) => state.quizzes,
+  (quizzes) => ({
+    upcoming: quizzes.upcoming,
+    loading: quizzes.loading,
+    error: quizzes.error,
+  })
+);

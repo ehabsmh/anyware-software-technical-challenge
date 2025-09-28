@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
 import type { IAnnouncement } from "../../interfaces/announcement";
 import {
   fetchAllAnnouncements,
@@ -96,7 +100,7 @@ const slice = createSlice({
     });
     builder.addCase(loadAll.fulfilled, (state, action) => {
       state.loading = false;
-      state.all = action.payload;
+      state.all = { ...action.payload };
     });
     builder.addCase(loadAll.rejected, (state, action) => {
       state.loading = false;
@@ -122,13 +126,35 @@ const slice = createSlice({
 export const { clearSelectedAnnouncement } = slice.actions;
 export default slice.reducer;
 
-// export const getCart = (state) => state.cart.cart;
-export const getLatest = (state: RootState) => ({
-  latest: state.announcements.latest,
-  loading: state.announcements.loading,
-});
+// export const getLatest = (state: RootState) => ({
+//   latest: state.announcements.latest,
+//   loading: state.announcements.loading,
+// });
 
-export const getAllAnnouncements = (state: RootState) => ({
-  all: state.announcements.all,
-  loading: state.announcements.loading,
-});
+// export const getAllAnnouncements = (state: RootState) => ({
+//   all: state.announcements.all,
+//   loading: state.announcements.loading,
+// });
+
+export const getAllAnnouncements = createSelector(
+  (state: RootState) => state.announcements.all,
+  (all) => ({
+    items: all.items,
+    totalPages: all.totalPages,
+    page: all.page,
+  })
+);
+
+export const getLatest = createSelector(
+  (state: RootState) => state.announcements.latest,
+  (latest) => [...latest]
+);
+
+export const getAnnouncementsInfo = createSelector(
+  (state: RootState) => state.announcements.loading,
+  (state: RootState) => state.announcements.error,
+  (loading, error) => ({
+    isLoading: loading,
+    hasError: Boolean(error),
+  })
+);

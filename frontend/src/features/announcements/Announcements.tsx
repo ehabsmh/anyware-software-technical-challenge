@@ -1,12 +1,17 @@
 import { useEffect } from "react";
 import Announcement from "./Announcement";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getLatest, loadLatest } from "./announcementsSlice";
+import {
+  getAnnouncementsInfo,
+  getLatest,
+  loadLatest,
+} from "./announcementsSlice";
 import { Link } from "react-router-dom";
 
 function Announcements() {
   const dispatch = useAppDispatch();
-  const { latest, loading } = useAppSelector(getLatest);
+  const latest = useAppSelector(getLatest);
+  const { hasError, isLoading } = useAppSelector(getAnnouncementsInfo);
 
   useEffect(() => {
     if (!latest || latest.length === 0) {
@@ -30,7 +35,8 @@ function Announcements() {
           All
         </Link>
       </div>
-      {loading && <div>Loading...</div>}
+      {isLoading && <div>Loading...</div>}
+      {hasError && <div className="text-red-500">Failed to load data.</div>}
       {latest.map((announcement) => (
         <Announcement
           key={announcement._id}

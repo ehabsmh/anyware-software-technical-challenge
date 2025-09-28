@@ -14,11 +14,19 @@ import { format } from "date-fns/esm";
 
 function WhatsDue() {
   const dispatch = useAppDispatch();
-  const { upcoming, loading } = useAppSelector(upcomingQuizzes);
+  const { upcoming, loading, error } = useAppSelector(upcomingQuizzes);
 
   useEffect(() => {
-    dispatch(loadUpcomingQuizzes());
-  }, [dispatch]);
+    if (upcoming.length === 0) dispatch(loadUpcomingQuizzes());
+  }, [dispatch, upcoming.length]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div className="text-red-500">Failed to load data.</div>;
+  }
+
   return (
     <Card className="shadow-md rounded-2xl">
       <CardHeader
@@ -33,7 +41,6 @@ function WhatsDue() {
       />
       <Divider />
       <CardContent className="space-y-4">
-        {loading && <p>Loading...</p>}
         {upcoming.length > 0 ? (
           upcoming.map((item, idx) => (
             <div key={idx} className="flex flex-col">
