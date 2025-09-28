@@ -9,7 +9,7 @@ quizzesRouter.get(
   "/current-semester",
   asyncHandler(QuizController.getByCurrentSemester)
 );
-quizzesRouter.get("/upcoming-due", asyncHandler(QuizController.getUpcomingDue));
+quizzesRouter.get("/upcoming", asyncHandler(QuizController.getUpcomingDue));
 quizzesRouter.get("/:id", asyncHandler(QuizController.getById));
 quizzesRouter.post("/:id/submit", asyncHandler(QuizController.submitAnswers));
 

@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import Navbar from "./Navbar";
+import { Toaster } from "sonner";
 
 function AppLayout() {
   return (
@@ -11,6 +12,7 @@ function AppLayout() {
 
         <main className="ml-3">
           <Outlet />
+          <Toaster richColors={true} />
         </main>
       </div>
     </div>

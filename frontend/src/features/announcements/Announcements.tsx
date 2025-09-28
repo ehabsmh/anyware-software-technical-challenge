@@ -15,7 +15,7 @@ function Announcements() {
   }, [latest, dispatch]);
 
   return (
-    <section className="mt-8 bg-white p-6 rounded-2xl shadow-lg w-full">
+    <section className="bg-white p-6 rounded-2xl shadow-lg w-full">
       <div className="flex justify-between items-center mb-4">
         <div>
           <h2 className="text-xl font-bold text-gray-700">Announcements</h2>
