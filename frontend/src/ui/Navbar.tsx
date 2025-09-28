@@ -2,11 +2,11 @@ import { BiChart, BiHome } from "react-icons/bi";
 import { GiGraduateCap } from "react-icons/gi";
 import { GrAnnounce, GrSchedule } from "react-icons/gr";
 import { LuLetterText } from "react-icons/lu";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 function Navbar() {
   const navItems = [
-    { to: "/", label: "Dashboard", icon: BiHome },
+    { to: "/dashboard", label: "Dashboard", icon: BiHome },
     { to: "schedule", label: "Schedule", icon: GrSchedule },
     { to: "courses", label: "Courses", icon: LuLetterText },
     { to: "gradebook", label: "GradeBook", icon: GiGraduateCap },
@@ -18,7 +18,9 @@ function Navbar() {
     <nav className="bg-gradient-to-b from-gradient-1 to-gradient-2 shadow-[0_20px_10px_rgba(0,0,0,0.2)] h-screen w-52 text-white">
       <ul className="space-y-7 mt-4 flex flex-col justify-center">
         <li className="flex flex-col justify-center items-center text-3xl font-bold">
-          <p className="flex items-center gap-3">Coligo</p>
+          <Link to={"/"} className="flex items-center gap-3">
+            Coligo
+          </Link>
         </li>
 
         {navItems.map(({ to, label, icon: Icon }) => (

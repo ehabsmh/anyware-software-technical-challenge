@@ -39,10 +39,7 @@ function SolveQuiz() {
 
   const handleSubmit = async () => {
     if (!id) return;
-    if (
-      answers.some((a) => Boolean(a) === false) ||
-      answers.length < currentQuiz!.questions.length
-    ) {
+    if (answers.length < currentQuiz!.questions.length) {
       toast.error("Please answer all questions before submitting.");
       return;
     }
