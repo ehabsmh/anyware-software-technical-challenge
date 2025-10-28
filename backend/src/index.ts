@@ -8,9 +8,13 @@ import { connectDB } from "./database/connection";
 import log from "./utils/logger";
 import { errorHandler } from "./middlewares/errorHandler";
 const app = express();
-const PORT = process.env.PORT || 5000;
-
-const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/anyware";
+export const {
+  JWT_SECRET_KEY,
+  PORT,
+  MONGO_URI,
+  GMAIL_PASSWORD,
+  CLOUDINARY_URL,
+} = process.env;
 
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
@@ -28,7 +32,9 @@ app.use(errorHandler);
 const startServer = async () => {
   try {
     await connectDB(MONGO_URI);
-    app.listen(PORT, () => log.success(`Server running on port ${PORT}`));
+    app.listen(PORT || 5000, () =>
+      log.success(`Server running on port ${PORT || 5000}`)
+    );
   } catch (err) {
     log.error(`Failed to start server: ${err}`);
   }

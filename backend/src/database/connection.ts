@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import log from "../utils/logger";
 
-const connectDB = async (uri: string) => {
+const connectDB = async (uri = "mongodb://localhost:27017/anyware") => {
   try {
     await mongoose.connect(uri);
     log.success("MongoDB connected");

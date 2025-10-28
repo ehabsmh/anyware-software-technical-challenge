@@ -4,5 +4,6 @@ import Course from "./course";
 import Semester from "./semester";
 import Announcement from "./announcement";
 import Quiz from "./quiz";
+import User from "./user";
 
-export { Course, Semester, Announcement, Quiz };
+export { Course, Semester, Announcement, Quiz, User };

@@ -17,8 +17,8 @@ function WhatsDue() {
   const { upcoming, loading, error } = useAppSelector(upcomingQuizzes);
 
   useEffect(() => {
-    if (upcoming.length === 0) dispatch(loadUpcomingQuizzes());
-  }, [dispatch, upcoming.length]);
+    dispatch(loadUpcomingQuizzes());
+  }, [dispatch]);
 
   if (loading) {
     return <div>Loading...</div>;

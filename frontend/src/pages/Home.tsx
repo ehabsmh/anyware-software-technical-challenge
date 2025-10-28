@@ -5,14 +5,44 @@ import {
   Button,
   Card,
   CardContent,
+  TextField,
+  styled,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { login, logout } from "../features/users/usersSlice";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import i18n from "../i18n";
+import { useForm } from "react-hook-form";
+import { login } from "../features/users/usersSlice";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
+const CssTextField = styled(TextField)({
+  "& label.Mui-focused": {
+    color: "#408391",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "#408391",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#408391",
+    },
+    "&:hover fieldset": {
+      borderColor: "#408391",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#408391",
+    },
+    ".MuiInputBase-root:before": {
+      borderBottomColor: "#408391",
+    },
+  },
+});
 
 function Home() {
+  const { register, handleSubmit } = useForm<{
+    email: string;
+    password: string;
+  }>();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(
@@ -20,20 +50,23 @@ function Home() {
   );
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    dispatch(login());
-    localStorage.setItem("isAuthenticated", "true");
-    navigate("/dashboard");
-  };
+  // const toggleLanguage = () => {
+  //   i18n.changeLanguage(i18n.language === "en" ? "ar" : "en");
+  // };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    localStorage.removeItem("isAuthenticated");
-  };
+  async function onSubmit(data: { email: string; password: string }) {
+    const result = await dispatch(login(data));
+    if (result.type === "auth/login/fulfilled") {
+      // navigate to dashboard on successful login
+      navigate("/dashboard");
+    }
+  }
 
-  const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language === "en" ? "ar" : "en");
-  };
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <Container
@@ -65,22 +98,44 @@ function Home() {
             {isAuthenticated ? t("loggedinMessage") : t("loginMessage")}
           </Typography>
 
-          <Box mt={4} display="flex" justifyContent="center" gap={2}>
-            {!isAuthenticated ? (
-              <Button variant="contained" color="primary" onClick={handleLogin}>
-                {t("login")}
-              </Button>
-            ) : (
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleLogout}
-              >
-                {t("logout")}
-              </Button>
-            )}
-            <Button variant="text" onClick={toggleLanguage}>
-              🌍 {i18n.language === "en" ? "AR" : "EN"}
+          <Box
+            component="form"
+            sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+            noValidate
+            autoComplete="off"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div className="">
+              <CssTextField
+                id="custom-css-outlined-input1"
+                label="Email"
+                variant="standard"
+                {...register("email")}
+              />
+            </div>
+            <div>
+              <CssTextField
+                id="custom-css-outlined-input2"
+                label="Password"
+                variant="standard"
+                type="password"
+                {...register("password")}
+              />
+            </div>
+            <Button
+              type="submit"
+              variant="outlined"
+              sx={{
+                marginTop: "1rem",
+                color: "#408391",
+                borderColor: "#408391",
+                "&:hover": {
+                  borderColor: "#1c5660",
+                  color: "#1c5660",
+                },
+              }}
+            >
+              Login
             </Button>
           </Box>
         </CardContent>
