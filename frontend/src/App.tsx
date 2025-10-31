@@ -9,31 +9,32 @@ import { useEffect } from "react";
 import { me } from "./features/users/usersSlice";
 import { useAppDispatch } from "./store/hooks";
 import { Toaster } from "sonner";
+import { requireGuest } from "./features/hoc/requireGuest";
 
 function App() {
   const dispatch = useAppDispatch();
+
+  const ProtectedAppLayout = requireAuth(AppLayout);
+  const GuestLogin = requireGuest(Home);
 
   useEffect(() => {
     dispatch(me());
   }, [dispatch]);
 
-  const ProtectedDashboard = requireAuth(Dashboard);
-  const ProtectedAnnouncements = requireAuth(Announcements);
-  const ProtectedSolveQuiz = requireAuth(SolveQuiz);
-
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<GuestLogin />} />
 
-        <Route element={<AppLayout />}>
-          <Route path="dashboard" element={<ProtectedDashboard />} />
-          <Route path="announcements" element={<ProtectedAnnouncements />} />
-          <Route path="quizzes/:id" element={<ProtectedSolveQuiz />} />
+        <Route element={<ProtectedAppLayout />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="announcements" element={<Announcements />} />
+          <Route path="quizzes/:id" element={<SolveQuiz />} />
         </Route>
 
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
+
       <Toaster richColors={true} />
     </>
   );

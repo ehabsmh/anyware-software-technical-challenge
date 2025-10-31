@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import announcementsReducer from "../features/announcements/announcementsSlice";
 import { quizzesReducer } from "../features/quizzes/quizzesSlice";
-import { usersReducer } from "../features/users/usersSlice";
+import { userReducer } from "../features/users/usersSlice";
 
 export const store = configureStore({
   reducer: {
     announcements: announcementsReducer,
     quizzes: quizzesReducer,
-    users: usersReducer,
+    user: userReducer,
   },
 });
 

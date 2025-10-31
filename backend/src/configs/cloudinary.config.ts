@@ -8,6 +8,11 @@ cloudinary.config({
 });
 
 export const uploadStream = async (file: any, folderName: string) => {
+  if (!file)
+    throw new AppError(
+      "Something went wrong while uploading the file, Please try again.",
+      400
+    );
   const result: any = await new Promise((resolve, reject) => {
     const timeout = setTimeout(
       () => reject(new AppError("Upload timeout", 422)),

@@ -45,9 +45,7 @@ function Home() {
   }>();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const isAuthenticated = useAppSelector(
-    (state) => state.users.isAuthenticated
-  );
+  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
   const navigate = useNavigate();
 
   // const toggleLanguage = () => {
@@ -62,11 +60,11 @@ function Home() {
     }
   }
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    }
-  }, [isAuthenticated, navigate]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     navigate("/dashboard");
+  //   }
+  // }, [isAuthenticated, navigate]);
 
   return (
     <Container

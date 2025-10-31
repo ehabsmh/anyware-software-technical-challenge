@@ -23,3 +23,14 @@ export async function getMe() {
     }
   }
 }
+
+export async function userLogout() {
+  try {
+    const { data } = await api.post("/auth/logout");
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error || "Failed to logout");
+    }
+  }
+}

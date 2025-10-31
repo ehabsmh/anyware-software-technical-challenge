@@ -1,8 +1,8 @@
 import { Navigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 
-export const requireAuth = (Component: React.ComponentType) => {
-  return function ProtectedRoute() {
+export const requireGuest = (Component: React.ComponentType) => {
+  return function PublicRoute() {
     const { isAuthenticated, isLoadingUser } = useAppSelector((s) => s.user);
 
     if (isLoadingUser) {
@@ -13,8 +13,8 @@ export const requireAuth = (Component: React.ComponentType) => {
       );
     }
 
-    if (!isAuthenticated) {
-      return <Navigate to="/" replace />;
+    if (isAuthenticated) {
+      return <Navigate to="/dashboard" />;
     }
 
     return <Component />;

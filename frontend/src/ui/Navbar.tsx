@@ -1,86 +1,110 @@
 import { useState } from "react";
-import { BiChart, BiHome } from "react-icons/bi";
-import { GiGraduateCap } from "react-icons/gi";
-import { GrAnnounce, GrSchedule } from "react-icons/gr";
-import { LuLetterText } from "react-icons/lu";
-import { Link, NavLink } from "react-router-dom";
-
 import {
   Box,
   Drawer,
   IconButton,
   List,
-  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Collapse,
   useMediaQuery,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { navConfig } from "../config/navConfig";
+import {} from "react-icons/bs";
+import { BiLogOut } from "react-icons/bi";
+import { logout } from "../features/users/usersSlice";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
   const isMobile = useMediaQuery("(max-width:1024px)");
+  const userRole = useAppSelector((state) => state.user.role);
+  const roleNavItems = navConfig[userRole] || [];
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
+  const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
+
+  const handleCollapse = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
   };
-
-  const navItems = [
-    { to: "/dashboard", label: "Dashboard", icon: BiHome },
-    { to: "schedule", label: "Schedule", icon: GrSchedule },
-    { to: "courses", label: "Courses", icon: LuLetterText },
-    { to: "gradebook", label: "GradeBook", icon: GiGraduateCap },
-    { to: "performance", label: "Performance", icon: BiChart },
-    { to: "announcements", label: "Announcement", icon: GrAnnounce },
-  ];
 
   const DrawerList = (
     <Box
       sx={{ width: 250 }}
       role="presentation"
-      onClick={toggleDrawer(false)}
-      className="bg-gradient-to-b from-gradient-1 to-gradient-2 shadow-[0_20px_10px_rgba(0,0,0,0.2)] h-screen"
+      className="bg-gradient-to-b from-gradient-1 to-gradient-2 text-white h-screen"
     >
       <List>
-        {navItems.map(({ to, label, icon: Icon }) => (
-          <ListItem key={to} disablePadding>
-            <NavLink
-              to={to}
-              style={{
-                width: "100%",
-                textDecoration: "none",
-                color: "inherit",
-              }}
-            >
-              {({ isActive }) => (
-                <ListItemButton
-                  sx={{
-                    backgroundColor: isActive ? "#f0f0f0" : "transparent",
-                    "&:hover": { backgroundColor: "#f5f5f5" },
-                  }}
-                >
-                  <ListItemIcon>
-                    <Icon
-                      size={22}
-                      className={
-                        isActive
-                          ? "text-gradient-1"
-                          : "group-hover:text-gradient-1 text-white"
-                      }
-                    />
+        {roleNavItems.map((item, index) => (
+          <Box key={item.to}>
+            {/* لو العنصر عنده subLinks */}
+            {"subLinks" in item ? (
+              <>
+                <ListItemButton onClick={() => handleCollapse(index)}>
+                  <ListItemIcon sx={{ color: "white" }}>
+                    <item.icon />
                   </ListItemIcon>
-                  <ListItemText
-                    primary={label}
+                  <ListItemText primary={item.label} />
+                  <KeyboardArrowDown
                     sx={{
-                      color: isActive ? "primary.main" : "white",
-                      fontWeight: isActive ? "bold" : "normal",
+                      transform:
+                        openIndex === index ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "0.2s",
                     }}
                   />
                 </ListItemButton>
-              )}
-            </NavLink>
-          </ListItem>
+
+                <Collapse in={openIndex === index} timeout="auto" unmountOnExit>
+                  {item.subLinks?.map((subItem) => (
+                    <NavLink
+                      key={subItem.to}
+                      to={subItem.to}
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <ListItemButton sx={{ pl: 4, py: 0.8 }}>
+                        <ListItemIcon sx={{ color: "rgba(255,255,255,0.8)" }}>
+                          <subItem.icon />
+                        </ListItemIcon>
+                        <ListItemText primary={subItem.label} />
+                      </ListItemButton>
+                    </NavLink>
+                  ))}
+                </Collapse>
+              </>
+            ) : (
+              // لو العنصر مفيهوش subLinks
+              <NavLink
+                to={item.to}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                {({ isActive }) => (
+                  <ListItemButton
+                    sx={{
+                      backgroundColor: isActive ? "#f0f0f0" : "transparent",
+                      "&:hover": { backgroundColor: "#f5f5f5" },
+                    }}
+                  >
+                    <ListItemIcon sx={{ color: "white" }}>
+                      <item.icon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={item.label}
+                      sx={{
+                        color: isActive ? "primary.main" : "white",
+                        fontWeight: isActive ? "bold" : "normal",
+                      }}
+                    />
+                  </ListItemButton>
+                )}
+              </NavLink>
+            )}
+          </Box>
         ))}
       </List>
     </Box>
@@ -102,7 +126,7 @@ function Navbar() {
           </Drawer>
         </>
       ) : (
-        <nav className="bg-gradient-to-b from-gradient-1 to-gradient-2 shadow-[0_20px_10px_rgba(0,0,0,0.2)] h-screen w-52 text-white">
+        <nav className="bg-gradient-to-b from-gradient-1 to-gradient-2 h-screen w-52 text-white overflow-y-auto flex flex-col justify-between">
           <ul className="space-y-7 mt-4 flex flex-col justify-center">
             <li className="flex flex-col justify-center items-center text-3xl font-bold">
               <Link to={"/"} className="flex items-center gap-3">
@@ -110,38 +134,114 @@ function Navbar() {
               </Link>
             </li>
 
-            {navItems.map(({ to, label, icon: Icon }) => (
-              <NavLink
-                key={to}
-                to={to}
-                className={({ isActive }) =>
-                  `group flex items-center gap-4 py-4 duration-100 
-                  ${isActive ? "bg-white" : "hover:bg-white"}`
-                }
-              >
-                {({ isActive }) => (
-                  <div className="flex items-center gap-4 px-6 w-full">
-                    <Icon
-                      className={`text-[1.6rem] ${
-                        isActive
-                          ? "text-gradient-1"
-                          : "group-hover:text-gradient-1"
-                      }`}
-                    />
-                    <span
-                      className={`${
-                        isActive
-                          ? "text-gradient-2"
-                          : "group-hover:text-gradient-2"
-                      }`}
+            <Box sx={{ bgcolor: "transparent", color: "white", width: "100%" }}>
+              {roleNavItems.map((item, index) => (
+                <Box key={item.to}>
+                  {/* Main item */}
+                  {"subLinks" in item ? (
+                    <ListItemButton
+                      onClick={() => handleCollapse(index)}
+                      sx={{
+                        py: 2,
+                        "&:hover": {
+                          backgroundColor: "rgba(232, 232, 232, 0.1)",
+                        },
+                      }}
                     >
-                      {label}
-                    </span>
-                  </div>
-                )}
-              </NavLink>
-            ))}
+                      <ListItemIcon sx={{ color: "white", minWidth: "35px" }}>
+                        <item.icon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item.label}
+                        primaryTypographyProps={{
+                          fontSize: 15,
+                          fontWeight: "medium",
+                        }}
+                      />
+                      <KeyboardArrowDown
+                        sx={{
+                          transform:
+                            openIndex === index
+                              ? "rotate(180deg)"
+                              : "rotate(0deg)",
+                          transition: "0.2s",
+                        }}
+                      />
+                    </ListItemButton>
+                  ) : (
+                    <NavLink
+                      to={item.to}
+                      className={({ isActive }) =>
+                        `group flex items-center py-4 duration-100 px-4
+                  ${isActive ? "bg-white/30" : "hover:bg-white/15"}`
+                      }
+                    >
+                      <ListItemIcon sx={{ color: "white", minWidth: "35px" }}>
+                        <item.icon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item.label}
+                        primaryTypographyProps={{
+                          fontSize: 15,
+                          fontWeight: "medium",
+                        }}
+                      />
+                    </NavLink>
+                  )}
+
+                  {/* ✅ Sub Links appear directly under the active item */}
+
+                  {"subLinks" in item && (
+                    <Collapse
+                      in={openIndex === index}
+                      timeout="auto"
+                      unmountOnExit
+                    >
+                      {item.subLinks?.map((subItem) => (
+                        <NavLink
+                          key={subItem.to}
+                          to={subItem.to}
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          <ListItemButton sx={{ pl: 3, py: 0.8 }}>
+                            <ListItemIcon
+                              sx={{ color: "rgba(255,255,255,0.8)" }}
+                            >
+                              <subItem.icon />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={subItem.label}
+                              primaryTypographyProps={{
+                                fontSize: 14,
+                                fontWeight: "normal",
+                              }}
+                            />
+                          </ListItemButton>
+                        </NavLink>
+                      ))}
+                    </Collapse>
+                  )}
+                </Box>
+              ))}
+            </Box>
           </ul>
+          <List
+            sx={{ alignSelf: "center", mb: 4 }}
+            onClick={async () => {
+              // call logout
+              await dispatch(logout());
+              // navigate to login page
+              navigate("/");
+            }}
+          >
+            <ListItemButton sx={{ pl: 3, py: 0.8 }}>
+              <ListItemIcon
+                sx={{ color: "rgba(255,255,255,0.8)", fontSize: 28 }}
+              >
+                <BiLogOut />
+              </ListItemIcon>
+            </ListItemButton>
+          </List>
         </nav>
       )}
     </>
