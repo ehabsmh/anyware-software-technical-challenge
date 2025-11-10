@@ -10,6 +10,8 @@ import { me } from "./features/users/usersSlice";
 import { useAppDispatch } from "./store/hooks";
 import { Toaster } from "sonner";
 import { requireGuest } from "./features/hoc/requireGuest";
+import CreateCourse from "./pages/instructor/CreateCourse";
+import Courses from "./pages/Courses";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -30,6 +32,12 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="announcements" element={<Announcements />} />
           <Route path="quizzes/:id" element={<SolveQuiz />} />
+          <Route path="instructor/courses/create" element={<CreateCourse />} />
+          <Route path="instructor/courses/my-courses" element={<Courses />} />
+          <Route
+            path="instructor/courses/edit/:id"
+            element={<CreateCourse editMode={true} />}
+          />
         </Route>
 
         <Route path="*" element={<div>404 Not Found</div>} />

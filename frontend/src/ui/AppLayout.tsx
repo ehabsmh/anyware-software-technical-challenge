@@ -10,7 +10,7 @@ function AppLayout() {
       <div className="flex-1">
         <Header />
 
-        <main className="ml-3">
+        <main className="lg:ml-3">
           <Outlet />
           <Toaster richColors={true} />
         </main>

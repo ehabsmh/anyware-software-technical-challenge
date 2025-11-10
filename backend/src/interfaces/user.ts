@@ -1,7 +1,7 @@
 import { Model, Schema, Types } from "mongoose";
 
 export interface IUser extends Document {
-  _id: Types.ObjectId;
+  _id: Schema.Types.ObjectId;
   name: string;
   email: string;
   password?: string | undefined;
@@ -9,7 +9,7 @@ export interface IUser extends Document {
   gender: string;
   role: "student" | "instructor" | "admin";
   avatar?: string | undefined;
-  enrolledIn: Types.ObjectId[];
+  enrolledIn: Schema.Types.ObjectId[];
   createdAt: Date;
   updatedAt: Date;
 }

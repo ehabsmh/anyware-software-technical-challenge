@@ -1,0 +1,93 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  createCourse,
+  deleteCourse,
+  getCourseById,
+  getCourses,
+  updateCourse,
+} from "../services/apiCourses";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+
+const coursesKey = (semesterId?: string) => ["courses", semesterId ?? "all"];
+
+export function useCourses(
+  semesterId: string,
+  name?: string,
+  page = 1,
+  limit = 8
+) {
+  return useQuery({
+    queryKey: [...coursesKey(semesterId), name, page, limit],
+    queryFn: () => getCourses(semesterId, name, page, limit),
+    enabled: !!semesterId,
+  });
+}
+
+export function useCourse(id: string) {
+  return useQuery({
+    queryKey: ["course", id],
+    queryFn: () => getCourseById(id),
+    enabled: !!id,
+  });
+}
+
+export function useCreateCourse() {
+  const qc = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: (payload: Parameters<typeof createCourse>[0]) =>
+      createCourse(payload),
+    onSuccess: (newCourse, variables) => {
+      qc.invalidateQueries({
+        queryKey: [...coursesKey(variables.semester)],
+      });
+      qc.setQueryData(["course", newCourse?._id], newCourse);
+      toast.success("Course created successfully!");
+      navigate("/instructor/courses/my-courses");
+    },
+  });
+}
+
+type UpdateCourseType = {
+  id: Parameters<typeof updateCourse>[0];
+  payload: Parameters<typeof updateCourse>[1];
+};
+
+export function useUpdateCourse() {
+  const qc = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: ({ id, payload }: UpdateCourseType) =>
+      updateCourse(id, payload),
+    onSuccess: (updatedCourse, variables) => {
+      qc.invalidateQueries({
+        queryKey: [...coursesKey(variables.payload.semester)],
+      });
+      qc.setQueryData(["course", updatedCourse?._id], updatedCourse);
+      toast.success("Course updated successfully!");
+      navigate("/instructor/courses/my-courses");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+}
+
+export function useDeleteCourse(semesterId?: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteCourse(id),
+    onSuccess: () => {
+      qc.invalidateQueries({
+        queryKey: [...coursesKey(semesterId)],
+      });
+      toast.success("Course has been deleted!");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+}
