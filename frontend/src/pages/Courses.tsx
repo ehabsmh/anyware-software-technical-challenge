@@ -12,9 +12,9 @@ import { useCourses, useDeleteCourse } from "../hooks/useCourses";
 import { useNavigate } from "react-router-dom";
 import { getSemesters } from "../services/apiSemesters";
 import type { ISemester } from "../interfaces/semester";
-import { toast } from "sonner";
 import SearchCourses from "../ui/SearchCourses";
 import CourseSkeleton from "../skeletons/course";
+import { showAlert } from "../utils/helpers";
 
 function Courses() {
   const [semesters, setSemesters] = useState<ISemester[]>([]);
@@ -49,27 +49,11 @@ function Courses() {
   }
 
   function onDelete(courseId: string) {
-    toast.error("Are you sure you want to remove this item?", {
-      id: "delete-confirm",
-      cancel: {
-        label: "No",
-        onClick: () => {
-          toast.dismiss("delete-confirm");
-        },
-      },
-      action: {
-        label: "Yes",
-        onClick: async () => {
-          deleteCourse(courseId);
-          toast.dismiss("delete-confirm");
-        },
-      },
-      duration: Infinity,
-      richColors: true,
-    });
+    showAlert(() => deleteCourse(courseId));
   }
 
   if (error) return <div>Error loading</div>;
+  if (!items) return <div>No courses found.</div>;
 
   return (
     <div className="bg-main overflow-y-auto p-8 h-[calc(100vh-86px)]">
@@ -114,6 +98,7 @@ function Courses() {
       </div>
 
       {/* Courses Grid */}
+
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {!isLoading
           ? items.map((course) => (
@@ -127,18 +112,23 @@ function Courses() {
             ))
           : [...Array(total)].map((_, i) => <CourseSkeleton key={i} />)}
       </div>
-      {totalPages && totalPages > 1 && (
-        <div className="flex justify-center items-center mt-6 w-full">
-          <Stack spacing={2}>
-            <Pagination
-              count={totalPages}
-              page={currentPage}
-              onChange={(_, value) => setCurrentPage(value)}
-              size="large"
-            />
-          </Stack>
-        </div>
-      )}
+
+      {/* Pagination */}
+      {items.length === 0
+        ? null
+        : typeof totalPages === "number" &&
+          totalPages > 1 && (
+            <div className="flex justify-center items-center mt-6 w-full">
+              <Stack spacing={2}>
+                <Pagination
+                  count={totalPages}
+                  page={currentPage}
+                  onChange={(_, value) => setCurrentPage(value)}
+                  size="large"
+                />
+              </Stack>
+            </div>
+          )}
     </div>
   );
 }

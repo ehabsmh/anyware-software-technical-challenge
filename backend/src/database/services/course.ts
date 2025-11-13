@@ -40,14 +40,12 @@ class CourseService {
     const { page = 1, limit = 10, name, instructorId } = options;
     const semester = await SemesterService.getSemesterById(semesterId);
 
-    const filter: any = { semester: semesterId };
+    const filter: any = { semester: semester._id };
 
     if (name) filter.name = { $regex: name, $options: "i" };
     if (instructorId) filter.instructor = instructorId;
 
     const skip = (page - 1) * limit;
-
-    console.log(semester._id, filter.instructor, filter.name);
 
     const [items, total] = await Promise.all([
       Course.find(filter)

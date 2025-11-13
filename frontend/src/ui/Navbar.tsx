@@ -43,7 +43,6 @@ function Navbar() {
       <List>
         {roleNavItems.map((item, index) => (
           <Box key={item.to}>
-            {/* لو العنصر عنده subLinks */}
             {"subLinks" in item ? (
               <>
                 <ListItemButton onClick={() => handleCollapse(index)}>
@@ -78,7 +77,6 @@ function Navbar() {
                 </Collapse>
               </>
             ) : (
-              // لو العنصر مفيهوش subLinks
               <NavLink
                 to={item.to}
                 style={{ textDecoration: "none", color: "inherit" }}

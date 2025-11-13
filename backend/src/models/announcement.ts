@@ -5,12 +5,12 @@ const announcementSchema = new Schema<IAnnouncement>(
   {
     title: { type: String, required: true },
     content: { type: String, required: true },
-    author: { type: String, required: true },
-    course: { type: Schema.Types.ObjectId, ref: "Course", required: true },
+    author: { type: Schema.Types.ObjectId, required: true, ref: "User" },
+    course: { type: Schema.Types.ObjectId, required: true, ref: "Course" },
     semester: {
       type: Schema.Types.ObjectId,
-      ref: "Semester",
       required: true,
+      ref: "Semester",
     },
   },
   { timestamps: true }

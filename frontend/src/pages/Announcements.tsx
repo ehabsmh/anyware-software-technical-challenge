@@ -1,58 +1,164 @@
-import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
-  getAllAnnouncements,
-  getAnnouncementsInfo,
-  loadAll,
-} from "../features/announcements/announcementsSlice";
-import Announcement from "../features/announcements/Announcement";
-import { Stack } from "@mui/system";
-import { Pagination } from "@mui/material";
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  Stack,
+  Pagination,
+  Avatar,
+} from "@mui/material";
+import {
+  useAnnouncements,
+  useDeleteAnnouncement,
+} from "../hooks/useAnnouncements";
+import AnnouncementsFilters from "../ui/AnnouncementsFilters";
+import { useState } from "react";
+import { useAppSelector } from "../store/hooks";
+import { Delete, Edit } from "@mui/icons-material";
+import { showAlert } from "../utils/helpers";
+import { useNavigate } from "react-router-dom";
 
-export default function Announcements() {
-  const dispatch = useAppDispatch();
-  const { items, page, totalPages } = useAppSelector(getAllAnnouncements);
-  const { hasError, isLoading } = useAppSelector(getAnnouncementsInfo);
-  const [currentPage, setCurrentPage] = useState(page || 1);
+function AnnouncementsPage() {
+  const [selectedSemesterId, setSelectedSemesterId] = useState("");
+  const [selectedCourseId, setSelectedCourseId] = useState("");
+  const [mineOnly, setMineOnly] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!items.length || page !== currentPage) {
-      dispatch(loadAll({ page: currentPage, limit: 2 }));
-    }
-  }, [dispatch, currentPage, items.length, page]);
+  const { mutate: deleteAnnouncement } = useDeleteAnnouncement();
 
-  if (isLoading) {
-    return <div className="p-6">Loading...</div>;
+  const user = useAppSelector((state) => state.user);
+
+  const { data } = useAnnouncements({
+    semesterId: selectedSemesterId,
+    courseId: selectedCourseId,
+    mineOnly: mineOnly,
+    page: currentPage,
+  });
+  console.log(data);
+
+  const announcements = data?.items || [];
+  const { totalPages } = data || {};
+
+  function onSelectSemester(semesterId: string) {
+    setSelectedSemesterId(semesterId);
   }
 
-  if (hasError) {
-    return <div className="p-6 text-red-500">Failed to load data.</div>;
+  function onSelectCourse(courseId: string) {
+    setSelectedCourseId(courseId);
+  }
+
+  function onToggleMineOnly() {
+    setMineOnly((prev) => !prev);
+  }
+
+  function onDeleteAnnouncement(announcementId: string) {
+    showAlert(() => deleteAnnouncement(announcementId));
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">All Announcements</h1>
+    <Box className="bg-main overflow-y-auto p-8 h-[calc(100vh-86px)]">
+      <AnnouncementsFilters
+        selectedSemesterId={selectedSemesterId}
+        onSelectSemester={onSelectSemester}
+        selectedCourseId={selectedCourseId}
+        onSelectCourse={onSelectCourse}
+        mineOnly={mineOnly}
+        onToggleMineOnly={onToggleMineOnly}
+      />
+      <Box className="max-w-7xl mx-auto">
+        {/* Header */}
+        <Box className="flex flex-col sm:flex-row justify-between items-center mb-6 mt-8">
+          <Typography
+            variant="h4"
+            className="font-semibold bg-gradient-to-r from-[--color-gradient-1] to-[--color-gradient-2] text-transparent bg-clip-text"
+          >
+            Announcements
+          </Typography>
+        </Box>
 
-      <div className="space-y-4">
-        {items.map((a) => (
-          <Announcement
-            key={a._id}
-            instructor={a.author}
-            content={a.content}
-            course={a.course?.name}
-          />
-        ))}
-      </div>
+        {/* Announcements list */}
+        {announcements.length === 0 ? (
+          <Typography variant="body1" className="text-center mt-8">
+            No announcements available.
+          </Typography>
+        ) : (
+          <Box className="space-y-4">
+            {announcements.map((a) => (
+              <Card
+                key={a._id}
+                className="rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 relative"
+              >
+                {user._id === a.author._id && (
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 8,
+                      right: 8,
+                      cursor: "pointer",
 
-      <div className="flex justify-between items-center mt-6">
-        <Stack spacing={2}>
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={(_, value) => setCurrentPage(value)}
-          />
-        </Stack>
-      </div>
-    </div>
+                      display: "flex",
+                      gap: "12px",
+                    }}
+                  >
+                    <Delete
+                      sx={{ color: "#e11919" }}
+                      onClick={() => onDeleteAnnouncement(a._id)}
+                    />
+                    <Edit
+                      sx={{ color: "#cb8800" }}
+                      onClick={() =>
+                        navigate(`/instructor/announcements/edit/${a._id}`)
+                      }
+                    />
+                  </Box>
+                )}
+                <CardContent>
+                  <Typography
+                    variant="h6"
+                    className="text-gradient-1 font-bold"
+                  >
+                    {a.title}
+                  </Typography>
+                  <Typography variant="body1" className="text-gray-700 mt-1">
+                    {a.content}
+                  </Typography>
+                  <Box className="flex justify-between items-center mt-3 text-sm text-gray-500">
+                    <Box className="flex items-center space-x-2">
+                      <Avatar
+                        alt={a.author.name}
+                        src={a.author.avatar}
+                        sx={{ width: 35, height: 35 }}
+                      />
+                      <span>{a.author.name}</span>
+                    </Box>
+                    <span>{new Date(a.createdAt).toLocaleDateString()}</span>
+                  </Box>
+                </CardContent>
+              </Card>
+            ))}
+          </Box>
+        )}
+
+        {/* Pagination */}
+        {announcements.length === 0
+          ? null
+          : typeof totalPages === "number" &&
+            totalPages > 1 && (
+              <div className="flex justify-center items-center mt-6 w-full">
+                <Stack spacing={2}>
+                  <Pagination
+                    count={totalPages}
+                    page={currentPage}
+                    onChange={(_, value) => setCurrentPage(value)}
+                    size="large"
+                  />
+                </Stack>
+              </div>
+            )}
+      </Box>
+    </Box>
   );
 }
+
+export default AnnouncementsPage;

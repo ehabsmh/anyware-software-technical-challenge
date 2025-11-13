@@ -42,7 +42,7 @@ function Announcements() {
           key={announcement._id}
           instructor={announcement.author}
           content={announcement.content}
-          course={announcement.course.name}
+          course={"General"}
         />
       ))}
     </section>

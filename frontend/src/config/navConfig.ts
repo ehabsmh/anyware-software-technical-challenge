@@ -101,7 +101,7 @@ export const navConfig = {
           icon: GrAnnounce,
         },
         {
-          to: "/instructor/announcements/view",
+          to: "/instructor/announcements",
           label: "View",
           icon: GrAnnounce,
         },

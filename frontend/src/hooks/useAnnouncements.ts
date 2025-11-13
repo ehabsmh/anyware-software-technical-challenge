@@ -1,0 +1,124 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  createAnnouncement,
+  deleteAnnouncement,
+  fetchAllAnnouncements,
+  fetchAnnouncementById,
+  updateAnnouncement,
+} from "../services/apiAnnouncements";
+import { toast } from "sonner";
+import type { IAnnouncementResponse } from "../interfaces/announcement";
+import { useNavigate } from "react-router-dom";
+
+export type AnnouncementsHookParams = {
+  page?: number;
+  limit?: number;
+  semesterId?: string;
+  courseId?: string;
+  mineOnly?: boolean;
+};
+
+export function useAnnouncements({
+  page = 1,
+  limit = 8,
+  semesterId,
+  courseId,
+  mineOnly,
+}: AnnouncementsHookParams = {}) {
+  return useQuery({
+    queryKey: ["announcements", semesterId, courseId, mineOnly, page, limit],
+    queryFn: () =>
+      fetchAllAnnouncements({ page, limit, semesterId, courseId, mineOnly }),
+  });
+}
+
+export function useAnnouncement(id: string) {
+  return useQuery({
+    queryKey: ["announcement", id],
+    queryFn: () => fetchAnnouncementById(id),
+  });
+}
+
+export function useCreateAnnouncement() {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: (payload: Parameters<typeof createAnnouncement>[0]) =>
+      createAnnouncement(payload),
+
+    onSuccess: (newAnnouncement) => {
+      queryClient.setQueriesData(
+        { queryKey: ["announcements"], exact: false },
+        (old: IAnnouncementResponse) => {
+          if (!old) return old;
+
+          return {
+            ...old,
+            items: [newAnnouncement, ...old.items],
+          };
+        }
+      );
+
+      queryClient.invalidateQueries({ queryKey: ["announcements"] });
+
+      toast.success("Announcement created successfully!");
+      navigate("/instructor/announcements");
+    },
+
+    onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : String(error);
+      toast.error(message || "Failed to create announcement.");
+    },
+  });
+}
+
+export function useUpdateAnnouncement() {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: Parameters<typeof updateAnnouncement>[1];
+    }) => updateAnnouncement(id, payload),
+    onSuccess: (updatedAnnouncement) => {
+      queryClient.setQueriesData(
+        { queryKey: ["announcements"], exact: false },
+        (old: IAnnouncementResponse) => {
+          if (!old) return old;
+
+          return {
+            ...old,
+            items: [updatedAnnouncement, ...old.items],
+          };
+        }
+      );
+
+      queryClient.invalidateQueries({ queryKey: ["announcements"] });
+
+      toast.success("Announcement updated successfully!");
+      navigate("/instructor/announcements");
+    },
+  });
+}
+
+export function useDeleteAnnouncement() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteAnnouncement(id),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["announcements"] });
+    },
+
+    onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : String(error);
+      toast.error(message || "Failed to create announcement.");
+    },
+  });
+}

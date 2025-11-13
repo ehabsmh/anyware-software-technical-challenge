@@ -12,6 +12,8 @@ import { Toaster } from "sonner";
 import { requireGuest } from "./features/hoc/requireGuest";
 import CreateCourse from "./pages/instructor/CreateCourse";
 import Courses from "./pages/Courses";
+import CreateAnnouncement from "./pages/instructor/CreateAnnouncement";
+import AnnouncementsPage from "./pages/Announcements";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -37,6 +39,20 @@ function App() {
           <Route
             path="instructor/courses/edit/:id"
             element={<CreateCourse editMode={true} />}
+          />
+          <Route
+            path="/instructor/announcements/create"
+            element={<CreateAnnouncement />}
+          />
+
+          <Route
+            path="/instructor/announcements/"
+            element={<AnnouncementsPage />}
+          />
+
+          <Route
+            path="instructor/announcements/edit/:id"
+            element={<CreateAnnouncement editMode={true} />}
           />
         </Route>
 

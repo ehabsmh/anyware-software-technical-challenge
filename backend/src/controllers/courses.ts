@@ -8,7 +8,7 @@ class CourseController {
   static async getCoursesBySemester(req: CustomRequest, res: Response) {
     const { semesterId } = req.params;
     const { page, limit, name } = req.query;
-    const user = req.user;
+    // const user = req.user;
 
     if (!semesterId) {
       throw new AppError("semester ID is required", 400);
@@ -29,10 +29,9 @@ class CourseController {
       page: parsedPage || 1,
       limit: parsedLimit || 10,
       name: typeof name === "string" ? name : undefined,
-      instructorId:
-        user?.role === "instructor" ? user._id.toString() : undefined,
+      // instructorId:
+      //   user?.role === "instructor" ? user._id.toString() : undefined,
     });
-    console.log(result);
 
     res.json({ status: "success", data: result });
   }

@@ -55,7 +55,7 @@ function Announcement({ instructor, content, course }: AnnouncementProps) {
                 color: "gray",
               }}
             >
-              {course}
+              {course || "General"}
             </Typography>
           }
           sx={{ p: 0 }}

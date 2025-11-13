@@ -20,6 +20,7 @@ import {
   useUpdateCourse,
 } from "../../hooks/useCourses";
 import { useParams } from "react-router-dom";
+import type { ISemester } from "../../interfaces/semester";
 
 export interface CourseFormValues {
   name: string;
@@ -30,9 +31,7 @@ export interface CourseFormValues {
 
 function CreateCourse({ editMode }: { editMode?: boolean }) {
   const [preview, setPreview] = useState<string | null>(null);
-  const [semesters, setSemesters] = useState<
-    Array<{ _id: string; name: string }>
-  >([]);
+  const [semesters, setSemesters] = useState<ISemester[]>([]);
 
   const { id } = useParams();
   const { data: courseData } = useCourse(id!);
@@ -43,7 +42,7 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
     reset,
     setValue,
     watch,
-    formState: { errors, isDirty, dirtyFields },
+    formState: { errors, isDirty },
   } = useForm<CourseFormValues>({
     defaultValues: {
       image: null,
@@ -58,8 +57,6 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
   const { mutate: updateCourse } = useUpdateCourse();
 
   const onSubmit = async (data: CourseFormValues) => {
-    console.log(data);
-
     try {
       if (editMode && id) {
         updateCourse({ id, payload: data });
@@ -81,12 +78,10 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
   };
 
   useEffect(() => {
-    getSemesters().then((data) => setSemesters(data));
+    getSemesters().then((data) => setSemesters(data ?? []));
   }, []);
 
   useEffect(() => {
-    console.log("courseData:", courseData);
-
     if (editMode && courseData) {
       reset({
         name: courseData.name,

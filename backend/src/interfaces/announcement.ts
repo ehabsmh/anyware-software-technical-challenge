@@ -4,7 +4,7 @@ export interface IAnnouncement extends Document {
   _id: Schema.Types.ObjectId;
   title: string;
   content: string;
-  author: string;
+  author: Schema.Types.ObjectId;
   course: Schema.Types.ObjectId;
   semester: Schema.Types.ObjectId;
 }
