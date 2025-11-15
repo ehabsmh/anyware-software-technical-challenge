@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { ICourse } from "../../interfaces/course";
 import { Course, Semester } from "../../models";
 import AppError from "../../utils/error";
@@ -106,6 +107,17 @@ class CourseService {
     if (!course) throw new AppError("Course not found.", 404);
 
     return { message: "Course deleted successfully", course };
+  }
+
+  static async courseExists(id: string) {
+    if (!id) throw new AppError("Course id is required.", 400);
+
+    if (!Types.ObjectId.isValid(id))
+      throw new AppError("Invalid course id", 400);
+
+    const isExist = await Course.exists({ _id: id });
+
+    return !!isExist;
   }
 }
 

@@ -1,19 +1,32 @@
 import { model, Schema } from "mongoose";
-import { IQuiz } from "../interfaces/quiz";
+import { IQuestion, IQuiz } from "../interfaces/quiz";
+
+const questionSchema = new Schema<IQuestion>(
+  {
+    type: {
+      type: String,
+      enum: ["mcq", "true_false", "short_answer"],
+      default: "mcq",
+    },
+    question: { type: String, required: true },
+    options: { type: [String], default: [] },
+    answer: { type: Schema.Types.Mixed }, // indices of correct options
+    points: { type: Number, default: 1 },
+  },
+  { _id: false }
+);
 
 const quizSchema = new Schema<IQuiz>(
   {
     course: { type: Schema.Types.ObjectId, ref: "Course", required: true },
+    semester: { type: Schema.Types.ObjectId, ref: "Semester", required: true },
+    createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     topic: { type: String, required: true },
     dueDate: { type: Date, required: true },
-    questions: [
-      {
-        question: { type: String, required: true },
-        options: { type: [String], required: true },
-        answer: { type: Number, required: true },
-      },
-    ],
-    semester: { type: Schema.Types.ObjectId, ref: "Semester", required: true },
+    status: { type: String, enum: ["draft", "published"], default: "draft" },
+    timeLimitInMinutes: { type: Number, default: 0 },
+    attemptsAllowed: { type: Number, default: 1 },
+    questions: [questionSchema],
   },
   { timestamps: true }
 );

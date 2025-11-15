@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { Semester } from "../../models";
 import AppError from "../../utils/error";
 
@@ -17,6 +18,17 @@ class SemesterService {
   static async getSemesters() {
     const semesters = await Semester.find();
     return semesters;
+  }
+
+  static async semesterExists(id: string) {
+    if (!id) throw new AppError("Semester id is required.", 400);
+
+    if (!Types.ObjectId.isValid(id))
+      throw new AppError("Invalid semester id", 400);
+
+    const isExist = await Semester.exists({ _id: id });
+
+    return !!isExist;
   }
 }
 
