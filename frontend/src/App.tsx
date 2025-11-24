@@ -14,6 +14,9 @@ import CreateCourse from "./pages/instructor/CreateCourse";
 import Courses from "./pages/Courses";
 import CreateAnnouncement from "./pages/instructor/CreateAnnouncement";
 import AnnouncementsPage from "./pages/Announcements";
+import CreateQuiz from "./pages/instructor/CreateQuiz";
+import Quizzes from "./pages/instructor/Quizzes";
+import EditQuestions from "./pages/instructor/EditQuestions";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -53,6 +56,15 @@ function App() {
           <Route
             path="instructor/announcements/edit/:id"
             element={<CreateAnnouncement editMode={true} />}
+          />
+
+          <Route path="/instructor/quizzes/create" element={<CreateQuiz />} />
+
+          <Route path="/instructor/quizzes/manage" element={<Quizzes />} />
+
+          <Route
+            path="/instructor/quizzes/edit-questions/:id"
+            element={<EditQuestions />}
           />
         </Route>
 

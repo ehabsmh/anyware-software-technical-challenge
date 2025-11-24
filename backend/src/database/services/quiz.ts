@@ -65,6 +65,62 @@ class QuizService {
     return quizzes;
   }
 
+  static async getInstructorQuizzes(
+    instructorId: string,
+    page = 1,
+    limit = 10
+  ) {
+    const skip = (page - 1) * limit;
+
+    const pipeline = [
+      {
+        $match: { createdBy: new Types.ObjectId(instructorId) },
+      },
+      {
+        $lookup: {
+          from: "courses",
+          localField: "course",
+          foreignField: "_id",
+          as: "course",
+          pipeline: [{ $project: { name: 1 } }],
+        },
+      },
+      {
+        $project: {
+          topic: 1,
+          course: { $arrayElemAt: ["$course", 0] },
+          dueDate: 1,
+          status: 1,
+          semester: 1,
+          timeLimitInMinutes: 1,
+          attemptsAllowed: 1,
+          totalPoints: 1,
+          numQuestions: { $size: "$questions" },
+        },
+      },
+      {
+        $skip: skip,
+      },
+      { $limit: limit },
+    ];
+
+    const [items, total] = await Promise.all([
+      Quiz.aggregate(pipeline),
+      Quiz.countDocuments({ createdBy: instructorId }),
+    ]);
+
+    return { items, total, page, limit, totalPages: Math.ceil(total / limit) };
+  }
+
+  static async getQuizQuestions(id: string) {
+    if (!Types.ObjectId.isValid(id)) throw new AppError("Invalid id", 400);
+
+    const quiz = await Quiz.findById(id).select("questions");
+    if (!quiz) throw new AppError("Quiz not found", 404);
+
+    return quiz.questions;
+  }
+
   static async create(data: IQuiz) {
     const { course, semester, createdBy } = data;
 

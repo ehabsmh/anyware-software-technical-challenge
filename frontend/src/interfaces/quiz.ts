@@ -2,14 +2,19 @@ export interface IQuiz {
   _id: string;
   course: string;
   topic: string;
-  dueDate: Date;
-  questions: {
-    _id: string;
-    question: string;
-    options: string[];
-    answer?: number;
-  }[];
+  dueDate: string;
   semester: string;
+  timeLimitInMinutes: number;
+  attemptsAllowed: number;
+  totalPoints: number;
+  status: "draft" | "published";
+  questions: {
+    type: "" | "mcq" | "true_false" | "short_answer";
+    question: string;
+    options?: string[];
+    answer?: number[] | string;
+    points: number;
+  }[];
 }
 
 export interface IQuizUpcoming {
@@ -45,4 +50,26 @@ export interface IQuizSubmission {
     correct: boolean;
     userAnswer: number | null;
   }[];
+}
+
+export interface IInstructorQuiz {
+  items: {
+    _id: string;
+    topic: string;
+    course: {
+      _id: string;
+      name: string;
+    };
+    semester: string;
+    timeLimitInMinutes: number;
+    attemptsAllowed: number;
+    totalPoints: number;
+    dueDate: string;
+    status: "draft" | "published";
+    numQuestions: number;
+  }[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }

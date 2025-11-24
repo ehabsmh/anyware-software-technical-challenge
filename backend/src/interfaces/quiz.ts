@@ -18,6 +18,7 @@ export interface IQuiz extends Document {
   status: "draft" | "published";
   timeLimitInMinutes: number;
   attemptsAllowed: number;
+  totalPoints: number;
   questions: IQuestion[];
   createdAt: Date;
   updatedAt: Date;

@@ -1,0 +1,169 @@
+import { styled } from "@mui/material/styles";
+import Stack from "@mui/material/Stack";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import SettingsIcon from "@mui/icons-material/Settings";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import VideoLabelIcon from "@mui/icons-material/VideoLabel";
+import StepConnector, {
+  stepConnectorClasses,
+} from "@mui/material/StepConnector";
+import type { StepIconProps } from "@mui/material/StepIcon";
+import QuizInfoForm from "./QuizInfoForm";
+import QuizQuestionsForm from "./QuizQuestionsForm";
+import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { Box, Card } from "@mui/material";
+
+const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 22,
+  },
+  [`&.${stepConnectorClasses.active}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      backgroundImage:
+        "linear-gradient( to left, var(--color-gradient-1) 0%, var(--color-gradient-2) 100%)",
+    },
+  },
+  [`&.${stepConnectorClasses.completed}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      backgroundImage:
+        "linear-gradient( to left, var(--color-gradient-1) 0%, var(--color-gradient-2) 100%)",
+    },
+  },
+  [`& .${stepConnectorClasses.line}`]: {
+    height: 3,
+    border: 0,
+    backgroundColor: "#eaeaf0",
+    borderRadius: 1,
+    ...theme.applyStyles("dark", {
+      backgroundColor: theme.palette.grey[800],
+    }),
+  },
+}));
+
+const ColorlibStepIconRoot = styled("div")<{
+  ownerState: { completed?: boolean; active?: boolean };
+}>(({ theme }) => ({
+  backgroundColor: "#ccc",
+  zIndex: 1,
+  color: "#fff",
+  width: 50,
+  height: 50,
+  display: "flex",
+  borderRadius: "50%",
+  justifyContent: "center",
+  alignItems: "center",
+  ...theme.applyStyles("dark", {
+    backgroundColor: theme.palette.grey[700],
+  }),
+  variants: [
+    {
+      props: ({ ownerState }) => ownerState.active,
+      style: {
+        backgroundImage:
+          "linear-gradient( to left, var(--color-gradient-1) 0%, var(--color-gradient-2) 100%)",
+        boxShadow: "0 2px 5px 0 rgba(0,0,0,.25)",
+      },
+    },
+    {
+      props: ({ ownerState }) => ownerState.completed,
+      style: {
+        backgroundImage:
+          "linear-gradient( to left, var(--color-gradient-1) 0%, var(--color-gradient-2) 100%)",
+      },
+    },
+  ],
+}));
+
+function ColorlibStepIcon(props: StepIconProps) {
+  const { active, completed, className } = props;
+
+  const icons: { [index: string]: React.ReactElement<unknown> } = {
+    1: <SettingsIcon />,
+    2: <GroupAddIcon />,
+    3: <VideoLabelIcon />,
+  };
+
+  return (
+    <ColorlibStepIconRoot
+      ownerState={{ completed, active }}
+      className={className}
+    >
+      {icons[String(props.icon)]}
+    </ColorlibStepIconRoot>
+  );
+}
+
+const steps = ["Create quiz info", "Add questions"];
+
+export default function CreateQuizStepper() {
+  const [activeStep, setActiveStep] = useState(0);
+  const [numQuestions, setNumQuestions] = useState(1);
+
+  const methods = useForm({
+    defaultValues: {
+      semester: "",
+      course: "",
+      topic: "",
+      dueDate: "",
+      timeLimitInMinutes: 0,
+      attemptsAllowed: 1,
+      questions: [
+        { type: "", question: "", options: [], answer: [], points: 1 },
+      ],
+    },
+  });
+
+  function onNext() {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  }
+
+  function onBack() {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  }
+
+  return (
+    <Stack sx={{ width: "100%", mt: 4 }} spacing={4}>
+      <Stepper
+        alternativeLabel
+        activeStep={activeStep}
+        connector={<ColorlibConnector />}
+      >
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel slots={{ stepIcon: ColorlibStepIcon }}>
+              {label}
+            </StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+      <FormProvider {...methods}>
+        <Box className="bg-main xl:w-4/7 lg:w-4/5 mx-auto! p-4">
+          <Card
+            sx={{
+              width: "100%",
+              borderRadius: "16px",
+              boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
+              p: 4,
+            }}
+          >
+            <form className="flex flex-col gap-4">
+              {activeStep === 0 && (
+                <QuizInfoForm editMode={false} onNext={onNext} />
+              )}
+              {activeStep === 1 && (
+                <QuizQuestionsForm
+                  numQuestions={numQuestions}
+                  setNumQuestions={setNumQuestions}
+                  onBack={onBack}
+                />
+              )}
+            </form>
+          </Card>
+        </Box>
+      </FormProvider>
+    </Stack>
+  );
+}

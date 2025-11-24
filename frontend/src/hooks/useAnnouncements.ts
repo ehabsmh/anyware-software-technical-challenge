@@ -116,7 +116,7 @@ export function useDeleteAnnouncement() {
       queryClient.invalidateQueries({ queryKey: ["announcements"] });
     },
 
-    onError: (error: unknown) => {
+    onError: (error) => {
       const message = error instanceof Error ? error.message : String(error);
       toast.error(message || "Failed to create announcement.");
     },

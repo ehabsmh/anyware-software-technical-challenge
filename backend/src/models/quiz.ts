@@ -10,7 +10,7 @@ const questionSchema = new Schema<IQuestion>(
     },
     question: { type: String, required: true },
     options: { type: [String], default: [] },
-    answer: { type: Schema.Types.Mixed }, // indices of correct options
+    answer: { type: Schema.Types.Mixed, default: null }, // indices of correct options
     points: { type: Number, default: 1 },
   },
   { _id: false }
@@ -26,6 +26,7 @@ const quizSchema = new Schema<IQuiz>(
     status: { type: String, enum: ["draft", "published"], default: "draft" },
     timeLimitInMinutes: { type: Number, default: 0 },
     attemptsAllowed: { type: Number, default: 1 },
+    totalPoints: { type: Number, default: 0 },
     questions: [questionSchema],
   },
   { timestamps: true }

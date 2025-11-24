@@ -44,10 +44,30 @@ class QuizController {
     res.json(quizzes);
   }
 
+  static async getInstructorQuizzes(req: CustomRequest, res: Response) {
+    const instructorId = req.user?._id;
+    const page = req.query.page ? Number(req.query.page) : undefined;
+    const limit = req.query.limit ? Number(req.query.limit) : undefined;
+    const quizzes = await QuizService.getInstructorQuizzes(
+      String(instructorId!),
+      page,
+      limit
+    );
+
+    res.json(quizzes);
+  }
+
   static async getUpcomingDue(req: Request, res: Response) {
     const limit = req.query.limit ? Number(req.query.limit) : undefined;
     const quizzes = await QuizService.getUpcomingDue(limit);
     res.json(quizzes);
+  }
+
+  static async getQuizQuestions(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const questions = await QuizService.getQuizQuestions(id!);
+    res.json(questions);
   }
 
   static async submitAnswers(req: Request, res: Response) {

@@ -11,6 +11,18 @@ quizzesRouter.get(
   asyncHandler(QuizController.getByCurrentSemester)
 );
 quizzesRouter.get("/upcoming", asyncHandler(QuizController.getUpcomingDue));
+quizzesRouter.get(
+  "/instructor",
+  auth,
+  isInstructor,
+  asyncHandler(QuizController.getInstructorQuizzes)
+);
+
+quizzesRouter.get(
+  "/:id/questions",
+  asyncHandler(QuizController.getQuizQuestions)
+);
+
 quizzesRouter.get("/:id", asyncHandler(QuizController.getById));
 
 quizzesRouter.post(

@@ -28,13 +28,12 @@ function Courses() {
   const { data, isLoading, error } = useCourses(
     selectedSemester,
     searchTerm,
-    currentPage,
-    1
+    currentPage
   );
   const { mutate: deleteCourse } = useDeleteCourse(selectedSemester);
 
   const items = data?.data.items || [];
-  const { totalPages, total } = data?.data || {};
+  const { totalPages } = data?.data || {};
 
   useEffect(() => {
     // Fetch semesters from API when component mounts
@@ -110,7 +109,7 @@ function Courses() {
                 onDelete={onDelete}
               />
             ))
-          : [...Array(total)].map((_, i) => <CourseSkeleton key={i} />)}
+          : [...Array(6)].map((_, i) => <CourseSkeleton key={i} />)}
       </div>
 
       {/* Pagination */}
