@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createCourse,
@@ -39,13 +40,20 @@ export function useCreateCourse() {
   return useMutation({
     mutationFn: (payload: Parameters<typeof createCourse>[0]) =>
       createCourse(payload),
-    onSuccess: (newCourse, variables) => {
+    onSuccess: (result, variables) => {
       qc.invalidateQueries({
         queryKey: [...coursesKey(variables.semester)],
       });
-      qc.setQueryData(["course", newCourse?._id], newCourse);
+
+      if (!result) return;
+      qc.setQueryData(["course", result.course._id], result.course);
       toast.success("Course created successfully!");
       navigate("/instructor/courses/my-courses");
+    },
+    onError: (error: any) => {
+      if (error.type !== "validation") {
+        toast.error(error.message);
+      }
     },
   });
 }
@@ -70,8 +78,10 @@ export function useUpdateCourse() {
       toast.success("Course updated successfully!");
       navigate("/instructor/courses/my-courses");
     },
-    onError: (error) => {
-      toast.error(error.message);
+    onError: (error: any) => {
+      if (error.type !== "validation") {
+        toast.error(error.message);
+      }
     },
   });
 }

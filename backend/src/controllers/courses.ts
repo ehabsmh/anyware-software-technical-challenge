@@ -3,12 +3,13 @@ import CourseService from "../database/services/course";
 import AppError from "../utils/error";
 import { uploadStream } from "../configs/cloudinary.config";
 import { CustomRequest } from "../middlewares/auth";
+import { IValidationError } from "../interfaces/validationError";
 
 class CourseController {
   static async getCoursesBySemester(req: CustomRequest, res: Response) {
     const { semesterId } = req.params;
     const { page, limit, name } = req.query;
-    // const user = req.user;
+    const user = req.user;
 
     if (!semesterId) {
       throw new AppError("semester ID is required", 400);
@@ -29,8 +30,8 @@ class CourseController {
       page: parsedPage || 1,
       limit: parsedLimit || 10,
       name: typeof name === "string" ? name : undefined,
-      // instructorId:
-      //   user?.role === "instructor" ? user._id.toString() : undefined,
+      instructorId:
+        user?.role === "instructor" ? user._id.toString() : undefined,
     });
 
     res.json({ status: "success", data: result });
@@ -46,6 +47,21 @@ class CourseController {
     const course = await CourseService.getCourseById(id);
 
     res.status(200).json({ status: "success", data: course });
+  }
+
+  static async getInstructorCoursesWithQuizzes(
+    req: CustomRequest,
+    res: Response
+  ) {
+    const instructorId = req.user?._id;
+    const page = req.query.page ? Number(req.query.page) : undefined;
+    const limit = req.query.limit ? Number(req.query.limit) : undefined;
+
+    const courses = await CourseService.getInstructorCoursesWithQuizzes(
+      String(instructorId!)
+    );
+
+    res.json(courses);
   }
 
   static async create(req: CustomRequest, res: Response) {
@@ -66,7 +82,7 @@ class CourseController {
       image: imageUrl,
     });
 
-    res.status(201).json({ status: "success", data: course });
+    res.status(201).json({ success: true, course });
   }
 
   static async update(req: CustomRequest, res: Response) {

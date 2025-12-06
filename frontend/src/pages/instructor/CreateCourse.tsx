@@ -21,6 +21,7 @@ import {
 } from "../../hooks/useCourses";
 import { useParams } from "react-router-dom";
 import type { ISemester } from "../../interfaces/semester";
+import type { IValidationError } from "../../interfaces/validationError";
 
 export interface CourseFormValues {
   name: string;
@@ -42,6 +43,7 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
     reset,
     setValue,
     watch,
+    setError,
     formState: { errors, isDirty },
   } = useForm<CourseFormValues>({
     defaultValues: {
@@ -53,17 +55,52 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
     },
   });
 
-  const { mutate: addCourse, isPending } = useCreateCourse();
+  const {
+    mutate: addCourse,
+    isPending,
+    error: courseError,
+  } = useCreateCourse();
   const { mutate: updateCourse } = useUpdateCourse();
 
   const onSubmit = async (data: CourseFormValues) => {
     try {
       if (editMode && id) {
-        updateCourse({ id, payload: data });
+        updateCourse(
+          { id, payload: data },
+          {
+            onError: (error) => {
+              if (error.type === "validation") {
+                const validationError = error as IValidationError;
+
+                validationError.errors.forEach((err) => {
+                  setError(err.field as keyof CourseFormValues, {
+                    message: err.message,
+                  });
+                });
+              }
+            },
+          }
+        );
       } else {
-        addCourse(data);
+        addCourse(data, {
+          onError: (error) => {
+            if (error.type === "validation") {
+              const validationError = error as IValidationError;
+
+              validationError.errors.forEach((err) => {
+                setError(err.field as keyof CourseFormValues, {
+                  message: err.message,
+                });
+              });
+            }
+          },
+        });
       }
     } catch (error) {
+      console.log(error);
+
+      console.log(courseError);
+
       toast.error((error as Error).message || "Failed to create course.");
     }
   };

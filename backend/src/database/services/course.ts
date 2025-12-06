@@ -3,6 +3,7 @@ import { ICourse } from "../../interfaces/course";
 import { Course, Semester } from "../../models";
 import AppError from "../../utils/error";
 import SemesterService from "./semester";
+import { CreateCourseSchema } from "../../validations/course";
 
 class CourseService {
   static async createCourse({
@@ -11,7 +12,7 @@ class CourseService {
     instructor,
     semester,
     image,
-  }: Partial<ICourse>) {
+  }: Partial<ICourse>): Promise<ICourse> {
     if (!name) throw new AppError("name is required.", 400);
 
     const course = await Course.create({
@@ -66,6 +67,34 @@ class CourseService {
       .populate("semester", "name startDate endDate");
     if (!course) throw new AppError("Course not found.", 404);
     return course;
+  }
+
+  static async getInstructorCoursesWithQuizzes(instructorId: string) {
+    const coursesWithQuizzes = await Course.aggregate([
+      {
+        $lookup: {
+          from: "quizzes",
+          localField: "_id",
+          foreignField: "course",
+          as: "quizzes",
+        },
+      },
+      {
+        $match: {
+          quizzes: { $ne: [] },
+          instructor: new Types.ObjectId(instructorId),
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          image: 1,
+          quizzesCount: { $size: "$quizzes" },
+        },
+      },
+    ]);
+
+    return coursesWithQuizzes;
   }
 
   static async updateCourse(id: string, data: Partial<ICourse>) {

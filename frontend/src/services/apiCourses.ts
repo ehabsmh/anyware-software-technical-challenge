@@ -48,16 +48,27 @@ export async function createCourse(payload: CourseFormValues) {
     formData.append("name", payload.name);
     formData.append("description", payload.description);
     formData.append("semester", payload.semester);
+
     if (payload.image && payload.image instanceof File) {
       formData.append("image", payload.image, payload.image.name);
     }
 
-    const { data }: { data: { status: string; data: ICourse } } =
+    const { data }: { data: { success: boolean; course: ICourse } } =
       await api.post("/courses", formData);
 
-    return data.data;
+    return data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
+      const response = error.response.data;
+
+      if (response.success === false && response.errors) {
+        throw {
+          type: "validation",
+          success: response.success,
+          errors: response.errors,
+        };
+      }
+
       throw new Error(error.response.data.error || "Failed to create course.");
     }
   }
@@ -79,7 +90,17 @@ export const updateCourse = async (id: string, payload: CourseFormValues) => {
     return data.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Failed to create course.");
+      const response = error.response.data;
+
+      if (response.success === false && response.errors) {
+        throw {
+          type: "validation",
+          success: response.success,
+          errors: response.errors,
+        };
+      }
+
+      throw new Error(error.response.data.error || "Failed to edit course.");
     }
   }
 };

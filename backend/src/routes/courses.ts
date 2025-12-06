@@ -3,6 +3,8 @@ import { auth, isInstructor } from "../middlewares/auth";
 import CourseController from "../controllers/courses";
 import asyncHandler from "../utils/asyncHandler";
 import upload from "../configs/multer.config";
+import { validate } from "../middlewares/validation";
+import { CreateCourseSchema } from "../validations/course";
 
 const coursesRouter = express.Router();
 
@@ -11,6 +13,7 @@ coursesRouter.post(
   auth,
   isInstructor,
   upload.single("image"),
+  validate(CreateCourseSchema),
   asyncHandler(CourseController.create)
 );
 coursesRouter.patch(
@@ -18,6 +21,7 @@ coursesRouter.patch(
   auth,
   isInstructor,
   upload.single("image"),
+  validate(CreateCourseSchema),
   asyncHandler(CourseController.update)
 );
 coursesRouter.delete(
@@ -32,6 +36,14 @@ coursesRouter.get(
   auth,
   asyncHandler(CourseController.getCoursesBySemester)
 );
+
+coursesRouter.get(
+  "/quizzes-count",
+  auth,
+  isInstructor,
+  asyncHandler(CourseController.getInstructorCoursesWithQuizzes)
+);
+
 coursesRouter.get("/:id", auth, asyncHandler(CourseController.getCourseById));
 
 export default coursesRouter;
