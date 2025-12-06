@@ -1,23 +1,21 @@
-import { useEffect } from "react";
+import { useLatesetAnnouncements } from "../../hooks/useAnnouncements";
 import Announcement from "./Announcement";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import {
-  getAnnouncementsInfo,
-  getLatest,
-  loadLatest,
-} from "./announcementsSlice";
 import { Link } from "react-router-dom";
 
 function Announcements() {
-  const dispatch = useAppDispatch();
-  const latest = useAppSelector(getLatest);
-  const { hasError, isLoading } = useAppSelector(getAnnouncementsInfo);
+  // const dispatch = useAppDispatch();
+  // const latest = useAppSelector(getLatest);
+  // const { hasError, isLoading } = useAppSelector(getAnnouncementsInfo);
 
-  useEffect(() => {
-    if (!latest || latest.length === 0) {
-      dispatch(loadLatest());
-    }
-  }, [latest, dispatch]);
+  // useEffect(() => {
+  //   if (!latest || latest.length === 0) {
+  //     dispatch(loadLatest());
+  //   }
+  // }, [latest, dispatch]);
+
+  const { data: latest, isLoading, isError } = useLatesetAnnouncements();
+
+  console.log(latest);
 
   return (
     <section className="bg-white lg:p-6 p-2 rounded-2xl shadow-lg w-full">
@@ -36,13 +34,13 @@ function Announcements() {
         </Link>
       </div>
       {isLoading && <div>Loading...</div>}
-      {hasError && <div className="text-red-500">Failed to load data.</div>}
-      {latest.map((announcement) => (
+      {isError && <div className="text-red-500">Failed to load data.</div>}
+      {latest?.map((announcement) => (
         <Announcement
           key={announcement._id}
-          instructor={announcement.author}
+          author={announcement.author}
           content={announcement.content}
-          course={"General"}
+          course={announcement.course}
         />
       ))}
     </section>

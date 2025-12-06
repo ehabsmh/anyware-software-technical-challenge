@@ -1,12 +1,14 @@
 import express from "express";
 import AnnouncementController from "../controllers/announcements";
 import asyncHandler from "../utils/asyncHandler";
-import { auth, isInstructor } from "../middlewares/auth";
+import { auth, isInstructor, isStudent } from "../middlewares/auth";
 
 const announcementsRouter = express.Router();
 
 announcementsRouter.get(
   "/latest",
+  auth,
+  isStudent,
   asyncHandler(AnnouncementController.getLatest)
 );
 announcementsRouter.get("/", auth, asyncHandler(AnnouncementController.getAll));

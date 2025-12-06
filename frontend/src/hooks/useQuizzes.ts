@@ -1,19 +1,54 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { IQuiz } from "../interfaces/quiz";
+import type {
+  ICorrectQuiz,
+  IQuiz,
+  IQuizSubmissionPopulated,
+  IQuizUpcoming,
+  ISubmitQuiz,
+} from "../interfaces/quiz";
 import {
+  correctQuizSubmission,
   createQuiz,
   deleteQuiz,
   fetchInstructorQuizzes,
+  fetchQuizById,
+  fetchQuizSubmissionById,
+  fetchQuizSubmissions,
+  fetchStudentSubmissions,
+  submitQuiz,
   updateQuizInfo,
   updateQuizQuestions,
 } from "../services/apiQuizzes";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
-export function useInstructorQuizzes(page: number, limit: number) {
+export function useInstructorQuizzes(options: {
+  page?: number;
+  limit?: number;
+  topic?: string;
+  course?: string;
+}) {
   return useQuery({
-    queryKey: ["quizzes", page, limit],
-    queryFn: () => fetchInstructorQuizzes(page, limit),
+    queryKey: [
+      "quizzes",
+      options.page,
+      options.limit,
+      options.topic,
+      options.course,
+    ],
+    queryFn: () => fetchInstructorQuizzes(options),
+  });
+}
+
+export function useQuiz(id: string, review?: boolean) {
+  return useQuery<IQuizSubmissionPopulated | IQuizUpcoming | undefined, Error>({
+    queryKey: [review ? "quizSubmissions" : "quiz", id],
+    queryFn: () => {
+      if (review) {
+        return fetchQuizSubmissionById(id);
+      }
+      return fetchQuizById(id);
+    },
   });
 }
 
@@ -86,6 +121,64 @@ export function useDeleteQuiz() {
     onError: (error) => {
       const message = error instanceof Error ? error.message : String(error);
       toast.error(message || "Failed to delete quiz");
+    },
+  });
+}
+
+export function useStudentSubmissions() {
+  return useQuery({
+    queryKey: ["studentSubmissions"],
+    queryFn: () => fetchStudentSubmissions(),
+  });
+}
+
+export function useSubmitQuiz() {
+  const qc = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: (payload: ISubmitQuiz) => submitQuiz(payload),
+    onSuccess: (newSubmission) => {
+      qc.invalidateQueries({ queryKey: ["studentSubmissions"] });
+      qc.setQueryData(
+        ["studentSubmissions", newSubmission?._id],
+        newSubmission
+      );
+
+      navigate(`/student/submitted-quizzes/${newSubmission?._id}`);
+
+      toast.success("Quiz submitted successfully!");
+    },
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : String(error);
+      toast.error(message || "Failed to submit quiz");
+    },
+  });
+}
+
+export function useQuizSubmissions(quizId: string, page = 1, limit = 5) {
+  return useQuery({
+    queryKey: ["quizSubmissions"],
+    queryFn: () => fetchQuizSubmissions(quizId, page, limit),
+  });
+}
+
+export function useCorrectQuiz() {
+  const qc = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: (data: ICorrectQuiz) => correctQuizSubmission(data),
+    onSuccess: (correctedSubmission) => {
+      qc.invalidateQueries({ queryKey: ["quizSubmissions"] });
+      toast.success("Quiz corrected successfully!");
+      navigate(
+        `/instructor/quizzes/${correctedSubmission?.quizId}/submissions`
+      );
+    },
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : String(error);
+      toast.error(message || "Failed to correct quiz submission");
     },
   });
 }

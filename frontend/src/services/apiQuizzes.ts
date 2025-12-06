@@ -1,10 +1,13 @@
 import axios from "axios";
 import api from "../config/axios.config";
 import type {
+  ICorrectQuiz,
   IInstructorQuiz,
   IQuiz,
   IQuizSubmission,
+  IQuizSubmissionPopulated,
   IQuizUpcoming,
+  ISubmitQuiz,
 } from "../interfaces/quiz";
 
 export async function fetchUpcomingQuizzes() {
@@ -19,12 +22,18 @@ export async function fetchQuizById(id: string) {
   return data;
 }
 
-export async function fetchInstructorQuizzes(page: number, limit: number) {
+export async function fetchInstructorQuizzes(options: {
+  page?: number;
+  limit?: number;
+  topic?: string;
+  course?: string;
+}) {
+  const { page = 1, limit = 5, topic = "", course = "" } = options;
   try {
     const { data }: { data: IInstructorQuiz } = await api.get(
       "/quizzes/instructor",
       {
-        params: { page, limit },
+        params: { page, limit, topic, course },
       }
     );
     console.log(data);
@@ -49,11 +58,79 @@ export async function fetchQuizQuestions(id: string) {
   }
 }
 
-export async function submitQuiz(id: string, answers: number[]) {
+export async function fetchStudentSubmissions() {
+  try {
+    const {
+      data,
+    }: {
+      data: {
+        items: IQuizSubmissionPopulated[];
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    } = await api.get(`/quizzes/submissions/student`);
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(
+        error.response.data.error || "Failed to fetch quiz submissions."
+      );
+    }
+  }
+}
+
+export async function fetchQuizSubmissionById(id: string) {
+  try {
+    const { data }: { data: IQuizSubmissionPopulated } = await api.get(
+      `/quizzes/submissions/${id}`
+    );
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(
+        error.response.data.error || "Failed to fetch quiz submission."
+      );
+    }
+  }
+}
+
+export async function fetchQuizSubmissions(
+  quizId: string,
+  page = 1,
+  limit = 5
+) {
+  try {
+    const {
+      data,
+    }: {
+      data: {
+        items: IQuizSubmissionPopulated[];
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    } = await api.get(`/quizzes/${quizId}/submissions`, {
+      params: { page, limit },
+    });
+
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(
+        error.response.data.error || "Failed to fetch quiz submissions."
+      );
+    }
+  }
+}
+
+export async function submitQuiz(payload: ISubmitQuiz) {
   try {
     const { data }: { data: IQuizSubmission } = await api.post(
-      `/quizzes/${id}/submit`,
-      { answers }
+      `/quizzes/submissions`,
+      payload
     );
     return data;
   } catch (error) {
@@ -117,6 +194,22 @@ export async function deleteQuiz(id: string) {
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
       throw new Error(error.response.data.error || "Failed to delete quiz");
+    }
+  }
+}
+
+export async function correctQuizSubmission(payload: ICorrectQuiz) {
+  try {
+    const { data }: { data: IQuizSubmission } = await api.patch(
+      "/quizzes/submissions/corrections",
+      payload
+    );
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(
+        error.response.data.error || "Failed to correct quiz submission"
+      );
     }
   }
 }

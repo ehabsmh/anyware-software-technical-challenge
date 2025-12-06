@@ -59,7 +59,10 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
           {role === "student" && (
             <Button
               variant="contained"
-              sx={{ background: "linear-gradient(90deg, #12557b, #408391)" }}
+              sx={{
+                background: "linear-gradient(90deg, #12557b, #408391)",
+                mt: 2,
+              }}
               onClick={() => onView?.(course._id.toString())}
             >
               View

@@ -4,12 +4,14 @@ import quizzesRouter from "./quizzes";
 import authRouter from "./auth";
 import coursesRouter from "./courses";
 import semestersRouter from "./semesters";
+import quizSubmissionsRouter from "./quizSubmissions";
 
 const router = express.Router();
 
 router.use("/auth", authRouter);
 router.use("/announcements", announcementsRouter);
 router.use("/quizzes", quizzesRouter);
+router.use("/quizzes/", quizSubmissionsRouter);
 router.use("/courses", coursesRouter);
 router.use("/semesters", semestersRouter);
 export default router;

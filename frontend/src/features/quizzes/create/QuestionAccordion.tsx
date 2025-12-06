@@ -92,7 +92,7 @@ function QuestionAccordion({
                 resetField(`questions.${qIndex}.options`);
                 resetField(`questions.${qIndex}.answer`);
               }}
-              error={!!watch(`questions.${qIndex}.type`) === false}
+              error={!!watch(`questions.${qIndex}.type`)}
             >
               <MenuItem value="mcq">Multiple Choice Question</MenuItem>
               <MenuItem value="true_false">True / False Question</MenuItem>

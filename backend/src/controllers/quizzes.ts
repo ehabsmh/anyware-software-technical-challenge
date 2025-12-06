@@ -46,12 +46,14 @@ class QuizController {
 
   static async getInstructorQuizzes(req: CustomRequest, res: Response) {
     const instructorId = req.user?._id;
+
+    const { topic, course }: { topic?: string; course?: string } = req.query;
+
     const page = req.query.page ? Number(req.query.page) : undefined;
     const limit = req.query.limit ? Number(req.query.limit) : undefined;
     const quizzes = await QuizService.getInstructorQuizzes(
       String(instructorId!),
-      page,
-      limit
+      { page, limit, topic, course }
     );
 
     res.json(quizzes);
@@ -71,10 +73,9 @@ class QuizController {
   }
 
   static async submitAnswers(req: Request, res: Response) {
-    const { id } = req.params;
-    const { answers } = req.body;
+    const { quizId, userId, answers } = req.body;
 
-    const result = await QuizService.submitAnswers(id!, answers);
+    const result = await QuizService.submitAnswers(quizId!, userId!, answers);
 
     res.json(result);
   }
@@ -113,24 +114,41 @@ class QuizController {
     res.status(204).send();
   }
 
-  // static async deleteQuestions(req: Request, res: Response) {
-  //   const { id } = req.params;
+  static async getUserSubmittedQuizzes(req: CustomRequest, res: Response) {
+    const user = req.user;
+    const userId = String(user?._id);
+    const submissions = await QuizService.getUserSubmittedQuizzes(userId);
+    res.json(submissions);
+  }
 
-  //   const message = await QuizService.deleteQuestion(
-  //     Number(req.body.index),
-  //     id!
-  //   );
+  static async getUserSubmittedQuiz(req: CustomRequest, res: Response) {
+    const submission = await QuizService.getUserSubmittedQuiz(
+      req.params.submissionId!
+    );
+    res.json(submission);
+  }
 
-  //   res.status(200).send(message);
-  // }
+  static async getQuizSubmissions(req: CustomRequest, res: Response) {
+    const { id } = req.params;
 
-  // static async addQuestion(req: Request, res: Response) {
-  //   const { id } = req.params;
+    const page = req.query.page ? Number(req.query.page) : undefined;
+    const limit = req.query.limit ? Number(req.query.limit) : undefined;
 
-  //   const newQuestion = await QuizService.addQuestion(id!, req.body);
+    const submissions = await QuizService.getQuizSubmissions(id!, page, limit);
 
-  //   res.json(newQuestion);
-  // }
+    res.json(submissions);
+  }
+
+  static async correctQuizSubmission(req: Request, res: Response) {
+    const { submissionId, answers } = req.body;
+
+    const correctedSubmission = await QuizService.correctQuizSubmission(
+      submissionId!,
+      answers
+    );
+
+    res.json(correctedSubmission);
+  }
 }
 
 export default QuizController;

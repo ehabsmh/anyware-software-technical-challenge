@@ -35,7 +35,6 @@ function AnnouncementsPage() {
     mineOnly: mineOnly,
     page: currentPage,
   });
-  console.log(data);
 
   const announcements = data?.items || [];
   const { totalPages } = data || {};
@@ -67,23 +66,16 @@ function AnnouncementsPage() {
         onToggleMineOnly={onToggleMineOnly}
       />
       <Box className="max-w-7xl mx-auto">
-        {/* Header */}
-        <Box className="flex flex-col sm:flex-row justify-between items-center mb-6 mt-8">
-          <Typography
-            variant="h4"
-            className="font-semibold bg-gradient-to-r from-[--color-gradient-1] to-[--color-gradient-2] text-transparent bg-clip-text"
-          >
-            Announcements
-          </Typography>
-        </Box>
-
         {/* Announcements list */}
         {announcements.length === 0 ? (
-          <Typography variant="body1" className="text-center mt-8">
+          <Typography
+            variant="body1"
+            className="text-center mt-8! text-gray-600"
+          >
             No announcements available.
           </Typography>
         ) : (
-          <Box className="space-y-4">
+          <Box className="space-y-4 mt-8!">
             {announcements.map((a) => (
               <Card
                 key={a._id}

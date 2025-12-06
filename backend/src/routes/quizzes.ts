@@ -18,12 +18,12 @@ quizzesRouter.get(
   asyncHandler(QuizController.getInstructorQuizzes)
 );
 
+quizzesRouter.get("/:id", asyncHandler(QuizController.getById));
+
 quizzesRouter.get(
   "/:id/questions",
   asyncHandler(QuizController.getQuizQuestions)
 );
-
-quizzesRouter.get("/:id", asyncHandler(QuizController.getById));
 
 quizzesRouter.post(
   "/",
@@ -52,21 +52,5 @@ quizzesRouter.delete(
   isInstructor,
   asyncHandler(QuizController.deleteQuiz)
 );
-
-// quizzesRouter.delete(
-//   "/:id/questions",
-//   auth,
-//   isInstructor,
-//   asyncHandler(QuizController.deleteQuestions)
-// );
-
-// quizzesRouter.post(
-//   "/:id/questions",
-//   auth,
-//   isInstructor,
-//   asyncHandler(QuizController.addQuestion)
-// );
-
-quizzesRouter.post("/:id/submit", asyncHandler(QuizController.submitAnswers));
 
 export default quizzesRouter;

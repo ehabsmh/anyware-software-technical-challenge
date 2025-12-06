@@ -1,11 +1,15 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useInstructorQuizzes } from "../../hooks/useQuizzes";
-import GenericTable from "../../ui/GenericTable";
+import GenericTable, { type Column } from "../../ui/GenericTable";
 import EditMenu from "../../features/quizzes/manage/EditMenu";
 import type { IInstructorQuiz } from "../../interfaces/quiz";
 import DeleteQuiz from "../../features/quizzes/manage/DeleteQuiz";
+import Search from "../../ui/Search";
+import { useState } from "react";
+import { useDebounce } from "use-debounce";
+import { Link } from "react-router-dom";
 
-const columns = [
+const columns: Column<IInstructorQuiz["items"][number]>[] = [
   { id: "topic", label: "Topic" },
   {
     id: "course",
@@ -23,31 +27,65 @@ const columns = [
   {
     id: "actions",
     label: "Actions",
+    align: "center",
     render: (row: IInstructorQuiz["items"][number]) => (
-      <Box display="flex" gap={1}>
+      <Box display="flex" className="items-center justify-center" gap={1}>
         <EditMenu row={row} />
 
         <DeleteQuiz quizId={row._id} />
+
+        <Button
+          variant="outlined"
+          component={Link}
+          to={`/instructor/quizzes/${row._id}/submissions`}
+        >
+          View Submissions
+        </Button>
       </Box>
     ),
   },
 ];
 
 function Quizzes() {
-  const { data: quizzes } = useInstructorQuizzes(1, 5);
+  const [searchTopic, setSearchTopic] = useState("");
+  const [searchCourse, setSearchCourse] = useState("");
+
+  const [debouncedTopic] = useDebounce(searchTopic, 800);
+  const [debouncedCourse] = useDebounce(searchCourse, 800);
+
+  const { data: quizzes } = useInstructorQuizzes({
+    page: 1,
+    limit: 5,
+    topic: debouncedTopic,
+    course: debouncedCourse,
+  });
   const items = quizzes?.items || [];
 
   const { page = 1, limit = 5, total = 0 } = quizzes || {};
 
   return (
-    <GenericTable<IInstructorQuiz["items"][number]>
-      columns={columns}
-      rows={items}
-      page={page}
-      limit={limit}
-      total={total}
-      onPageChange={() => {}}
-    />
+    <>
+      <div className="flex gap-16">
+        <Search
+          label="Search Topic"
+          value={searchTopic}
+          onChange={(e) => setSearchTopic(e.target.value)}
+        />
+        <Search
+          label="Search Course"
+          value={searchCourse}
+          onChange={(e) => setSearchCourse(e.target.value)}
+        />
+      </div>
+      <GenericTable<IInstructorQuiz["items"][number]>
+        columns={columns}
+        rows={items}
+        page={page}
+        limit={limit}
+        total={total}
+        onPageChange={() => {}}
+      />
+    </>
   );
 }
 

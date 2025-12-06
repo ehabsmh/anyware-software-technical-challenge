@@ -1,9 +1,8 @@
-// src/config/navConfig.ts
 import { GrAnnounce, GrDocumentTest, GrUserAdmin } from "react-icons/gr";
 import { LuLetterText } from "react-icons/lu";
 import { BiHome, BiChart } from "react-icons/bi";
 import { GiGraduateCap } from "react-icons/gi";
-import { GrSchedule } from "react-icons/gr";
+import { FactCheck } from "@mui/icons-material";
 
 export const navConfig = {
   admin: [
@@ -46,12 +45,17 @@ export const navConfig = {
   ],
 
   student: [
-    { to: "/dashboard", label: "Dashboard", icon: BiHome },
-    { to: "/schedule", label: "Schedule", icon: GrSchedule },
-    { to: "/courses", label: "Courses", icon: LuLetterText },
-    { to: "/gradebook", label: "GradeBook", icon: GiGraduateCap },
-    { to: "/performance", label: "Performance", icon: BiChart },
-    { to: "/announcements", label: "Announcements", icon: GrAnnounce },
+    { to: "/student/dashboard", label: "Dashboard", icon: BiHome },
+    { to: "/student/courses", label: "Courses", icon: LuLetterText },
+    { to: "/student/announcements", label: "Announcements", icon: GrAnnounce },
+    {
+      to: "/student/submitted-quizzes",
+      label: "Quizzes",
+      icon: GrDocumentTest,
+    },
+    // { to: "/schedule", label: "Schedule", icon: GrSchedule },
+    // { to: "/gradebook", label: "GradeBook", icon: GiGraduateCap },
+    // { to: "/performance", label: "Performance", icon: BiChart },
   ],
 
   instructor: [
@@ -87,6 +91,11 @@ export const navConfig = {
           to: "/instructor/quizzes/manage",
           label: "Manage Quizzes",
           icon: GrDocumentTest,
+        },
+        {
+          to: "/instructor/quizzes/corrections",
+          label: "Corrections",
+          icon: FactCheck,
         },
       ],
     },

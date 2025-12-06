@@ -9,14 +9,15 @@ import {
   Box,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import type { ILatestAnnouncement } from "../../interfaces/announcement";
 
 type AnnouncementProps = {
-  instructor: string;
-  content: string;
-  course: string;
+  author: ILatestAnnouncement["author"];
+  content: ILatestAnnouncement["content"];
+  course: ILatestAnnouncement["course"];
 };
 
-function Announcement({ instructor, content, course }: AnnouncementProps) {
+function Announcement({ author, content, course }: AnnouncementProps) {
   const theme = useTheme();
   const isMobileOrTablet = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -39,12 +40,12 @@ function Announcement({ instructor, content, course }: AnnouncementProps) {
         }}
       >
         <CardHeader
-          avatar={<Avatar>{instructor[0]}</Avatar>}
+          avatar={<Avatar src={author.avatar} />}
           title={
             <Typography
               sx={{ fontSize: isMobileOrTablet ? "0.9rem" : "0.8rem" }}
             >
-              {instructor}
+              {author.name}
             </Typography>
           }
           subheader={
@@ -55,7 +56,7 @@ function Announcement({ instructor, content, course }: AnnouncementProps) {
                 color: "gray",
               }}
             >
-              {course || "General"}
+              {course?.name || "General"}
             </Typography>
           }
           sx={{ p: 0 }}

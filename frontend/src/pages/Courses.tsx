@@ -15,8 +15,10 @@ import type { ISemester } from "../interfaces/semester";
 import SearchCourses from "../ui/SearchCourses";
 import CourseSkeleton from "../skeletons/course";
 import { showAlert } from "../utils/helpers";
+import { useAppSelector } from "../store/hooks";
 
 function Courses() {
+  const { role: userRole } = useAppSelector((state) => state.user);
   const [semesters, setSemesters] = useState<ISemester[]>([]);
 
   const [selectedSemester, setSelectedSemester] = useState("");
@@ -58,7 +60,7 @@ function Courses() {
     <div className="bg-main overflow-y-auto p-8 h-[calc(100vh-86px)]">
       {/* Header */}
       <h1 className="text-3xl font-bold text-center text-[--color-gradient-1] mb-10">
-        📘 My Courses
+        {userRole === "instructor" ? "📘 My Courses" : "📘 Courses"}
       </h1>
 
       <div className="md:flex md:gap-8 mb-7">
@@ -104,7 +106,7 @@ function Courses() {
               <CourseCard
                 key={course._id}
                 course={course}
-                role="instructor"
+                role={userRole!}
                 onEdit={onEdit}
                 onDelete={onDelete}
               />

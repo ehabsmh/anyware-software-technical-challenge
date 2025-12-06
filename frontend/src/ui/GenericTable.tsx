@@ -8,8 +8,9 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { useNavigate } from "react-router";
 
-interface Column<T> {
+export interface Column<T> {
   id: string;
   label: string;
   align?: "left" | "right" | "center";
@@ -25,14 +26,14 @@ interface Props<T extends { _id: string }> {
   onPageChange: (newPage: number) => void;
 }
 
-export default function GenericTable<T extends { _id: string }>({
-  columns,
-  rows,
-  page,
-  limit,
-  total,
-  onPageChange,
-}: Props<T>) {
+export default function GenericTable<
+  T extends {
+    score?: number;
+    totalPoints?: number;
+    _id: string;
+  }
+>({ columns, rows, page, limit, total, onPageChange }: Props<T>) {
+  const navigate = useNavigate();
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -49,8 +50,28 @@ export default function GenericTable<T extends { _id: string }>({
             </TableHead>
 
             <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row._id}>
+              {rows?.map((row) => (
+                <TableRow
+                  key={row._id}
+                  hover={
+                    row.score !== undefined && row.totalPoints !== undefined
+                      ? true
+                      : false
+                  }
+                  className={`${
+                    row.score !== undefined && row.totalPoints !== undefined
+                      ? "cursor-pointer"
+                      : ""
+                  }`}
+                  onClick={() => {
+                    if (
+                      row.score !== undefined &&
+                      row.totalPoints !== undefined
+                    ) {
+                      navigate(`/student/submitted-quizzes/${row._id}`);
+                    }
+                  }}
+                >
                   {columns.map((col) => (
                     <TableCell key={col.id} align={col.align || "left"}>
                       {col.render ? col.render(row) : (row as any)[col.id]}

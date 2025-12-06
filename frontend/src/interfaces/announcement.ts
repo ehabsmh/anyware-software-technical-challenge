@@ -23,3 +23,13 @@ export interface IAnnouncementResponse {
   limit: number;
   totalPages: number;
 }
+
+export interface ILatestAnnouncement {
+  _id: string;
+  title: string;
+  content: string;
+  author: { _id: string; name: string; avatar: string };
+  course: { _id: string; name: string; instructor: string };
+  createdAt: string;
+  updatedAt: string;
+}

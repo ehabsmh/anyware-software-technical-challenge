@@ -100,7 +100,6 @@ const steps = ["Create quiz info", "Add questions"];
 
 export default function CreateQuizStepper() {
   const [activeStep, setActiveStep] = useState(0);
-  const [numQuestions, setNumQuestions] = useState(1);
 
   const methods = useForm({
     defaultValues: {
@@ -153,13 +152,7 @@ export default function CreateQuizStepper() {
               {activeStep === 0 && (
                 <QuizInfoForm editMode={false} onNext={onNext} />
               )}
-              {activeStep === 1 && (
-                <QuizQuestionsForm
-                  numQuestions={numQuestions}
-                  setNumQuestions={setNumQuestions}
-                  onBack={onBack}
-                />
-              )}
+              {activeStep === 1 && <QuizQuestionsForm onBack={onBack} />}
             </form>
           </Card>
         </Box>

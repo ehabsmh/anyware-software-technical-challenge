@@ -13,7 +13,6 @@ import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { login } from "../features/users/usersSlice";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 const CssTextField = styled(TextField)({
   "& label.Mui-focused": {
@@ -45,7 +44,7 @@ function Home() {
   }>();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
+  const { isAuthenticated, role } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
 
   // const toggleLanguage = () => {
@@ -56,15 +55,10 @@ function Home() {
     const result = await dispatch(login(data));
     if (result.type === "auth/login/fulfilled") {
       // navigate to dashboard on successful login
-      navigate("/dashboard");
+      if (role === "student") navigate("/student/dashboard");
+      if (role === "instructor") navigate("/instructor/dashboard");
     }
   }
-
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     navigate("/dashboard");
-  //   }
-  // }, [isAuthenticated, navigate]);
 
   return (
     <Container

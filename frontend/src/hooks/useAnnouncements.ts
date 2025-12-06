@@ -4,6 +4,7 @@ import {
   deleteAnnouncement,
   fetchAllAnnouncements,
   fetchAnnouncementById,
+  fetchLatestAnnouncements,
   updateAnnouncement,
 } from "../services/apiAnnouncements";
 import { toast } from "sonner";
@@ -29,6 +30,13 @@ export function useAnnouncements({
     queryKey: ["announcements", semesterId, courseId, mineOnly, page, limit],
     queryFn: () =>
       fetchAllAnnouncements({ page, limit, semesterId, courseId, mineOnly }),
+  });
+}
+
+export function useLatesetAnnouncements() {
+  return useQuery({
+    queryKey: ["announcements", "latest"],
+    queryFn: () => fetchLatestAnnouncements(5),
   });
 }
 

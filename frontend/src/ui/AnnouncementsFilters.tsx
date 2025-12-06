@@ -6,10 +6,10 @@ import {
   Checkbox,
   Button,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import type { ISemester } from "../interfaces/semester";
 import { getSemesters } from "../services/apiSemesters";
 import { useCourses } from "../hooks/useCourses";
+import { useAppSelector } from "../store/hooks";
+import { useQuery } from "@tanstack/react-query";
 
 export default function AnnouncementsFilters({
   selectedSemesterId,
@@ -26,16 +26,22 @@ export default function AnnouncementsFilters({
   mineOnly: boolean;
   onToggleMineOnly: () => void;
 }) {
-  const [semesters, setSemesters] = useState<ISemester[]>([]);
+  // const [semesters, setSemesters] = useState<ISemester[]>([]);
+  const { data: semesters } = useQuery({
+    queryKey: ["semesters"],
+    queryFn: getSemesters,
+  });
+
+  const { role: userRole } = useAppSelector((state) => state.user);
 
   // Get Courses based on the chosen semester
   const { data } = useCourses(selectedSemesterId);
   const courses = data?.data.items;
 
   // Get Semesters on component mount
-  useEffect(() => {
-    getSemesters().then((data) => setSemesters(data ?? []));
-  }, []);
+  // useEffect(() => {
+  //   getSemesters().then((data) => setSemesters(data ?? []));
+  // }, []);
 
   return (
     <Toolbar
@@ -85,7 +91,7 @@ export default function AnnouncementsFilters({
         onChange={(e) => onSelectSemester(e.target.value)}
       >
         <MenuItem value="">All Semesters</MenuItem>
-        {semesters.map((semester) => (
+        {semesters?.map((semester) => (
           <MenuItem key={semester._id} value={semester._id}>
             {semester.name}
           </MenuItem>
@@ -135,18 +141,20 @@ export default function AnnouncementsFilters({
         </TextField>
       )}
 
-      <FormControlLabel
-        control={<Checkbox />}
-        label="Mine only"
-        checked={mineOnly}
-        onChange={onToggleMineOnly}
-        sx={{
-          color: "white",
-          "& .MuiCheckbox-root": {
+      {userRole === "instructor" && (
+        <FormControlLabel
+          control={<Checkbox />}
+          label="Mine only"
+          checked={mineOnly}
+          onChange={onToggleMineOnly}
+          sx={{
             color: "white",
-          },
-        }}
-      />
+            "& .MuiCheckbox-root": {
+              color: "white",
+            },
+          }}
+        />
+      )}
 
       <Button
         variant="contained"

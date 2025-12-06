@@ -55,7 +55,7 @@ function WhatsDue() {
               </Typography>
               <Button
                 component={Link}
-                to={`/quizzes/${item._id}`}
+                to={`/student/quizzes/solve/${item._id}`}
                 variant="outlined"
                 sx={{ mt: 2 }}
               >

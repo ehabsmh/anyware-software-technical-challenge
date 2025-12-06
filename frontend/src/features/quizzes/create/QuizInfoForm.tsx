@@ -38,7 +38,6 @@ function QuizInfoForm({
       "topic",
       "dueDate",
       "timeLimitInMinutes",
-      "numberOfAttempts",
       "totalPoints",
     ]);
 
@@ -144,14 +143,6 @@ function QuizInfoForm({
           error={!!errors.timeLimitInMinutes}
         />
 
-        <TextField
-          type="number"
-          label="Number of attempts"
-          {...register("attemptsAllowed", {
-            required: "Number of attempts is required",
-          })}
-          error={!!errors.attemptsAllowed}
-        />
         <TextField
           type="number"
           label="Total Points"

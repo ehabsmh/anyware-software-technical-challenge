@@ -1,6 +1,6 @@
-import Announcements from "../features/announcements/Announcements";
-import WhatsDue from "../features/quizzes/WhatsDue";
-import ExamsTimeBanner from "../ui/ExamsTimeBanner";
+import Announcements from "../../features/announcements/Announcements";
+import WhatsDue from "../../features/quizzes/WhatsDue";
+import ExamsTimeBanner from "../../ui/ExamsTimeBanner";
 
 export default function Dashboard() {
   return (

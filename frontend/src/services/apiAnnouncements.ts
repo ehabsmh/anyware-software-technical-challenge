@@ -4,13 +4,17 @@ import type {
   IAnnouncement,
   IAnnouncementPopulated,
   IAnnouncementResponse,
+  ILatestAnnouncement,
 } from "../interfaces/announcement";
 import type { AnnouncementsHookParams } from "../hooks/useAnnouncements";
 
 export async function fetchLatestAnnouncements(limit = 4) {
-  const { data } = await api.get("/announcements/latest", {
-    params: { limit },
-  });
+  const { data }: { data: ILatestAnnouncement[] } = await api.get(
+    "/announcements/latest",
+    {
+      params: { limit },
+    }
+  );
   return data;
 }
 
