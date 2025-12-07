@@ -108,9 +108,9 @@ export default function CreateQuizStepper() {
       topic: "",
       dueDate: "",
       timeLimitInMinutes: 0,
-      attemptsAllowed: 1,
+      totalPoints: 0,
       questions: [
-        { type: "", question: "", options: [], answer: [], points: 1 },
+        // { _id: "", type: "", question: "", options: [], answer: [], points: 1 },
       ],
     },
   });
@@ -139,7 +139,7 @@ export default function CreateQuizStepper() {
         ))}
       </Stepper>
       <FormProvider {...methods}>
-        <Box className="bg-main xl:w-4/7 lg:w-4/5 mx-auto! p-4">
+        <Box className="bg-main xl:w-4/7 lg:w-4/5 mx-auto! w-full p-4">
           <Card
             sx={{
               width: "100%",

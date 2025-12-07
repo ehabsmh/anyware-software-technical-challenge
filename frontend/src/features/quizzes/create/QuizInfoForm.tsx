@@ -71,6 +71,9 @@ function QuizInfoForm({
               }}
               value={field.value || ""}
               error={!!errors.semester}
+              helperText={
+                errors.semester ? String(errors.semester.message) : ""
+              }
             >
               <MenuItem value="">Select semester</MenuItem>
 
@@ -96,6 +99,7 @@ function QuizInfoForm({
               value={field.value || ""}
               onChange={(e) => field.onChange(e.target.value)}
               error={!!errors.course}
+              helperText={errors.course ? String(errors.course.message) : ""}
             >
               <MenuItem value="">Select course</MenuItem>
 
@@ -118,8 +122,15 @@ function QuizInfoForm({
 
       <TextField
         label="Topic"
-        {...register("topic", { required: "Topic is required" })}
+        {...register("topic", {
+          required: "Topic is required",
+          maxLength: {
+            value: 100,
+            message: "Topic cannot exceed 100 characters",
+          },
+        })}
         error={!!errors.topic}
+        helperText={errors.topic ? String(errors.topic.message) : ""}
         sx={{ width: "100%" }}
       />
 
@@ -130,6 +141,7 @@ function QuizInfoForm({
           valueAsDate: true,
         })}
         error={!!errors.dueDate}
+        helperText={errors.dueDate ? String(errors.dueDate.message) : ""}
       />
 
       <Box className="md:flex-row flex flex-col md:gap-6 gap-4">
@@ -139,8 +151,17 @@ function QuizInfoForm({
           {...register("timeLimitInMinutes", {
             required: "Time limit is required",
             valueAsNumber: true,
+            max: {
+              value: 180,
+              message: "Time limit cannot exceed 180 minutes",
+            },
           })}
           error={!!errors.timeLimitInMinutes}
+          helperText={
+            errors.timeLimitInMinutes
+              ? String(errors.timeLimitInMinutes.message)
+              : ""
+          }
         />
 
         <TextField
@@ -151,6 +172,9 @@ function QuizInfoForm({
             valueAsNumber: true,
           })}
           error={!!errors.totalPoints}
+          helperText={
+            errors.totalPoints ? String(errors.totalPoints.message) : ""
+          }
         />
       </Box>
 

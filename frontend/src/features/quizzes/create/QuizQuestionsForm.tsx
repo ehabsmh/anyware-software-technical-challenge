@@ -28,6 +28,7 @@ function QuizQuestionsForm({ editMode, onBack }: QuizQuestionsFormProps) {
   });
 
   const initialQuestion: IQuiz["questions"][number] = {
+    _id: "",
     question: "",
     type: "",
     options: [],

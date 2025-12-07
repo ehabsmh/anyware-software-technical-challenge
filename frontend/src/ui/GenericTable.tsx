@@ -35,10 +35,10 @@ export default function GenericTable<
 >({ columns, rows, page, limit, total, onPageChange }: Props<T>) {
   const navigate = useNavigate();
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box className="w-screen lg:w-auto">
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+        <TableContainer className="overflow-x-auto">
+          <Table aria-labelledby="tableTitle">
             <TableHead>
               <TableRow>
                 {columns.map((col) => (

@@ -3,13 +3,12 @@ import { IAnnouncement } from "../interfaces/announcement";
 
 const announcementSchema = new Schema<IAnnouncement>(
   {
-    title: { type: String, required: true },
-    content: { type: String, required: true },
-    author: { type: Schema.Types.ObjectId, required: true, ref: "User" },
-    course: { type: Schema.Types.ObjectId, required: true, ref: "Course" },
+    title: { type: String },
+    content: { type: String },
+    author: { type: Schema.Types.ObjectId, ref: "User" },
+    course: { type: Schema.Types.ObjectId, ref: "Course" },
     semester: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: "Semester",
     },
   },

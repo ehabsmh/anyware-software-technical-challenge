@@ -23,6 +23,7 @@ import { useQuery } from "@tanstack/react-query";
 
 // For Edit mode
 import { useParams } from "react-router";
+import type { IValidationError } from "../../interfaces/validationError";
 
 function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
   const { data: semesters } = useQuery({
@@ -46,6 +47,7 @@ function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
     handleSubmit,
     reset,
     watch,
+    setError,
     formState: { errors },
   } = useForm<Partial<IAnnouncement>>();
 
@@ -55,7 +57,19 @@ function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
         console.log("Implemenet Edit mode");
       } else {
         // add announcement
-        createAnnouncement(data);
+        createAnnouncement(data, {
+          onError: (error) => {
+            if (error.type === "validation") {
+              const validationError = error as IValidationError;
+
+              validationError.errors.forEach((err) => {
+                setError(err.field as keyof IAnnouncement, {
+                  message: err.message,
+                });
+              });
+            }
+          },
+        });
       }
     } catch (error) {
       toast.error((error as Error).message || "Failed to create course.");

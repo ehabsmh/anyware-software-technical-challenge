@@ -105,7 +105,7 @@ function AnnouncementsPage() {
                     />
                   </Box>
                 )}
-                <CardContent>
+                <CardContent sx={{ mt: 3 }}>
                   <Typography
                     variant="h6"
                     className="text-gradient-1 font-bold"

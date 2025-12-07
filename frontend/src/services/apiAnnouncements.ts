@@ -44,8 +44,21 @@ export async function createAnnouncement(payload: Partial<IAnnouncement>) {
     return data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Failed to create course.");
+      const response = error.response.data;
+
+      if (response.success === false && response.errors) {
+        throw {
+          type: "validation",
+          success: response.success,
+          errors: response.errors,
+        };
+      }
+
+      throw new Error(error.response.data.error || "Failed to edit course.");
     }
+    // if (axios.isAxiosError(error) && error.response) {
+    //   throw new Error(error.response.data.error || "Failed to create course.");
+    // }
   }
 }
 

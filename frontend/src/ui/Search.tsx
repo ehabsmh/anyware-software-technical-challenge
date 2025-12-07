@@ -9,8 +9,8 @@ export default function Search({
   onChange,
 }: {
   label?: string;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
     <Paper

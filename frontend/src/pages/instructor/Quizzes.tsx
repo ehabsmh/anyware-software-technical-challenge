@@ -36,10 +36,11 @@ const columns: Column<IInstructorQuiz["items"][number]>[] = [
 
         <Button
           variant="outlined"
+          size="small"
           component={Link}
           to={`/instructor/quizzes/${row._id}/submissions`}
         >
-          View Submissions
+          Submissions
         </Button>
       </Box>
     ),
@@ -65,7 +66,7 @@ function Quizzes() {
 
   return (
     <>
-      <div className="flex gap-16">
+      <div className="flex md:gap-16 gap-4 md:flex-row flex-col mb-4">
         <Search
           label="Search Topic"
           value={searchTopic}

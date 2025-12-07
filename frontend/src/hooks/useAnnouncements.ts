@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createAnnouncement,
@@ -74,9 +75,10 @@ export function useCreateAnnouncement() {
       navigate("/instructor/announcements");
     },
 
-    onError: (error: unknown) => {
-      const message = error instanceof Error ? error.message : String(error);
-      toast.error(message || "Failed to create announcement.");
+    onError: (error: any) => {
+      if (error.type !== "validation") {
+        toast.error(error.message);
+      }
     },
   });
 }

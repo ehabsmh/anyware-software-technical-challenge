@@ -18,7 +18,8 @@ class AnnouncementService {
     return Announcement.find({}, "-semester")
       .sort({ createdAt: -1 })
       .limit(limit)
-      .populate("course", "name instructor");
+      .populate("course", "name instructor")
+      .populate("author", "name avatar");
   }
 
   static async getAll(user: IUser, options: IAnnouncementsOptions) {
@@ -32,14 +33,16 @@ class AnnouncementService {
     }
 
     // Student can filter by semesterId
-    if (user.role === "student") filter.semester = semesterId;
+    if (user.role === "student") {
+      if (semesterId) filter.semester = semesterId;
+      if (courseId) filter.course = courseId;
+    }
 
     // Instructor can filter by mineOnly, courseId, semesterId
     if (user.role === "instructor") {
       if (semesterId) filter.semester = semesterId;
       if (courseId) filter.course = courseId;
       if (mineOnly) {
-        console.log(mineOnly);
         filter.author = user._id;
       }
     }
