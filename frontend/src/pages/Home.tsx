@@ -47,10 +47,6 @@ function Home() {
   const { isAuthenticated, role } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
 
-  // const toggleLanguage = () => {
-  //   i18n.changeLanguage(i18n.language === "en" ? "ar" : "en");
-  // };
-
   async function onSubmit(data: { email: string; password: string }) {
     const result = await dispatch(login(data));
     if (result.type === "auth/login/fulfilled") {

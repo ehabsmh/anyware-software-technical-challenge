@@ -4,12 +4,14 @@ import EditInfoModal from "./EditInfoModal";
 import type { IInstructorQuiz } from "../../../interfaces/quiz";
 import { useNavigate } from "react-router-dom";
 import { useUpdateQuizInfo } from "../../../hooks/useQuizzes";
+import { useTranslation } from "react-i18next";
 
 export default function EditMenu({
   row,
 }: {
   row: IInstructorQuiz["items"][number];
 }) {
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const navigate = useNavigate();
@@ -37,7 +39,7 @@ export default function EditMenu({
         size="small"
         sx={{ background: "linear-gradient(90deg, #12557b, #408391)" }}
       >
-        Edit
+        {t("manageQuizzes.editButtonText")}
       </Button>
       <Menu
         id="basic-menu"
@@ -56,7 +58,7 @@ export default function EditMenu({
             setShowEditModal(true);
           }}
         >
-          Edit Info
+          {t("manageQuizzes.editQuizInfoButtonText")}
         </MenuItem>
 
         <MenuItem
@@ -65,7 +67,7 @@ export default function EditMenu({
             navigate(`/instructor/quizzes/edit-questions/${row._id}`);
           }}
         >
-          Edit Questions
+          {t("manageQuizzes.editQuestionsButtonText")}
         </MenuItem>
 
         {row.status === "draft" ? (
@@ -75,7 +77,7 @@ export default function EditMenu({
               editQuiz({ id: row._id, quizData: { status: "published" } });
             }}
           >
-            Set to publish
+            {t("manageQuizzes.setToPublishButtonText")}
           </MenuItem>
         ) : (
           <MenuItem
@@ -84,7 +86,7 @@ export default function EditMenu({
               editQuiz({ id: row._id, quizData: { status: "draft" } });
             }}
           >
-            Set to draft
+            {t("manageQuizzes.setToDraftButtonText")}
           </MenuItem>
         )}
       </Menu>

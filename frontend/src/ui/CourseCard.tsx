@@ -1,6 +1,7 @@
 import { Card, CardContent, Typography, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import type { ICourse } from "../interfaces/course";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   course: ICourse;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
+  const { t } = useTranslation();
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -44,14 +46,14 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
                 sx={{ background: "linear-gradient(90deg, #12557b, #408391)" }}
                 onClick={() => onEdit?.(course._id.toString())}
               >
-                Edit
+                {t("instructorCoursesPage.editButtonText")}
               </Button>
               <Button
                 variant="outlined"
                 color="error"
                 onClick={() => onDelete?.(course._id.toString())}
               >
-                Delete
+                {t("instructorCoursesPage.deleteButtonText")}
               </Button>
             </div>
           )}

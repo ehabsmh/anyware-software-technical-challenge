@@ -11,6 +11,7 @@ import {
 import { toast } from "sonner";
 import type { IAnnouncementResponse } from "../interfaces/announcement";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export type AnnouncementsHookParams = {
   page?: number;
@@ -51,6 +52,7 @@ export function useAnnouncement(id: string) {
 export function useCreateAnnouncement() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: (payload: Parameters<typeof createAnnouncement>[0]) =>
@@ -71,7 +73,7 @@ export function useCreateAnnouncement() {
 
       queryClient.invalidateQueries({ queryKey: ["announcements"] });
 
-      toast.success("Announcement created successfully!");
+      toast.success(t("createAnnouncementPage.successfulCreationMessage"));
       navigate("/instructor/announcements");
     },
 

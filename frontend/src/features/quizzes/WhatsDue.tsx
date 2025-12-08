@@ -11,8 +11,10 @@ import { loadUpcomingQuizzes, upcomingQuizzes } from "./quizzesSlice";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns/esm";
+import { useTranslation } from "react-i18next";
 
 function WhatsDue() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { upcoming, loading, error } = useAppSelector(upcomingQuizzes);
 
@@ -30,7 +32,7 @@ function WhatsDue() {
   return (
     <Card className="shadow-md rounded-2xl">
       <CardHeader
-        title="What's Due"
+        title={t("dashboard.whatsDue.title")}
         sx={{
           "& .MuiCardHeader-title": {
             fontWeight: "bold",

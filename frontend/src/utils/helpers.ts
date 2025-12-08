@@ -1,16 +1,17 @@
+import { t } from "i18next";
 import { toast } from "sonner";
 
 export function showAlert(action: () => void) {
-  toast.error("Are you sure you want to remove this item?", {
+  toast.error(t("instructorCoursesPage.deleteConfirmationMessage"), {
     id: "delete-confirm",
     cancel: {
-      label: "No",
+      label: t("instructorCoursesPage.noActionButtonText"),
       onClick: () => {
         toast.dismiss("delete-confirm");
       },
     },
     action: {
-      label: "Yes",
+      label: t("instructorCoursesPage.yesActionButtonText"),
       onClick: async () => {
         action();
         toast.dismiss("delete-confirm");

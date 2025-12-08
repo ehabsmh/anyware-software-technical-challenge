@@ -4,6 +4,7 @@ import { getSemesters } from "../../../services/apiSemesters";
 import { useEffect, useState } from "react";
 import { useCourses } from "../../../hooks/useCourses";
 import { Controller, useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 function QuizInfoForm({
   onNext,
@@ -12,6 +13,7 @@ function QuizInfoForm({
   onNext: () => void;
   editMode?: boolean;
 }) {
+  const { t } = useTranslation();
   const { data: semesters } = useQuery({
     queryKey: ["semesters"],
     queryFn: getSemesters,
@@ -63,7 +65,7 @@ function QuizInfoForm({
           render={({ field }) => (
             <TextField
               select
-              label="Semester"
+              label={t("createQuizInfo.semesterLabel")}
               fullWidth
               onChange={(e) => {
                 field.onChange(e.target.value);
@@ -94,7 +96,7 @@ function QuizInfoForm({
           render={({ field }) => (
             <TextField
               select
-              label="Course"
+              label={t("createQuizInfo.courseLabel")}
               fullWidth
               value={field.value || ""}
               onChange={(e) => field.onChange(e.target.value)}
@@ -121,7 +123,7 @@ function QuizInfoForm({
       )}
 
       <TextField
-        label="Topic"
+        label={t("createQuizInfo.topicInputLabel")}
         {...register("topic", {
           required: "Topic is required",
           maxLength: {
@@ -147,7 +149,7 @@ function QuizInfoForm({
       <Box className="md:flex-row flex flex-col md:gap-6 gap-4">
         <TextField
           type="number"
-          label="Time limit in minutes"
+          label={t("createQuizInfo.timeLimitInputLabel")}
           {...register("timeLimitInMinutes", {
             required: "Time limit is required",
             valueAsNumber: true,
@@ -166,7 +168,7 @@ function QuizInfoForm({
 
         <TextField
           type="number"
-          label="Total Points"
+          label={t("createQuizInfo.totalPointsInputLabel")}
           {...register("totalPoints", {
             required: "Quiz total points is required",
             valueAsNumber: true,
@@ -195,7 +197,7 @@ function QuizInfoForm({
         }}
         onClick={handleNext}
       >
-        Next
+        {t("createQuizInfo.buttonNext")}
       </Button>
     </>
   );

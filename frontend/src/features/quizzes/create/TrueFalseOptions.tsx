@@ -1,14 +1,10 @@
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { Controller, useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 function TrueFalseOptions({ qIndex }: { qIndex: number }) {
+  const { t } = useTranslation();
   const { control } = useFormContext();
-
-  // useEffect(() => {
-  //   if (getValues(`questions.${qIndex}.options`)) {
-  //     unregister(`questions.${qIndex}.options`);
-  //   }
-  // }, [getValues, qIndex, unregister]);
 
   return (
     <div className="flex gap-2">
@@ -18,8 +14,16 @@ function TrueFalseOptions({ qIndex }: { qIndex: number }) {
         defaultValue=""
         render={({ field }) => (
           <RadioGroup {...field}>
-            <FormControlLabel value="true" control={<Radio />} label="True" />
-            <FormControlLabel value="false" control={<Radio />} label="False" />
+            <FormControlLabel
+              value="true"
+              control={<Radio />}
+              label={t("createQuizQuestions.question.trueCheckboxLabel")}
+            />
+            <FormControlLabel
+              value="false"
+              control={<Radio />}
+              label={t("createQuizQuestions.question.falseCheckboxLabel")}
+            />
           </RadioGroup>
         )}
       />

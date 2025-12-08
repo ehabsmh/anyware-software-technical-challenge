@@ -18,6 +18,7 @@ import { navConfig } from "../config/navConfig";
 import {} from "react-icons/bs";
 import { BiLogOut } from "react-icons/bi";
 import { logout } from "../features/users/usersSlice";
+import { useTranslation } from "react-i18next";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -27,6 +28,8 @@ function Navbar() {
   const roleNavItems = navConfig[userRole] || [];
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const { t } = useTranslation();
 
   const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
 
@@ -49,7 +52,7 @@ function Navbar() {
                   <ListItemIcon sx={{ color: "white" }}>
                     <item.icon />
                   </ListItemIcon>
-                  <ListItemText primary={item.label} />
+                  <ListItemText primary={t(`navbar.${item.label}.link`)} />
                   <KeyboardArrowDown
                     sx={{
                       transform:
@@ -70,7 +73,9 @@ function Navbar() {
                         <ListItemIcon sx={{ color: "rgba(255,255,255,0.8)" }}>
                           <subItem.icon />
                         </ListItemIcon>
-                        <ListItemText primary={subItem.label} />
+                        <ListItemText
+                          primary={t(`navbar.${item.label}.${subItem.label}`)}
+                        />
                       </ListItemButton>
                     </NavLink>
                   ))}
@@ -92,7 +97,7 @@ function Navbar() {
                       <item.icon />
                     </ListItemIcon>
                     <ListItemText
-                      primary={item.label}
+                      primary={t(`navbar.${item.label}`)}
                       sx={{
                         color: isActive ? "primary.main" : "white",
                         fontWeight: isActive ? "bold" : "normal",
@@ -128,7 +133,7 @@ function Navbar() {
           <ul className="space-y-7 mt-4 flex flex-col justify-center">
             <li className="flex flex-col justify-center items-center text-3xl font-bold">
               <Link to={"/"} className="flex items-center gap-3">
-                Coligo
+                {t("logoName")}
               </Link>
             </li>
 
@@ -150,7 +155,7 @@ function Navbar() {
                         <item.icon />
                       </ListItemIcon>
                       <ListItemText
-                        primary={item.label}
+                        primary={t(`navbar.${item.label}.link`)}
                         primaryTypographyProps={{
                           fontSize: 15,
                           fontWeight: "medium",
@@ -178,7 +183,7 @@ function Navbar() {
                         <item.icon />
                       </ListItemIcon>
                       <ListItemText
-                        primary={item.label}
+                        primary={t(`navbar.${item.label}.link`)}
                         primaryTypographyProps={{
                           fontSize: 15,
                           fontWeight: "medium",
@@ -186,8 +191,6 @@ function Navbar() {
                       />
                     </NavLink>
                   )}
-
-                  {/* ✅ Sub Links appear directly under the active item */}
 
                   {"subLinks" in item && (
                     <Collapse
@@ -208,7 +211,9 @@ function Navbar() {
                               <subItem.icon />
                             </ListItemIcon>
                             <ListItemText
-                              primary={subItem.label}
+                              primary={t(
+                                `navbar.${item.label}.${subItem.label}`
+                              )}
                               primaryTypographyProps={{
                                 fontSize: 14,
                                 fontWeight: "normal",

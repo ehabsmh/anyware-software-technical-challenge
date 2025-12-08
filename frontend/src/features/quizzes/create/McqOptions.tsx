@@ -1,7 +1,9 @@
 import { Checkbox, TextField } from "@mui/material";
 import { Controller, useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 function McqOptions({ qIndex }: { qIndex: number }) {
+  const { t } = useTranslation();
   const { register, control } = useFormContext();
 
   return (
@@ -19,7 +21,7 @@ function McqOptions({ qIndex }: { qIndex: number }) {
           )}
         />
         <TextField
-          label="Option 1"
+          label={`${t("createQuizQuestions.question.optionInputLabel")} 1`}
           fullWidth
           {...register(`questions.${qIndex}.options.0`, {
             required: "Option 1 is required",
@@ -40,7 +42,7 @@ function McqOptions({ qIndex }: { qIndex: number }) {
           )}
         />
         <TextField
-          label="Option 2"
+          label={`${t("createQuizQuestions.question.optionInputLabel")} 2`}
           fullWidth
           {...register(`questions.${qIndex}.options.1`, {
             required: "Option 2 is required",
@@ -61,7 +63,7 @@ function McqOptions({ qIndex }: { qIndex: number }) {
           )}
         />
         <TextField
-          label="Option 3"
+          label={`${t("createQuizQuestions.question.optionInputLabel")} 3`}
           fullWidth
           {...register(`questions.${qIndex}.options.2`, {
             required: "Option 3 is required",
@@ -82,7 +84,7 @@ function McqOptions({ qIndex }: { qIndex: number }) {
           )}
         />
         <TextField
-          label="Option 4"
+          label={`${t("createQuizQuestions.question.optionInputLabel")} 4`}
           fullWidth
           {...register(`questions.${qIndex}.options.3`, {
             required: "Option 4 is required",

@@ -2,7 +2,6 @@ import { GrAnnounce, GrDocumentTest, GrUserAdmin } from "react-icons/gr";
 import { LuLetterText } from "react-icons/lu";
 import { BiHome, BiChart } from "react-icons/bi";
 import { GiGraduateCap } from "react-icons/gi";
-import { FactCheck } from "@mui/icons-material";
 
 export const navConfig = {
   admin: [
@@ -45,12 +44,12 @@ export const navConfig = {
   ],
 
   student: [
-    { to: "/student/dashboard", label: "Dashboard", icon: BiHome },
-    { to: "/student/courses", label: "Courses", icon: LuLetterText },
-    { to: "/student/announcements", label: "Announcements", icon: GrAnnounce },
+    { to: "/student/dashboard", label: "dashboard", icon: BiHome },
+    { to: "/student/courses", label: "courses", icon: LuLetterText },
+    { to: "/student/announcements", label: "announcements", icon: GrAnnounce },
     {
       to: "/student/submitted-quizzes",
-      label: "Quizzes",
+      label: "quizzes",
       icon: GrDocumentTest,
     },
     // { to: "/schedule", label: "Schedule", icon: GrSchedule },
@@ -59,10 +58,10 @@ export const navConfig = {
   ],
 
   instructor: [
-    { to: "/instructor/dashboard", label: "Dashboard", icon: BiHome },
+    { to: "/instructor/dashboard", label: "dashboard", icon: BiHome },
     {
       to: "/instructor/courses",
-      label: "Courses",
+      label: "courses",
       icon: LuLetterText,
       subLinks: [
         {
@@ -79,56 +78,51 @@ export const navConfig = {
     },
     {
       to: "/instructor/quizzes",
-      label: "Quizzes",
+      label: "quizzes",
       icon: GrDocumentTest,
       subLinks: [
         {
           to: "/instructor/quizzes/create",
-          label: "Create Quiz",
+          label: "create",
           icon: GrDocumentTest,
         },
         {
           to: "/instructor/quizzes/manage",
-          label: "Manage Quizzes",
+          label: "manage",
           icon: GrDocumentTest,
-        },
-        {
-          to: "/instructor/quizzes/corrections",
-          label: "Corrections",
-          icon: FactCheck,
         },
       ],
     },
     {
       to: "/instructor/announcements",
-      label: "Announcements",
+      label: "announcements",
       icon: GrAnnounce,
       subLinks: [
         {
           to: "/instructor/announcements/create",
-          label: "Create",
+          label: "create",
           icon: GrAnnounce,
         },
         {
           to: "/instructor/announcements",
-          label: "View",
+          label: "view",
           icon: GrAnnounce,
         },
       ],
     },
     {
       to: "/instructor/students",
-      label: "Students",
+      label: "students",
       icon: GiGraduateCap,
       subLinks: [
         {
           to: "/instructor/students/list",
-          label: "Student List",
+          label: "student list",
           icon: GiGraduateCap,
         },
         {
           to: "/instructor/students/performance",
-          label: "Performance",
+          label: "performance",
           icon: BiChart,
         },
       ],

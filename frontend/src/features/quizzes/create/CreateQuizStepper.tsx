@@ -15,6 +15,7 @@ import QuizQuestionsForm from "./QuizQuestionsForm";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Box, Card } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -96,9 +97,12 @@ function ColorlibStepIcon(props: StepIconProps) {
   );
 }
 
-const steps = ["Create quiz info", "Add questions"];
-
 export default function CreateQuizStepper() {
+  const { t } = useTranslation();
+  const steps = [
+    t("createQuizInfo.titleCreateQuizInfo"),
+    t("createQuizQuestions.titleCreateQuizQuestions"),
+  ];
   const [activeStep, setActiveStep] = useState(0);
 
   const methods = useForm({
@@ -107,8 +111,8 @@ export default function CreateQuizStepper() {
       course: "",
       topic: "",
       dueDate: "",
-      timeLimitInMinutes: 0,
-      totalPoints: 0,
+      timeLimitInMinutes: "",
+      totalPoints: "",
       questions: [
         // { _id: "", type: "", question: "", options: [], answer: [], points: 1 },
       ],

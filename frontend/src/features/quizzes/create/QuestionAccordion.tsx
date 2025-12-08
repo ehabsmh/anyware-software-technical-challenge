@@ -11,6 +11,7 @@ import {
 import { Controller, useFormContext } from "react-hook-form";
 import McqOptions from "./McqOptions";
 import TrueFalseOptions from "./TrueFalseOptions";
+import { useTranslation } from "react-i18next";
 
 function QuestionAccordion({
   qIndex,
@@ -21,6 +22,7 @@ function QuestionAccordion({
   deleteMode: boolean;
   deleteQuestion: () => void;
 }) {
+  const { t } = useTranslation();
   const {
     register,
     // trigger,
@@ -60,11 +62,13 @@ function QuestionAccordion({
             <Divider orientation="vertical" flexItem sx={{ mx: 2 }} />
           </>
         )}
-        <Typography component="span">Question {qIndex + 1}</Typography>
+        <Typography component="span">
+          {t("createQuizQuestions.question.questionTitle")} {qIndex + 1}
+        </Typography>
       </AccordionSummary>
       <AccordionDetails>
         <TextField
-          label="Question text"
+          label={t("createQuizQuestions.question.questionTextInputLabel")}
           multiline
           rows={4}
           sx={{ mt: 2 }}
@@ -82,7 +86,7 @@ function QuestionAccordion({
           render={({ field }) => (
             <TextField
               select
-              label="Question type"
+              label={t("createQuizQuestions.question.questionTypeSelectLabel")}
               sx={{ mt: 4 }}
               fullWidth
               defaultValue=""
@@ -94,9 +98,15 @@ function QuestionAccordion({
               }}
               error={!!watch(`questions.${qIndex}.type`)}
             >
-              <MenuItem value="mcq">Multiple Choice Question</MenuItem>
-              <MenuItem value="true_false">True / False Question</MenuItem>
-              <MenuItem value="short_answer">Short Answer Question</MenuItem>
+              <MenuItem value="mcq">
+                {t("createQuizQuestions.question.multipleChoice")}
+              </MenuItem>
+              <MenuItem value="true_false">
+                {t("createQuizQuestions.question.trueFalse")}
+              </MenuItem>
+              <MenuItem value="short_answer">
+                {t("createQuizQuestions.question.shortAnswer")}
+              </MenuItem>
             </TextField>
           )}
         />
@@ -105,7 +115,7 @@ function QuestionAccordion({
 
         <TextField
           size="small"
-          label="Points"
+          label={t("createQuizQuestions.question.pointInputLabel")}
           type="number"
           sx={{ mt: 4, width: "150px" }}
           fullWidth

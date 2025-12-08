@@ -9,6 +9,7 @@ import {
 } from "../services/apiCourses";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const coursesKey = (semesterId?: string) => ["courses", semesterId ?? "all"];
 
@@ -36,6 +37,7 @@ export function useCourse(id: string) {
 export function useCreateCourse() {
   const qc = useQueryClient();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: (payload: Parameters<typeof createCourse>[0]) =>
@@ -47,7 +49,7 @@ export function useCreateCourse() {
 
       if (!result) return;
       qc.setQueryData(["course", result.course._id], result.course);
-      toast.success("Course created successfully!");
+      toast.success(t("createCoursePage.successfulCreationMessage"));
       navigate("/instructor/courses/my-courses");
     },
     onError: (error: any) => {
@@ -66,6 +68,7 @@ type UpdateCourseType = {
 export function useUpdateCourse() {
   const qc = useQueryClient();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: ({ id, payload }: UpdateCourseType) =>
@@ -75,7 +78,7 @@ export function useUpdateCourse() {
         queryKey: [...coursesKey(variables.payload.semester)],
       });
       qc.setQueryData(["course", updatedCourse?._id], updatedCourse);
-      toast.success("Course updated successfully!");
+      toast.success(t("createCoursePage.successfulEditMessage"));
       navigate("/instructor/courses/my-courses");
     },
     onError: (error: any) => {

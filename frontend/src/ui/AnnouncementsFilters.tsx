@@ -4,12 +4,12 @@ import {
   MenuItem,
   FormControlLabel,
   Checkbox,
-  Button,
 } from "@mui/material";
 import { getSemesters } from "../services/apiSemesters";
 import { useCourses } from "../hooks/useCourses";
 import { useAppSelector } from "../store/hooks";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 export default function AnnouncementsFilters({
   selectedSemesterId,
@@ -26,7 +26,7 @@ export default function AnnouncementsFilters({
   mineOnly: boolean;
   onToggleMineOnly: () => void;
 }) {
-  // const [semesters, setSemesters] = useState<ISemester[]>([]);
+  const { t } = useTranslation();
   const { data: semesters } = useQuery({
     queryKey: ["semesters"],
     queryFn: getSemesters,
@@ -37,11 +37,6 @@ export default function AnnouncementsFilters({
   // Get Courses based on the chosen semester
   const { data } = useCourses(selectedSemesterId);
   const courses = data?.data.items;
-
-  // Get Semesters on component mount
-  // useEffect(() => {
-  //   getSemesters().then((data) => setSemesters(data ?? []));
-  // }, []);
 
   return (
     <Toolbar
@@ -57,7 +52,7 @@ export default function AnnouncementsFilters({
     >
       <TextField
         select
-        label="Semester"
+        label={t("announcementsFilters.semesterLabel")}
         size="small"
         sx={{
           minWidth: 180,
@@ -90,7 +85,9 @@ export default function AnnouncementsFilters({
         value={selectedSemesterId}
         onChange={(e) => onSelectSemester(e.target.value)}
       >
-        <MenuItem value="">All Semesters</MenuItem>
+        <MenuItem value="">
+          {t("announcementsFilters.allSemestersLabel")}
+        </MenuItem>
         {semesters?.map((semester) => (
           <MenuItem key={semester._id} value={semester._id}>
             {semester.name}
@@ -101,7 +98,7 @@ export default function AnnouncementsFilters({
       {selectedSemesterId && (
         <TextField
           select
-          label="Course"
+          label={t("announcementsFilters.courseLabel")}
           size="small"
           sx={{
             minWidth: 180,
@@ -132,7 +129,9 @@ export default function AnnouncementsFilters({
           value={selectedCourseId}
           onChange={(e) => onSelectCourse(e.target.value)}
         >
-          <MenuItem value="">All Courses</MenuItem>
+          <MenuItem value="">
+            {t("announcementsFilters.allCoursesLabel")}
+          </MenuItem>
           {courses?.map((course) => (
             <MenuItem key={course._id} value={course._id}>
               {course.name}
@@ -144,7 +143,7 @@ export default function AnnouncementsFilters({
       {userRole === "instructor" && (
         <FormControlLabel
           control={<Checkbox />}
-          label="Mine only"
+          label={t("announcementsFilters.mineOnlyLabel")}
           checked={mineOnly}
           onChange={onToggleMineOnly}
           sx={{
@@ -155,19 +154,6 @@ export default function AnnouncementsFilters({
           }}
         />
       )}
-
-      <Button
-        variant="contained"
-        sx={{
-          color: "black",
-          background: "white",
-          borderRadius: "8px",
-          transition: "background-color 0.2s",
-          "&:hover": { backgroundColor: "#f3f3f3" },
-        }}
-      >
-        Apply
-      </Button>
     </Toolbar>
   );
 }

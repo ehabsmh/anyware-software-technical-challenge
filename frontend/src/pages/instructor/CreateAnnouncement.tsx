@@ -24,8 +24,10 @@ import { useQuery } from "@tanstack/react-query";
 // For Edit mode
 import { useParams } from "react-router";
 import type { IValidationError } from "../../interfaces/validationError";
+import { useTranslation } from "react-i18next";
 
 function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
+  const { t } = useTranslation();
   const { data: semesters } = useQuery({
     queryKey: ["semesters"],
     queryFn: getSemesters,
@@ -115,7 +117,9 @@ function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
               mb: 3,
             }}
           >
-            {editMode ? "Edit Announcement" : "New Announcement"}
+            {editMode
+              ? t("createAnnouncementPage.titleEditAnnouncement")
+              : t("createAnnouncementPage.titleNewAnnouncement")}
           </Typography>
 
           <form
@@ -124,7 +128,7 @@ function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
           >
             {/* Announcement Title */}
             <TextField
-              label="Title"
+              label={t("createAnnouncementPage.titleInputLabel")}
               variant="outlined"
               fullWidth
               focused={editMode}
@@ -135,7 +139,7 @@ function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
 
             {/* Description */}
             <TextField
-              label="Content"
+              label={t("createAnnouncementPage.contentInputLabel")}
               variant="outlined"
               fullWidth
               multiline
@@ -149,7 +153,7 @@ function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
             {/* Semester */}
             <TextField
               select
-              label="Semester"
+              label={t("createAnnouncementPage.semesterSelectLabel")}
               fullWidth
               focused={editMode}
               value={chosenSemesterId || watch("semester") || ""}
@@ -170,7 +174,7 @@ function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
             {chosenSemesterId && (
               <TextField
                 select
-                label="Course"
+                label={t("createAnnouncementPage.courseSelectLabel")}
                 fullWidth
                 focused={editMode}
                 value={watch("course") || ""}
@@ -215,9 +219,9 @@ function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
               {isPending ? (
                 <CircularProgress size={24} sx={{ color: "white" }} />
               ) : editMode ? (
-                "Update Announcement"
+                t("createAnnouncementPage.submitButtonTextEdit")
               ) : (
-                "Create Announcement"
+                t("createAnnouncementPage.submitButtonTextCreate")
               )}
             </Button>
           </form>

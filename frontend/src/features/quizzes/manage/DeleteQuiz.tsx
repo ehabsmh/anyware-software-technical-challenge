@@ -1,8 +1,10 @@
 import { Button } from "@mui/material";
 import { useDeleteQuiz } from "../../../hooks/useQuizzes";
 import { showAlert } from "../../../utils/helpers";
+import { useTranslation } from "react-i18next";
 
 function DeleteQuiz({ quizId }: { quizId: string }) {
+  const { t } = useTranslation();
   const { mutate: deleteQuiz } = useDeleteQuiz();
 
   function onDeleteQuiz() {
@@ -15,7 +17,7 @@ function DeleteQuiz({ quizId }: { quizId: string }) {
       color="error"
       onClick={onDeleteQuiz}
     >
-      Delete
+      {t("manageQuizzes.deleteButtonText")}
     </Button>
   );
 }

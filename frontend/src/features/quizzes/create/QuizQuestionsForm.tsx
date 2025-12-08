@@ -8,6 +8,7 @@ import {
 } from "../../../hooks/useQuizzes";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 type QuizQuestionsFormProps = {
   editMode?: boolean;
@@ -15,6 +16,7 @@ type QuizQuestionsFormProps = {
 };
 
 function QuizQuestionsForm({ editMode, onBack }: QuizQuestionsFormProps) {
+  const { t } = useTranslation();
   const { handleSubmit, control } = useFormContext<IQuiz>();
   const { mutate: createQuiz } = useCreateQuiz();
   const { mutate: updateQuizQuestions } = useUpdateQuizQuestions();
@@ -67,7 +69,7 @@ function QuizQuestionsForm({ editMode, onBack }: QuizQuestionsFormProps) {
           onClick={() => append(initialQuestion)}
           sx={{ mb: 3, backgroundColor: "var(--color-gradient-1)" }}
         >
-          Add Question
+          {t("createQuizQuestions.addQuestionButtonText")}
         </Button>
         <Button
           variant="outlined"
@@ -75,7 +77,9 @@ function QuizQuestionsForm({ editMode, onBack }: QuizQuestionsFormProps) {
           color="error"
           onClick={() => setDeleteMode((prev) => !prev)}
         >
-          {deleteMode ? "Cancel Delete" : "Delete"}
+          {deleteMode
+            ? t("createQuizQuestions.cancelDeleteButtonText")
+            : t("createQuizQuestions.deleteButtonText")}
         </Button>
       </div>
 
@@ -100,7 +104,7 @@ function QuizQuestionsForm({ editMode, onBack }: QuizQuestionsFormProps) {
               }}
               onClick={onBack}
             >
-              Back
+              {t("createQuizQuestions.stepBackButtonText")}
             </Button>
           </>
         )}
@@ -121,7 +125,9 @@ function QuizQuestionsForm({ editMode, onBack }: QuizQuestionsFormProps) {
             },
           }}
         >
-          {editMode ? "Save Changes" : "Create Quiz"}
+          {editMode
+            ? t("createQuizQuestions.editQuestionsButtonText")
+            : t("createQuizQuestions.createQuizButtonText")}
         </Button>
       </div>
     </div>

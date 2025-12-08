@@ -22,6 +22,7 @@ import {
 import { useParams } from "react-router-dom";
 import type { ISemester } from "../../interfaces/semester";
 import type { IValidationError } from "../../interfaces/validationError";
+import { useTranslation } from "react-i18next";
 
 export interface CourseFormValues {
   name: string;
@@ -31,6 +32,7 @@ export interface CourseFormValues {
 }
 
 function CreateCourse({ editMode }: { editMode?: boolean }) {
+  const { t } = useTranslation();
   const [preview, setPreview] = useState<string | null>(null);
   const [semesters, setSemesters] = useState<ISemester[]>([]);
 
@@ -55,11 +57,7 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
     },
   });
 
-  const {
-    mutate: addCourse,
-    isPending,
-    error: courseError,
-  } = useCreateCourse();
+  const { mutate: addCourse, isPending } = useCreateCourse();
   const { mutate: updateCourse } = useUpdateCourse();
 
   const onSubmit = async (data: CourseFormValues) => {
@@ -97,10 +95,6 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
         });
       }
     } catch (error) {
-      console.log(error);
-
-      console.log(courseError);
-
       toast.error((error as Error).message || "Failed to create course.");
     }
   };
@@ -159,7 +153,9 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
               mb: 3,
             }}
           >
-            {editMode ? "Edit Course" : "New Course"}
+            {editMode
+              ? t("createCoursePage.titleEditCourse")
+              : t("createCoursePage.titleNewCourse")}
           </Typography>
 
           <form
@@ -168,7 +164,7 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
           >
             {/* Course Name */}
             <TextField
-              label="Course Name"
+              label={t("createCoursePage.nameInputLabel")}
               variant="outlined"
               fullWidth
               {...register("name", { required: "Course name is required" })}
@@ -178,7 +174,7 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
 
             {/* Description */}
             <TextField
-              label="Description"
+              label={t("createCoursePage.descriptionInputLabel")}
               variant="outlined"
               fullWidth
               multiline
@@ -197,14 +193,16 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
             {/* Semester */}
             <TextField
               select
-              label="Semester"
+              label={t("createCoursePage.semesterSelectLabel")}
               fullWidth
               value={watch("semester") || ""}
               {...register("semester", { required: "Semester is required" })}
               error={!!errors.semester}
               helperText={errors.semester?.message}
             >
-              <MenuItem value="">Select semester</MenuItem>
+              <MenuItem value="">
+                {t("createCoursePage.semesterSelectLabel")}
+              </MenuItem>
 
               {semesters.map((sem) => (
                 <MenuItem key={sem._id} value={sem._id}>
@@ -228,7 +226,7 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
                   },
                 }}
               >
-                Upload Image
+                {t("createCoursePage.imageUploadLabel")}
                 <input
                   type="file"
                   accept="image/*"
@@ -271,9 +269,9 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
               {isPending ? (
                 <CircularProgress size={22} color="inherit" />
               ) : editMode ? (
-                "Edit Course"
+                t("createCoursePage.submitButtonTextEdit")
               ) : (
-                "Create Course"
+                t("createCoursePage.submitButtonTextCreate")
               )}
             </Button>
           </form>
