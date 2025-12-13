@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import {
-  Box,
   Button,
-  Card,
-  CardContent,
   TextField,
-  Typography,
   MenuItem,
   CircularProgress,
   Avatar,
@@ -25,6 +21,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 import type { IValidationError } from "../../interfaces/validationError";
 import { useTranslation } from "react-i18next";
+import Form from "../../ui/Form";
 
 function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
   const { t } = useTranslation();
@@ -95,139 +92,110 @@ function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
     }
   }, [announcement]);
 
+  if (editMode && !id) {
+    return <div>Invalid edit request</div>;
+  }
+
   return (
-    <Box className="bg-main xl:w-4/7 lg:w-4/5 mx-auto p-4">
-      <Card
+    <Form
+      title={editMode ? "Edit Announcement" : "New Announcement"}
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      {/* Announcement Title */}
+      <TextField
+        label={t("createAnnouncementPage.titleInputLabel")}
+        variant="outlined"
+        fullWidth
+        focused={editMode}
+        {...register("title", { required: "Title is required" })}
+        error={!!errors.title}
+        helperText={errors.title?.message}
+      />
+
+      {/* Description */}
+      <TextField
+        label={t("createAnnouncementPage.contentInputLabel")}
+        variant="outlined"
+        fullWidth
+        multiline
+        rows={3}
+        focused={editMode}
+        {...register("content", { required: "Content is required" })}
+        error={!!errors.content}
+        helperText={errors.content?.message}
+      />
+
+      {/* Semester */}
+      <TextField
+        select
+        label={t("createAnnouncementPage.semesterSelectLabel")}
+        fullWidth
+        focused={editMode}
+        value={chosenSemesterId || watch("semester") || ""}
+        {...register("semester", { required: "Semester is required" })}
+        error={!!errors.semester}
+        helperText={errors.semester?.message}
+        onChange={(e) => setChosenSemesterId(e.target.value)}
+      >
+        <MenuItem value="">Select semester</MenuItem>
+        {semesters?.map((sem) => (
+          <MenuItem key={sem._id} value={sem._id}>
+            {sem.name}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      {/* Course */}
+      {chosenSemesterId && (
+        <TextField
+          select
+          label={t("createAnnouncementPage.courseSelectLabel")}
+          fullWidth
+          focused={editMode}
+          value={watch("course") || ""}
+          {...register("course", { required: "Course is required" })}
+          error={!!errors.course}
+          helperText={errors.course?.message}
+        >
+          <MenuItem value="">Select course</MenuItem>
+
+          {courses?.map((course) => (
+            <MenuItem key={course._id} value={course._id}>
+              <div className="flex items-center gap-3">
+                <Avatar src={course.image} alt="" sx={{ borderRadius: 0 }} />
+                <p>{course.name}</p>
+              </div>
+            </MenuItem>
+          ))}
+        </TextField>
+      )}
+
+      {/* Submit */}
+      <Button
+        type="submit"
+        variant="contained"
         sx={{
-          width: "100%",
-          borderRadius: "16px",
-          boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
+          mt: 2,
+          py: 1.2,
+          fontWeight: 600,
+          background:
+            "linear-gradient(to right, var(--color-gradient-1), var(--color-gradient-2))",
+          "&:hover": {
+            opacity: 0.9,
+            background:
+              "linear-gradient(to right, var(--color-gradient-2), var(--color-gradient-1))",
+          },
         }}
       >
-        <CardContent sx={{ p: 4 }}>
-          <Typography
-            variant="h5"
-            align="center"
-            fontWeight="bold"
-            sx={{
-              background:
-                "linear-gradient(to right, var(--color-gradient-1), var(--color-gradient-2))",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              mb: 3,
-            }}
-          >
-            {editMode
-              ? t("createAnnouncementPage.titleEditAnnouncement")
-              : t("createAnnouncementPage.titleNewAnnouncement")}
-          </Typography>
-
-          <form
-            className="flex flex-col gap-4"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            {/* Announcement Title */}
-            <TextField
-              label={t("createAnnouncementPage.titleInputLabel")}
-              variant="outlined"
-              fullWidth
-              focused={editMode}
-              {...register("title", { required: "Title is required" })}
-              error={!!errors.title}
-              helperText={errors.title?.message}
-            />
-
-            {/* Description */}
-            <TextField
-              label={t("createAnnouncementPage.contentInputLabel")}
-              variant="outlined"
-              fullWidth
-              multiline
-              rows={3}
-              focused={editMode}
-              {...register("content", { required: "Content is required" })}
-              error={!!errors.content}
-              helperText={errors.content?.message}
-            />
-
-            {/* Semester */}
-            <TextField
-              select
-              label={t("createAnnouncementPage.semesterSelectLabel")}
-              fullWidth
-              focused={editMode}
-              value={chosenSemesterId || watch("semester") || ""}
-              {...register("semester", { required: "Semester is required" })}
-              error={!!errors.semester}
-              helperText={errors.semester?.message}
-              onChange={(e) => setChosenSemesterId(e.target.value)}
-            >
-              <MenuItem value="">Select semester</MenuItem>
-              {semesters?.map((sem) => (
-                <MenuItem key={sem._id} value={sem._id}>
-                  {sem.name}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            {/* Course */}
-            {chosenSemesterId && (
-              <TextField
-                select
-                label={t("createAnnouncementPage.courseSelectLabel")}
-                fullWidth
-                focused={editMode}
-                value={watch("course") || ""}
-                {...register("course", { required: "Course is required" })}
-                error={!!errors.course}
-                helperText={errors.course?.message}
-              >
-                <MenuItem value="">Select course</MenuItem>
-
-                {courses?.map((course) => (
-                  <MenuItem key={course._id} value={course._id}>
-                    <div className="flex items-center gap-3">
-                      <Avatar
-                        src={course.image}
-                        alt=""
-                        sx={{ borderRadius: 0 }}
-                      />
-                      <p>{course.name}</p>
-                    </div>
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
-
-            {/* Submit */}
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{
-                mt: 2,
-                py: 1.2,
-                fontWeight: 600,
-                background:
-                  "linear-gradient(to right, var(--color-gradient-1), var(--color-gradient-2))",
-                "&:hover": {
-                  opacity: 0.9,
-                  background:
-                    "linear-gradient(to right, var(--color-gradient-2), var(--color-gradient-1))",
-                },
-              }}
-            >
-              {isPending ? (
-                <CircularProgress size={24} sx={{ color: "white" }} />
-              ) : editMode ? (
-                t("createAnnouncementPage.submitButtonTextEdit")
-              ) : (
-                t("createAnnouncementPage.submitButtonTextCreate")
-              )}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </Box>
+        {isPending ? (
+          <CircularProgress size={24} sx={{ color: "white" }} />
+        ) : editMode ? (
+          t("createAnnouncementPage.submitButtonTextEdit")
+        ) : (
+          t("createAnnouncementPage.submitButtonTextCreate")
+        )}
+      </Button>
+    </Form>
   );
 }
 

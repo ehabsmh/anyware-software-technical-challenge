@@ -3,7 +3,6 @@ import { ICourse } from "../../interfaces/course";
 import { Course, Semester } from "../../models";
 import AppError from "../../utils/error";
 import SemesterService from "./semester";
-import { CreateCourseSchema } from "../../validations/course";
 
 class CourseService {
   static async createCourse({

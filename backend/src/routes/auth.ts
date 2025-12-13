@@ -1,7 +1,7 @@
 import express from "express";
 import { auth, isAdmin } from "../middlewares/auth";
 import UsersController from "../controllers/users";
-import upload from "../configs/multer.config";
+import { uploadImages } from "../configs/multer.config";
 
 const authRouter = express.Router();
 
@@ -10,7 +10,7 @@ authRouter.post(
   "/register",
   auth,
   isAdmin,
-  upload.single("avatar"),
+  uploadImages.single("avatar"),
   UsersController.register
 );
 authRouter.post("/create-password", UsersController.createPassword);

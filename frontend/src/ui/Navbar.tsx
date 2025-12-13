@@ -15,12 +15,13 @@ import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { navConfig } from "../config/navConfig";
-import {} from "react-icons/bs";
 import { BiLogOut } from "react-icons/bi";
 import { logout } from "../features/users/usersSlice";
 import { useTranslation } from "react-i18next";
 
 function Navbar() {
+  const { t } = useTranslation();
+
   const [open, setOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const isMobile = useMediaQuery("(max-width:1024px)");
@@ -28,8 +29,6 @@ function Navbar() {
   const roleNavItems = navConfig[userRole] || [];
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  const { t } = useTranslation();
 
   const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
 

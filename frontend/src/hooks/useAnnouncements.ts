@@ -46,6 +46,7 @@ export function useAnnouncement(id: string) {
   return useQuery({
     queryKey: ["announcement", id],
     queryFn: () => fetchAnnouncementById(id),
+    enabled: !!id,
   });
 }
 

@@ -19,6 +19,8 @@ import Quizzes from "./pages/instructor/Quizzes";
 import EditQuestions from "./pages/instructor/EditQuestions";
 import SubmittedQuizzes from "./pages/student/SubmittedQuizzes";
 import QuizSubmissions from "./pages/instructor/QuizSubmissions";
+import Course from "./pages/Course";
+import CreateCourseLesson from "./pages/instructor/CreateCourseLesson";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -50,6 +52,18 @@ function App() {
           <Route path="/student/courses/" element={<Courses />} />
           <Route path="instructor/courses/create" element={<CreateCourse />} />
           <Route path="instructor/courses/my-courses" element={<Courses />} />
+          <Route
+            path="instructor/courses/my-courses/:id"
+            element={<Course />}
+          />
+          <Route
+            path="/instructor/courses/:courseId/add-lesson"
+            element={<CreateCourseLesson />}
+          />
+          <Route
+            path="/instructor/courses/:courseId/edit-lesson/:lessonId"
+            element={<CreateCourseLesson editMode={true} />}
+          />
           <Route
             path="instructor/courses/edit/:id"
             element={<CreateCourse editMode={true} />}

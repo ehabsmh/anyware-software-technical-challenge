@@ -2,6 +2,7 @@ import { Card, CardContent, Typography, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import type { ICourse } from "../interfaces/course";
 import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface Props {
   course: ICourse;
@@ -13,6 +14,9 @@ interface Props {
 
 const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -25,14 +29,18 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
           <img
             src={course.image || "/placeholder.png"}
             alt={course.name}
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain cursor-pointer"
+            onClick={() =>
+              navigate(
+                `${pathname.endsWith("/") ? pathname : pathname + "/"}${
+                  course._id
+                }`
+              )
+            }
           />
         </div>
         <CardContent className="text-center">
-          <Typography
-            variant="h6"
-            className="text-[--color-gradient-1] font-semibold"
-          >
+          <Typography variant="h6" className="text-gradient-1 font-semibold">
             {course.name}
           </Typography>
           <Typography variant="body2" color="text.secondary" className="mb-2">

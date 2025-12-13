@@ -44,6 +44,7 @@ export const getCourseById = async (id: string) => {
 
 export async function createCourse(payload: CourseFormValues) {
   try {
+    console.log("xx", payload);
     const formData = new FormData();
     formData.append("name", payload.name);
     formData.append("description", payload.description);
@@ -56,8 +57,11 @@ export async function createCourse(payload: CourseFormValues) {
     const { data }: { data: { success: boolean; course: ICourse } } =
       await api.post("/courses", formData);
 
+    console.log(data);
+
     return data;
   } catch (error) {
+    console.log(error);
     if (axios.isAxiosError(error) && error.response) {
       const response = error.response.data;
 
