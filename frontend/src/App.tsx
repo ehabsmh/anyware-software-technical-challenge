@@ -50,6 +50,7 @@ function App() {
           />
           <Route path="/student/quizzes/solve/:id" element={<SolveQuiz />} />
           <Route path="/student/courses/" element={<Courses />} />
+          <Route path="/student/courses/:id" element={<Course />} />
           <Route path="instructor/courses/create" element={<CreateCourse />} />
           <Route path="instructor/courses/my-courses" element={<Courses />} />
           <Route

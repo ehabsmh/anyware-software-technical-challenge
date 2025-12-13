@@ -4,6 +4,7 @@ import { Delete, EditNote } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDeleteCourseLesson } from "../../hooks/useCourseLessons";
 import { showAlert } from "../../utils/helpers";
+import { useAppSelector } from "../../store/hooks";
 
 type CourseContentProps = {
   lessons: ICourseLessonPopulated["lessons"];
@@ -16,20 +17,23 @@ function CourseContent({
   selectedLessonId,
   onSelect,
 }: CourseContentProps) {
+  const { role: userRole } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   const { id } = useParams();
 
   const { mutate: deleteLesson } = useDeleteCourseLesson();
   return (
-    <nav className="bg-white h-screen w-[28rem] text-black overflow-y-auto flex flex-col p-4 shadow-lg ">
+    <nav className="bg-white h-screen w-md text-black overflow-y-auto flex flex-col p-4 shadow-lg ">
       <div className="flex gap-3">
-        <Button
-          variant="outlined"
-          className="w-full mb-4 border-gradient-2! text-gradient-1! font-bold"
-          onClick={() => navigate(`/instructor/courses/${id}/add-lesson`)}
-        >
-          Add Lesson
-        </Button>
+        {userRole === "instructor" && (
+          <Button
+            variant="outlined"
+            className="w-full mb-4 border-gradient-2! text-gradient-1! font-bold"
+            onClick={() => navigate(`/instructor/courses/${id}/add-lesson`)}
+          >
+            Add Lesson
+          </Button>
+        )}
       </div>
       <List className="space-y-3">
         <h3 className="font-bold text-xl p-3">Course Content</h3>
@@ -52,30 +56,32 @@ function CourseContent({
             }}
           >
             <ListItemText primary={`${lesson.order}. ${lesson.title}`} />
-            <div className="flex flex-col justify-center items-center">
-              <Delete
-                fontSize="medium"
-                className={`cursor-pointer hover:rotate-180 transition-transform! duration-300! ${
-                  lesson._id !== selectedLessonId ? "text-red-700" : ""
-                }`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  showAlert(() => deleteLesson(lesson._id));
-                }}
-              />
-              <EditNote
-                fontSize="medium"
-                className={`cursor-pointer hover:scale-125 transition-transform! duration-200! ${
-                  lesson._id !== selectedLessonId ? "text-amber-600" : ""
-                }`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(
-                    `/instructor/courses/${id}/edit-lesson/${lesson._id}`
-                  );
-                }}
-              />
-            </div>
+            {userRole === "instructor" && (
+              <div className="flex flex-col justify-center items-center">
+                <Delete
+                  fontSize="medium"
+                  className={`cursor-pointer hover:rotate-180 transition-transform! duration-300! ${
+                    lesson._id !== selectedLessonId ? "text-red-700" : ""
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    showAlert(() => deleteLesson(lesson._id));
+                  }}
+                />
+                <EditNote
+                  fontSize="medium"
+                  className={`cursor-pointer hover:scale-125 transition-transform! duration-200! ${
+                    lesson._id !== selectedLessonId ? "text-amber-600" : ""
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(
+                      `/instructor/courses/${id}/edit-lesson/${lesson._id}`
+                    );
+                  }}
+                />
+              </div>
+            )}
           </ListItem>
         ))}
         {/* <ListItem className="bg-gradient-to-l from-gradient-1 to-gradient-2 text-white font-bold cursor-pointer duration-200 p-4 rounded-sm shadow-lg">

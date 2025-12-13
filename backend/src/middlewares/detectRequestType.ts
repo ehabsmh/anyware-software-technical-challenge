@@ -27,7 +27,7 @@ export function handleCreateLesson(
     return res.status(422).json(validationResult);
   }
 
-  req.body = validationResult;
+  req.body = validationResult.data;
 
   return LessonsController.createLesson(req, res);
 }

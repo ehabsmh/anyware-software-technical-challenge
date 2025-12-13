@@ -3,6 +3,7 @@ import { useStudentSubmissions } from "../../hooks/useQuizzes";
 import type { IQuizSubmissionPopulated } from "../../interfaces/quiz";
 import GenericTable from "../../ui/GenericTable";
 import TableSkeleton from "../../skeletons/tableSkeleton";
+import { format } from "date-fns";
 
 function SubmittedQuizzes() {
   const { t } = useTranslation();
@@ -42,7 +43,9 @@ function SubmittedQuizzes() {
       id: "correctedAt",
       label: t("submittedQuizzes.correctedAtTableHeader"),
       render: (row: IQuizSubmissionPopulated) =>
-        row.correctedAt ? row.correctedAt : "Not yet",
+        row.correctedAt
+          ? format(new Date(row.correctedAt), "MM/dd/yyyy")
+          : "Not yet",
     },
   ];
 
