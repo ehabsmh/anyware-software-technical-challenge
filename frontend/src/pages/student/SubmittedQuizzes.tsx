@@ -2,14 +2,16 @@ import { useTranslation } from "react-i18next";
 import { useStudentSubmissions } from "../../hooks/useQuizzes";
 import type { IQuizSubmissionPopulated } from "../../interfaces/quiz";
 import GenericTable from "../../ui/GenericTable";
+import TableSkeleton from "../../skeletons/tableSkeleton";
 
 function SubmittedQuizzes() {
   const { t } = useTranslation();
-  const { data } = useStudentSubmissions();
 
-  if (!data) return <p>No submissions found.</p>;
+  const { data, isLoading: studentSubmissionsLoading } =
+    useStudentSubmissions();
 
-  const { items, limit, page, total } = data;
+  const items = data?.items || [];
+  const { page = 1, limit = 5, total = 0 } = data || {};
 
   const columns = [
     {
@@ -45,14 +47,20 @@ function SubmittedQuizzes() {
   ];
 
   return (
-    <GenericTable
-      columns={columns}
-      rows={items}
-      page={page}
-      limit={limit}
-      total={total}
-      onPageChange={() => {}}
-    />
+    <>
+      {studentSubmissionsLoading ? (
+        <TableSkeleton columns={columns} rowsCount={5} limit={limit} />
+      ) : (
+        <GenericTable
+          rows={items}
+          columns={columns}
+          page={page}
+          limit={limit}
+          total={total}
+          onPageChange={() => {}}
+        />
+      )}
+    </>
   );
 }
 

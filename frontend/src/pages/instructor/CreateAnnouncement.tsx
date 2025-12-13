@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import {
   useAnnouncement,
   useCreateAnnouncement,
+  useEditAnnouncement,
 } from "../../hooks/useAnnouncements";
 import { useQuery } from "@tanstack/react-query";
 
@@ -25,6 +26,7 @@ import Form from "../../ui/Form";
 
 function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
   const { t } = useTranslation();
+
   const { data: semesters } = useQuery({
     queryKey: ["semesters"],
     queryFn: getSemesters,
@@ -39,7 +41,10 @@ function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
   const { data } = useCourses(chosenSemesterId);
   const courses = data?.data.items;
 
-  const { mutate: createAnnouncement, isPending } = useCreateAnnouncement();
+  const { mutate: createAnnouncement, isPending: isCreating } =
+    useCreateAnnouncement();
+  const { mutate: editAnnouncement, isPending: isEditing } =
+    useEditAnnouncement();
 
   const {
     register,
@@ -53,7 +58,22 @@ function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
   const onSubmit = async (data: Partial<IAnnouncement>) => {
     try {
       if (editMode) {
-        console.log("Implemenet Edit mode");
+        editAnnouncement(
+          { id: id!, payload: data },
+          {
+            onError: (error) => {
+              if (error.type === "validation") {
+                const validationError = error as IValidationError;
+
+                validationError.errors.forEach((err) => {
+                  setError(err.field as keyof IAnnouncement, {
+                    message: err.message,
+                  });
+                });
+              }
+            },
+          }
+        );
       } else {
         // add announcement
         createAnnouncement(data, {
@@ -187,7 +207,7 @@ function CreateAnnouncement({ editMode }: { editMode?: boolean }) {
           },
         }}
       >
-        {isPending ? (
+        {isCreating || isEditing ? (
           <CircularProgress size={24} sx={{ color: "white" }} />
         ) : editMode ? (
           t("createAnnouncementPage.submitButtonTextEdit")

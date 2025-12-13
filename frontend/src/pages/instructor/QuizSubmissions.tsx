@@ -5,15 +5,17 @@ import { Avatar } from "@mui/material";
 import { Check, Clear } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import type { IQuizSubmissionPopulated } from "../../interfaces/quiz";
+import TableSkeleton from "../../skeletons/tableSkeleton";
 
 function QuizSubmissions() {
   const { t } = useTranslation();
 
   const { id } = useParams();
-  const { data: quizSubmissions } = useQuizSubmissions(id || "", 1, 5);
-  if (!quizSubmissions) return null;
+  const { data: quizSubmissions, isLoading: quizSubmissionsLoading } =
+    useQuizSubmissions(id || "", 1, 5);
 
-  const { items, limit, page, total } = quizSubmissions;
+  const items = quizSubmissions?.items || [];
+  const { page = 1, limit = 5, total = 0 } = quizSubmissions || {};
 
   const columns = [
     {
@@ -50,14 +52,20 @@ function QuizSubmissions() {
   ];
 
   return (
-    <GenericTable
-      columns={columns}
-      rows={items}
-      page={page}
-      limit={limit}
-      total={total}
-      onPageChange={() => {}}
-    />
+    <>
+      {quizSubmissionsLoading ? (
+        <TableSkeleton columns={columns} rowsCount={4} limit={limit} />
+      ) : (
+        <GenericTable
+          rows={items}
+          columns={columns}
+          page={page}
+          limit={limit}
+          total={total}
+          onPageChange={() => {}}
+        />
+      )}
+    </>
   );
 }
 

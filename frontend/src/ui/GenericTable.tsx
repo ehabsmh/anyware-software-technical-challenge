@@ -15,6 +15,7 @@ export interface Column<T> {
   label: string;
   align?: "left" | "right" | "center";
   render?: (row: T) => React.ReactNode;
+  width?: string;
 }
 
 interface Props<T extends { _id: string }> {
@@ -73,7 +74,11 @@ export default function GenericTable<
                   }}
                 >
                   {columns.map((col) => (
-                    <TableCell key={col.id} align={col.align || "left"}>
+                    <TableCell
+                      width={col.width}
+                      key={col.id}
+                      align={col.align || "left"}
+                    >
                       {col.render ? col.render(row) : (row as any)[col.id]}
                     </TableCell>
                   ))}

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import type { ICourse } from "../interfaces/course";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 interface Props {
   course: ICourse;
@@ -16,6 +17,11 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const [seeMore, setSeeMore] = useState(false);
+
+  function toggleSeeMore() {
+    setSeeMore(!seeMore);
+  }
 
   return (
     <motion.div
@@ -39,12 +45,23 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
             }
           />
         </div>
-        <CardContent className="text-center">
-          <Typography variant="h6" className="text-gradient-1 font-semibold">
+        <CardContent>
+          <Typography
+            variant="h6"
+            className="text-gradient-1 font-semibold text-center"
+          >
             {course.name}
           </Typography>
           <Typography variant="body2" color="text.secondary" className="mb-2">
-            {course.description}
+            {!seeMore
+              ? course.description.split(" ").slice(0, 15).join(" ")
+              : course.description}{" "}
+            <button
+              className="text-gray-400 font-bold cursor-pointer"
+              onClick={toggleSeeMore}
+            >
+              {seeMore ? "See less" : "See more"}
+            </button>
           </Typography>
 
           {role === "instructor" && (

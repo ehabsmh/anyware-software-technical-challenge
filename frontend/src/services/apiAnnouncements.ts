@@ -54,11 +54,10 @@ export async function createAnnouncement(payload: Partial<IAnnouncement>) {
         };
       }
 
-      throw new Error(error.response.data.error || "Failed to edit course.");
+      throw new Error(
+        error.response.data.error || "Failed to create announcement."
+      );
     }
-    // if (axios.isAxiosError(error) && error.response) {
-    //   throw new Error(error.response.data.error || "Failed to create course.");
-    // }
   }
 }
 
@@ -74,6 +73,16 @@ export async function updateAnnouncement(
     return data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
+      const response = error.response.data;
+
+      if (response.success === false && response.errors) {
+        throw {
+          type: "validation",
+          success: response.success,
+          errors: response.errors,
+        };
+      }
+
       throw new Error(
         error.response.data.error || "Failed to update announcement."
       );

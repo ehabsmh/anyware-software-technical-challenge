@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import TableSkeleton from "../../skeletons/tableSkeleton";
 
 function Quizzes() {
   const { t } = useTranslation();
@@ -18,7 +19,7 @@ function Quizzes() {
   const [debouncedTopic] = useDebounce(searchTopic, 800);
   const [debouncedCourse] = useDebounce(searchCourse, 800);
 
-  const { data: quizzes } = useInstructorQuizzes({
+  const { data: quizzes, isLoading: quizzesLoading } = useInstructorQuizzes({
     page: 1,
     limit: 5,
     topic: debouncedTopic,
@@ -34,29 +35,37 @@ function Quizzes() {
   const { page = 1, limit = 5, total = 0 } = quizzes || {};
 
   const columns: Column<IInstructorQuiz["items"][number]>[] = [
-    { id: "topic", label: t("manageQuizzes.topicTableHeader") },
+    { id: "topic", label: t("manageQuizzes.topicTableHeader"), width: "250" },
     {
       id: "course",
       label: t("manageQuizzes.courseTableHeader"),
       render: (row: IInstructorQuiz["items"][number]) => row.course.name,
+      width: "300",
     },
     {
       id: "dueDate",
       label: t("manageQuizzes.dueDateTableHeader"),
       render: (row: IInstructorQuiz["items"][number]) =>
         new Date(row.dueDate).toLocaleDateString(),
+      width: "100",
     },
     {
       id: "status",
       label: t("manageQuizzes.statusTableHeader"),
+      width: "100",
       render: (row: IInstructorQuiz["items"][number]) =>
         statusMap[row.status] || row.status,
     },
-    { id: "numQuestions", label: t("manageQuizzes.questionsNumTableHeader") },
+    {
+      id: "numQuestions",
+      label: t("manageQuizzes.questionsNumTableHeader"),
+      width: "100",
+    },
     {
       id: "actions",
       label: t("manageQuizzes.actionsTableHeader"),
       align: "center",
+      width: "250",
       render: (row: IInstructorQuiz["items"][number]) => (
         <Box display="flex" className="items-center justify-center" gap={1}>
           <EditMenu row={row} />
@@ -84,20 +93,26 @@ function Quizzes() {
           value={searchTopic}
           onChange={(e) => setSearchTopic(e.target.value)}
         />
+
         <Search
           label="Search Course"
           value={searchCourse}
           onChange={(e) => setSearchCourse(e.target.value)}
         />
       </div>
-      <GenericTable<IInstructorQuiz["items"][number]>
-        columns={columns}
-        rows={items}
-        page={page}
-        limit={limit}
-        total={total}
-        onPageChange={() => {}}
-      />
+
+      {quizzesLoading ? (
+        <TableSkeleton columns={columns} rowsCount={6} limit={limit} />
+      ) : (
+        <GenericTable<IInstructorQuiz["items"][number]>
+          rows={items}
+          columns={columns}
+          page={page}
+          limit={limit}
+          total={total}
+          onPageChange={() => {}}
+        />
+      )}
     </>
   );
 }

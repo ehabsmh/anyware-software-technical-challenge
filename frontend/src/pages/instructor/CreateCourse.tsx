@@ -56,8 +56,8 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
     },
   });
 
-  const { mutate: addCourse, isPending } = useCreateCourse();
-  const { mutate: updateCourse } = useUpdateCourse();
+  const { mutate: addCourse, isPending: isCreating } = useCreateCourse();
+  const { mutate: updateCourse, isPending: isEditing } = useUpdateCourse();
 
   const onSubmit = async (data: CourseFormValues) => {
     try {
@@ -229,7 +229,7 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
       <Button
         type="submit"
         variant="contained"
-        disabled={isPending || !isDirty}
+        disabled={isCreating || isEditing || !isDirty}
         sx={{
           mt: 2,
           py: 1.2,
@@ -243,7 +243,7 @@ function CreateCourse({ editMode }: { editMode?: boolean }) {
           },
         }}
       >
-        {isPending ? (
+        {isCreating || isEditing ? (
           <CircularProgress size={22} color="inherit" />
         ) : editMode ? (
           t("createCoursePage.submitButtonTextEdit")

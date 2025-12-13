@@ -68,7 +68,7 @@ function Courses() {
           : `${t("coursesTitle")}`}
       </h1>
 
-      <div className="md:flex md:gap-8 mb-7">
+      <div className="md:flex md:items-center md:gap-8 mb-7 space-y-4! md:space-y-0!">
         {/* Semester Dropdown */}
         <FormControl
           sx={{
@@ -76,7 +76,6 @@ function Courses() {
             backgroundColor: "white",
             borderRadius: "10px",
             boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-            mb: 3,
           }}
           size="small"
           className=""

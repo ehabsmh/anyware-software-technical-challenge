@@ -86,7 +86,7 @@ export function useCreateAnnouncement() {
   });
 }
 
-export function useUpdateAnnouncement() {
+export function useEditAnnouncement() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -115,6 +115,11 @@ export function useUpdateAnnouncement() {
 
       toast.success("Announcement updated successfully!");
       navigate("/instructor/announcements");
+    },
+    onError: (error: any) => {
+      if (error.type !== "validation") {
+        toast.error(error.message);
+      }
     },
   });
 }

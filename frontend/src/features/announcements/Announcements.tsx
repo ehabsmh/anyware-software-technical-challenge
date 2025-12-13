@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useLatesetAnnouncements } from "../../hooks/useAnnouncements";
 import Announcement from "./Announcement";
 import { Link } from "react-router-dom";
+import LatestAnnouncementsSkeleton from "../../skeletons/latestAnnouncementsSkeleton";
 
 function Announcements() {
   const { t } = useTranslation();
@@ -25,16 +26,19 @@ function Announcements() {
           {t("dashboard.announcements.viewAllButtonText")}
         </Link>
       </div>
-      {isLoading && <div>Loading...</div>}
       {isError && <div className="text-red-500">Failed to load data.</div>}
-      {latest?.map((announcement) => (
-        <Announcement
-          key={announcement._id}
-          author={announcement.author}
-          content={announcement.content}
-          course={announcement.course}
-        />
-      ))}
+      {isLoading
+        ? Array.from({ length: 3 }).map((_, i) => (
+            <LatestAnnouncementsSkeleton key={i} />
+          ))
+        : latest?.map((announcement) => (
+            <Announcement
+              key={announcement._id}
+              author={announcement.author}
+              content={announcement.content}
+              course={announcement.course}
+            />
+          ))}
     </section>
   );
 }

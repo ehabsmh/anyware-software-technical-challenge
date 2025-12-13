@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useQuiz } from "../hooks/useQuizzes";
 import { useAppSelector } from "../store/hooks";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import Quiz from "./../features/quizzes/solve/Quiz";
 import { FormProvider, useForm } from "react-hook-form";
 import type {
@@ -18,11 +18,7 @@ function SolveQuiz({ review = false }: { review?: boolean }) {
 
   const { id: quizId } = useParams<{ id: string }>();
 
-  const { data: currentQuiz, isLoading: loading } = useQuiz(
-    quizId || "",
-    review
-  );
-  console.log(currentQuiz);
+  const { data: currentQuiz, isLoading } = useQuiz(quizId || "", review);
 
   const methods = useForm<ISubmitQuiz | ICorrectQuiz>({
     defaultValues:
@@ -46,18 +42,22 @@ function SolveQuiz({ review = false }: { review?: boolean }) {
     }
   }, [review, currentQuiz, methods]);
 
-  if (loading) return <p>Loading quiz...</p>;
-
   return (
     <section className="overflow-y-auto w-full h-[calc(100vh-86px)]">
       <Box className="max-w-3xl mx-auto mt-8">
-        <FormProvider {...methods}>
-          <Quiz
-            quiz={currentQuiz!}
-            review={review}
-            isInstructor={currUserRole === "instructor"}
-          />
-        </FormProvider>
+        {isLoading ? (
+          <div className="flex justify-center items-center">
+            <CircularProgress />
+          </div>
+        ) : (
+          <FormProvider {...methods}>
+            <Quiz
+              quiz={currentQuiz!}
+              review={review}
+              isInstructor={currUserRole === "instructor"}
+            />
+          </FormProvider>
+        )}
       </Box>
     </section>
   );
