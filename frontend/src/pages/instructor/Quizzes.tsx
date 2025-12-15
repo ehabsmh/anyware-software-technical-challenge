@@ -19,9 +19,11 @@ function Quizzes() {
   const [debouncedTopic] = useDebounce(searchTopic, 800);
   const [debouncedCourse] = useDebounce(searchCourse, 800);
 
+  const [currentPage, setCurrentPage] = useState(1);
+
   const { data: quizzes, isLoading: quizzesLoading } = useInstructorQuizzes({
-    page: 1,
-    limit: 5,
+    page: currentPage,
+    limit: 2,
     topic: debouncedTopic,
     course: debouncedCourse,
   });
@@ -110,7 +112,7 @@ function Quizzes() {
           page={page}
           limit={limit}
           total={total}
-          onPageChange={() => {}}
+          onPageChange={(newPage) => setCurrentPage(newPage)}
         />
       )}
     </>

@@ -117,7 +117,13 @@ class QuizController {
   static async getUserSubmittedQuizzes(req: CustomRequest, res: Response) {
     const user = req.user;
     const userId = String(user?._id);
-    const submissions = await QuizService.getUserSubmittedQuizzes(userId);
+    const page = req.query.page ? Number(req.query.page) : undefined;
+    const limit = req.query.limit ? Number(req.query.limit) : undefined;
+    const submissions = await QuizService.getUserSubmittedQuizzes(
+      userId,
+      page,
+      limit
+    );
     res.json(submissions);
   }
 

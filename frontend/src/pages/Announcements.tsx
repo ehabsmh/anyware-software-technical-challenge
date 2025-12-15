@@ -36,6 +36,7 @@ function AnnouncementsPage() {
     courseId: selectedCourseId,
     mineOnly: mineOnly,
     page: currentPage,
+    limit: 4,
   });
 
   const announcements = data?.items || [];

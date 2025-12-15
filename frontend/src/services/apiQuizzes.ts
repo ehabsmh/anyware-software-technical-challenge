@@ -58,7 +58,13 @@ export async function fetchQuizQuestions(id: string) {
   }
 }
 
-export async function fetchStudentSubmissions() {
+export async function fetchStudentSubmissions({
+  page = 1,
+  limit = 5,
+}: {
+  page?: number;
+  limit?: number;
+}) {
   try {
     const {
       data,
@@ -70,7 +76,9 @@ export async function fetchStudentSubmissions() {
         limit: number;
         totalPages: number;
       };
-    } = await api.get(`/quizzes/submissions/student`);
+    } = await api.get(`/quizzes/submissions/student`, {
+      params: { page, limit },
+    });
     return data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {

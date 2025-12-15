@@ -4,12 +4,16 @@ import type { IQuizSubmissionPopulated } from "../../interfaces/quiz";
 import GenericTable from "../../ui/GenericTable";
 import TableSkeleton from "../../skeletons/tableSkeleton";
 import { format } from "date-fns";
+import { useState } from "react";
 
 function SubmittedQuizzes() {
   const { t } = useTranslation();
 
-  const { data, isLoading: studentSubmissionsLoading } =
-    useStudentSubmissions();
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, isLoading: studentSubmissionsLoading } = useStudentSubmissions({
+    page: currentPage,
+    limit: 5,
+  });
 
   const items = data?.items || [];
   const { page = 1, limit = 5, total = 0 } = data || {};
@@ -60,7 +64,9 @@ function SubmittedQuizzes() {
           page={page}
           limit={limit}
           total={total}
-          onPageChange={() => {}}
+          onPageChange={(newPage) => {
+            setCurrentPage(newPage);
+          }}
         />
       )}
     </>

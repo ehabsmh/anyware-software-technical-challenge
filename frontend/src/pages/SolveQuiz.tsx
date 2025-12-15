@@ -44,7 +44,7 @@ function SolveQuiz({ review = false }: { review?: boolean }) {
 
   return (
     <section className="overflow-y-auto w-full h-[calc(100vh-86px)]">
-      <Box className="max-w-3xl mx-auto mt-8">
+      <Box className="max-w-4xl mx-auto mt-8">
         {isLoading ? (
           <div className="flex justify-center items-center">
             <CircularProgress />

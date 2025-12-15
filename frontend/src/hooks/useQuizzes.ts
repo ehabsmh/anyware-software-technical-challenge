@@ -125,10 +125,13 @@ export function useDeleteQuiz() {
   });
 }
 
-export function useStudentSubmissions() {
+export function useStudentSubmissions({
+  page = 1,
+  limit = 5,
+}: { page?: number; limit?: number } = {}) {
   return useQuery({
-    queryKey: ["studentSubmissions"],
-    queryFn: () => fetchStudentSubmissions(),
+    queryKey: ["studentSubmissions", page, limit],
+    queryFn: () => fetchStudentSubmissions({ page, limit }),
   });
 }
 

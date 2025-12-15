@@ -96,6 +96,17 @@ function Quiz({ quiz, review = false, isInstructor = false }: QuizProps) {
       <CardContent>
         {quiz.questions?.map((q, qIndex) => (
           <Box key={q._id} className="mb-6">
+            <div className="bg-gradient-2 w-full h-[0.20rem] rounded-full relative mb-3">
+              <div className="text-xs font-mono absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-red bg-white px-2 rounded-md">
+                <p className="font-bold text-lg text-gray-500">
+                  {q.type === "true_false"
+                    ? "T/F"
+                    : q.type === "short_answer"
+                    ? "Short Answer"
+                    : "MCQ"}
+                </p>
+              </div>
+            </div>
             <div className="flex justify-between">
               <div className="flex items-center gap-4">
                 <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
@@ -130,15 +141,6 @@ function Quiz({ quiz, review = false, isInstructor = false }: QuizProps) {
                       <BsExclamationCircle className="text-black inline-block mb-2" />
                     </Tooltip>
                   ))}
-              </div>
-              <div className="bg-gradient-2 rounded-4xl px-3 text-white flex items-center justify-center h-7">
-                <p className="text-sm font-mono">
-                  {q.type === "true_false"
-                    ? "T/F"
-                    : q.type === "short_answer"
-                    ? "Short Answer"
-                    : "MCQ"}
-                </p>
               </div>
             </div>
             <RadioGroup>

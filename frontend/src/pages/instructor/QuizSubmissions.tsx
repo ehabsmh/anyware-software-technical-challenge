@@ -6,13 +6,16 @@ import { Check, Clear } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import type { IQuizSubmissionPopulated } from "../../interfaces/quiz";
 import TableSkeleton from "../../skeletons/tableSkeleton";
+import { useState } from "react";
 
 function QuizSubmissions() {
   const { t } = useTranslation();
 
   const { id } = useParams();
+
+  const [currentPage, setCurrentPage] = useState(1);
   const { data: quizSubmissions, isLoading: quizSubmissionsLoading } =
-    useQuizSubmissions(id || "", 1, 5);
+    useQuizSubmissions(id || "", currentPage, 5);
 
   const items = quizSubmissions?.items || [];
   const { page = 1, limit = 5, total = 0 } = quizSubmissions || {};
@@ -62,7 +65,9 @@ function QuizSubmissions() {
           page={page}
           limit={limit}
           total={total}
-          onPageChange={() => {}}
+          onPageChange={(newPage) => {
+            setCurrentPage(newPage);
+          }}
         />
       )}
     </>

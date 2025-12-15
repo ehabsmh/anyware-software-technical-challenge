@@ -1,12 +1,15 @@
 import Search from "./Search";
-import { Avatar, Button, useMediaQuery } from "@mui/material";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import EmailIcon from "@mui/icons-material/Email";
+import { Avatar, Button, IconButton, useMediaQuery } from "@mui/material";
 import { useAppSelector } from "../store/hooks";
 import { Language } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
+import MenuIcon from "@mui/icons-material/Menu";
 
-function Header() {
+function Header({
+  toggleDrawer,
+}: {
+  toggleDrawer: (newOpen: boolean) => () => void;
+}) {
   const { name: userName, avatar } = useAppSelector((state) => state.user);
   const [firstName, lastName] = [
     userName.split(" ")[0],
@@ -23,32 +26,41 @@ function Header() {
 
   return (
     <header className="w-full bg-white/60 py-5">
-      <div className="flex items-center justify-between px-10">
-        <h1 className="font-bold lg:text-2xl text-lg text-gray-500">
+      <div className="flex items-center justify-between md:px-10 px-3">
+        {isMobile && (
+          <IconButton onClick={toggleDrawer(true)}>
+            <MenuIcon />
+          </IconButton>
+        )}
+        <h1 className="font-bold lg:text-2xl text-md text-gray-500">
           {i18n.language === "en"
             ? `${t("header.welcome")}, ${firstName} ${lastName}`
             : `${firstName} ${lastName} ${t("header.welcome")}`}
         </h1>
 
-        <div className="flex items-center gap-5 col-span-2 col-start-2 md:mr-10">
+        <div className="flex items-center gap-2 md:gap-5 col-span-2 col-start-2 md:mr-10">
           <Button
             variant="text"
-            className="text-gradient-2! font-bold!"
+            className="text-gradient-2! font-bold! "
             onClick={toggleLanguage}
           >
-            <Language className="text-gradient-2 mr-1" />
+            <Language className="text-gradient-2 mr-1 text-sm! md:text-md!" />
             {i18n.language}
           </Button>
           {!isMobile && <Search />}
-          <NotificationsIcon
+          {/* <NotificationsIcon
             fontSize="large"
             className="cursor-pointer text-gradient-2"
           />
           <EmailIcon
             fontSize="large"
             className="cursor-pointer text-gradient-2"
+          /> */}
+          <Avatar
+            alt={userName}
+            src={avatar}
+            sx={{ width: isMobile ? 30 : 40, height: isMobile ? 30 : 40 }}
           />
-          <Avatar alt={userName} src={avatar} />
         </div>
       </div>
     </header>
