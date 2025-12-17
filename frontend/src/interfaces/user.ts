@@ -4,7 +4,7 @@ export interface IUser {
   email: string;
   gender: string;
   phone: string;
-  role: "" | "student" | "admin" | "instructor";
+  role: "student" | "admin" | "instructor";
   avatar: string;
   enrolledIn: string[];
 }
