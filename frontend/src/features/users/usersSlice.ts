@@ -16,7 +16,7 @@ const initialState: IUserInitialState = {
   email: "",
   gender: "",
   phone: "",
-  role: "",
+  role: "student",
   avatar: "",
   enrolledIn: [],
   loading: false,
