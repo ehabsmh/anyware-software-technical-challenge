@@ -132,200 +132,212 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
   }, [courseLesson, editMode, lessonId, reset]);
 
   return (
-    <Form
-      title={
-        editMode
-          ? t("courseLessons.lessonCreateForm.titleEditLesson")
-          : t("courseLessons.lessonCreateForm.titleAddLesson")
-      }
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      {/* Title */}
-      <TextField
-        focused={editMode}
-        label={t("courseLessons.lessonCreateForm.lessonTitleInputLabel")}
-        variant="outlined"
-        fullWidth
-        {...register("title", { required: "Lesson title is required" })}
-        error={!!errors.title}
-        helperText={errors.title?.message}
-      />
+    <Box className="bg-main overflow-y-auto p-8 h-[calc(100vh-86px)]">
+      <Form
+        title={
+          editMode
+            ? t("courseLessons.lessonCreateForm.titleEditLesson")
+            : t("courseLessons.lessonCreateForm.titleAddLesson")
+        }
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        {/* Title */}
+        <TextField
+          focused={editMode}
+          label={t("courseLessons.lessonCreateForm.lessonTitleInputLabel")}
+          variant="outlined"
+          fullWidth
+          {...register("title", { required: "Lesson title is required" })}
+          error={!!errors.title}
+          helperText={errors.title?.message}
+        />
 
-      {/* Content */}
-      <TextField
-        focused={editMode}
-        label={t("courseLessons.lessonCreateForm.lessonContentInputLabel")}
-        variant="outlined"
-        fullWidth
-        multiline
-        rows={3}
-        {...register("content", { required: "Lesson content is required" })}
-        error={!!errors.content}
-        helperText={errors.content?.message}
-      />
+        {/* Content */}
+        <TextField
+          focused={editMode}
+          label={t("courseLessons.lessonCreateForm.lessonContentInputLabel")}
+          variant="outlined"
+          fullWidth
+          multiline
+          rows={3}
+          {...register("content", { required: "Lesson content is required" })}
+          error={!!errors.content}
+          helperText={errors.content?.message}
+        />
 
-      {/* Upload video */}
-      {editMode ? null : (
-        <Box mt={2}>
-          <Paper
-            elevation={4}
-            sx={{
-              p: 2,
-              borderRadius: 2,
-              display: "flex",
-              flexDirection: "column",
-              gap: 1.5,
-            }}
-          >
-            <FormControl>
-              <FormLabel id="demo-radio-buttons-group-label">
-                {t("courseLessons.lessonCreateForm.lessonVideoTypeLabel")}
-              </FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="url"
-                name="radio-buttons-group"
-                onChange={(e) => setVideoType(e.target.value as "url" | "file")}
-              >
-                <FormControlLabel
-                  value="url"
-                  control={<Radio />}
+        {/* Upload video */}
+        {editMode ? null : (
+          <Box mt={2}>
+            <Paper
+              elevation={4}
+              sx={{
+                p: 2,
+                borderRadius: 2,
+                display: "flex",
+                flexDirection: "column",
+                gap: 1.5,
+              }}
+            >
+              <FormControl>
+                <FormLabel id="demo-radio-buttons-group-label">
+                  {t("courseLessons.lessonCreateForm.lessonVideoTypeLabel")}
+                </FormLabel>
+                <RadioGroup
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue="url"
+                  name="radio-buttons-group"
+                  onChange={(e) =>
+                    setVideoType(e.target.value as "url" | "file")
+                  }
+                >
+                  <FormControlLabel
+                    value="url"
+                    control={<Radio />}
+                    label={t(
+                      "courseLessons.lessonCreateForm.lessonVideoUrlInputLabel"
+                    )}
+                  />
+                  <FormControlLabel
+                    value="file"
+                    control={<Radio />}
+                    label={t(
+                      "courseLessons.lessonCreateForm.lessonVideoUploadLabel"
+                    )}
+                  />
+                </RadioGroup>
+              </FormControl>
+
+              {videoType === "file" ? (
+                <>
+                  <Button
+                    variant="contained"
+                    component="label"
+                    sx={{ alignSelf: "start" }}
+                  >
+                    {t("courseLessons.lessonCreateForm.lessonVideoUploadLabel")}
+                    <input
+                      type="file"
+                      hidden
+                      accept="video/*"
+                      {...register("video", { required: "Video is required" })}
+                    />
+                  </Button>
+
+                  <Typography variant="body2" color="text.secondary">
+                    {watch("video") && (watch("video") as FileList).length > 0
+                      ? (watch("video") as FileList)[0].name
+                      : t("courseLessons.lessonCreateForm.noVideoSelectedText")}
+                  </Typography>
+                </>
+              ) : (
+                <TextField
                   label={t(
                     "courseLessons.lessonCreateForm.lessonVideoUrlInputLabel"
                   )}
+                  variant="outlined"
+                  fullWidth
+                  {...register("video", { required: "Video url is required" })}
+                  error={!!errors.video}
+                  helperText={errors.video?.message}
                 />
-                <FormControlLabel
-                  value="file"
-                  control={<Radio />}
-                  label={t(
-                    "courseLessons.lessonCreateForm.lessonVideoUploadLabel"
-                  )}
-                />
-              </RadioGroup>
-            </FormControl>
+              )}
 
-            {videoType === "file" ? (
-              <>
-                <Button
-                  variant="contained"
-                  component="label"
-                  sx={{ alignSelf: "start" }}
-                >
-                  {t("courseLessons.lessonCreateForm.lessonVideoUploadLabel")}
-                  <input
-                    type="file"
-                    hidden
-                    accept="video/*"
-                    {...register("video", { required: "Video is required" })}
-                  />
-                </Button>
-
-                <Typography variant="body2" color="text.secondary">
-                  {watch("video") && (watch("video") as FileList).length > 0
-                    ? (watch("video") as FileList)[0].name
-                    : t("courseLessons.lessonCreateForm.noVideoSelectedText")}
+              {/* Error */}
+              {errors.video && (
+                <Typography color="error" fontSize={14}>
+                  {errors.video.message}
                 </Typography>
-              </>
-            ) : (
-              <TextField
-                label={t(
-                  "courseLessons.lessonCreateForm.lessonVideoUrlInputLabel"
-                )}
-                variant="outlined"
-                fullWidth
-                {...register("video", { required: "Video url is required" })}
-                error={!!errors.video}
-                helperText={errors.video?.message}
-              />
-            )}
+              )}
+            </Paper>
+          </Box>
+        )}
 
-            {/* Error */}
-            {errors.video && (
-              <Typography color="error" fontSize={14}>
-                {errors.video.message}
+        {/* Resources Section */}
+        <Box mt={3}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="h6">
+              {t("courseLessons.courseContent.addLessonButtonText")}
+            </Typography>
+
+            <Button
+              startIcon={<Add />}
+              variant="outlined"
+              onClick={() => append({ name: "", url: "" })}
+            >
+              {t("courseLessons.lessonCreateForm.lessonAddResourceButtonText")}
+            </Button>
+          </Box>
+
+          {/* Resource Fields */}
+          <Box mt={2} display="flex" flexDirection="column" gap={2}>
+            {fields.map((field, index) => (
+              <Paper
+                key={field.id}
+                elevation={2}
+                sx={{ p: 2, borderRadius: 2 }}
+              >
+                <Box display="flex" gap={2} alignItems="center">
+                  <TextField
+                    label={t(
+                      "courseLessons.lessonCreateForm.lessonResourceNameInputLabel"
+                    )}
+                    variant="outlined"
+                    fullWidth
+                    {...register(`resources.${index}.name` as const, {
+                      required: "Resource name is required",
+                    })}
+                    error={!!errors.resources?.[index]?.name}
+                    helperText={errors.resources?.[index]?.name?.message}
+                  />
+
+                  <TextField
+                    label={t(
+                      "courseLessons.lessonCreateForm.lessonResourceUrlInputLabel"
+                    )}
+                    variant="outlined"
+                    fullWidth
+                    {...register(`resources.${index}.url` as const, {
+                      required: "Resource URL is required",
+                    })}
+                    error={!!errors.resources?.[index]?.url}
+                    helperText={errors.resources?.[index]?.url?.message}
+                  />
+
+                  <IconButton color="error" onClick={() => remove(index)}>
+                    <Delete />
+                  </IconButton>
+                </Box>
+              </Paper>
+            ))}
+
+            {fields.length === 0 && (
+              <Typography color="text.secondary" fontSize={14}>
+                {t("courseLessons.lessonCreateForm.emptyResourcesListText")}
               </Typography>
             )}
-          </Paper>
+          </Box>
         </Box>
-      )}
-
-      {/* Resources Section */}
-      <Box mt={3}>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6">
-            {t("courseLessons.courseContent.addLessonButtonText")}
-          </Typography>
-
-          <Button
-            startIcon={<Add />}
-            variant="outlined"
-            onClick={() => append({ name: "", url: "" })}
-          >
-            {t("courseLessons.lessonCreateForm.lessonAddResourceButtonText")}
-          </Button>
-        </Box>
-
-        {/* Resource Fields */}
-        <Box mt={2} display="flex" flexDirection="column" gap={2}>
-          {fields.map((field, index) => (
-            <Paper key={field.id} elevation={2} sx={{ p: 2, borderRadius: 2 }}>
-              <Box display="flex" gap={2} alignItems="center">
-                <TextField
-                  label={t(
-                    "courseLessons.lessonCreateForm.lessonResourceNameInputLabel"
-                  )}
-                  variant="outlined"
-                  fullWidth
-                  {...register(`resources.${index}.name` as const, {
-                    required: "Resource name is required",
-                  })}
-                  error={!!errors.resources?.[index]?.name}
-                  helperText={errors.resources?.[index]?.name?.message}
-                />
-
-                <TextField
-                  label={t(
-                    "courseLessons.lessonCreateForm.lessonResourceUrlInputLabel"
-                  )}
-                  variant="outlined"
-                  fullWidth
-                  {...register(`resources.${index}.url` as const, {
-                    required: "Resource URL is required",
-                  })}
-                  error={!!errors.resources?.[index]?.url}
-                  helperText={errors.resources?.[index]?.url?.message}
-                />
-
-                <IconButton color="error" onClick={() => remove(index)}>
-                  <Delete />
-                </IconButton>
-              </Box>
-            </Paper>
-          ))}
-
-          {fields.length === 0 && (
-            <Typography color="text.secondary" fontSize={14}>
-              {t("courseLessons.lessonCreateForm.emptyResourcesListText")}
-            </Typography>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          disabled={isCreating || isUpdating}
+        >
+          {isCreating || isUpdating ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : editMode ? (
+            "Update Lesson"
+          ) : (
+            "Create Lesson"
           )}
-        </Box>
-      </Box>
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        fullWidth
-        disabled={isCreating || isUpdating}
-      >
-        {isCreating || isUpdating ? (
-          <CircularProgress size={24} color="inherit" />
-        ) : editMode ? (
-          "Update Lesson"
-        ) : (
-          "Create Lesson"
-        )}
-      </Button>
-    </Form>
+        </Button>
+      </Form>
+    </Box>
   );
 }
 

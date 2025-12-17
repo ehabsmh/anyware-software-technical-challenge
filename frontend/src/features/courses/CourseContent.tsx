@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Drawer,
   List,
   ListItem,
@@ -39,6 +40,13 @@ function CourseContent({
 
   const courseContentSidebar = (
     <List className="mt-2">
+      <Button
+        variant="outlined"
+        className="w-full mb-4 border-gradient-2! text-gradient-1! font-bold"
+        onClick={() => navigate(`/instructor/courses/${id}/add-lesson`)}
+      >
+        Add Lesson
+      </Button>
       {lessons.map((lesson) => {
         const isActive = lesson._id === selectedLessonId;
 
