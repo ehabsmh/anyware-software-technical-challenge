@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
+import { CircularProgress } from "@mui/material";
 
 export const requireAuth = (Component: React.ComponentType) => {
   return function ProtectedRoute() {
@@ -8,13 +9,13 @@ export const requireAuth = (Component: React.ComponentType) => {
     if (isLoadingUser) {
       return (
         <div className="flex justify-center items-center h-screen">
-          Loading...
+          <CircularProgress size={50} />
         </div>
       );
     }
 
     if (!isAuthenticated) {
-      return <Navigate to="/" replace />;
+      return <Navigate to="/login" replace />;
     }
 
     return <Component />;

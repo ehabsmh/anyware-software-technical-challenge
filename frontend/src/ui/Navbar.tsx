@@ -11,7 +11,13 @@ import {
   ListItem,
 } from "@mui/material";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import {
+  NavLink,
+  Link,
+  useNavigate,
+  useParams,
+  useLocation,
+} from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { navConfig } from "../config/navConfig";
 import { BiLogOut } from "react-icons/bi";
@@ -23,42 +29,49 @@ function Navbar({
   toggleDrawer,
 }: {
   open: boolean;
-  toggleDrawer: (newOpen: boolean) => () => void;
+  toggleDrawer: (newOpen: boolean) => void;
 }) {
   const { t } = useTranslation();
 
-  // const [open, setOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const isMobile = useMediaQuery("(max-width:1024px)");
   const userRole = useAppSelector((state) => state.user.role);
   const roleNavItems = navConfig[userRole] || [];
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  // const toggleDrawer = (newOpen: boolean) => () => setOpen(newOpen);
+  const { id } = useParams();
+  const { pathname } = useLocation();
 
   const handleCollapse = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
+  const handleNavClick = () => {
+    toggleDrawer(false);
+  };
+
   const DrawerList = (
     <Box
-      sx={{ width: 250 }}
+      sx={{ width: 300, height: "100%" }}
       role="presentation"
-      className="bg-linear-to-b from-gradient-1 to-gradient-2 text-white h-screen flex flex-col justify-between"
+      className="bg-linear-to-b from-gradient-1 to-gradient-2 text-white h-screen flex flex-col justify-between overflow-y-auto"
     >
-      <List>
+      <List className="space-y-7 mt-4 flex flex-col justify-center">
         <ListItem className="flex flex-col justify-center items-center text-2xl font-bold mb-5">
           <Link to={"/"} className="flex items-center gap-3">
             {t("logoName")}
           </Link>
         </ListItem>
+
         {roleNavItems.map((item, index) => (
-          <ListItem disableGutters key={item.to}>
+          <ListItem sx={{ display: "block" }} disableGutters key={item.to}>
             {"subLinks" in item ? (
               <>
-                <ListItemButton onClick={() => handleCollapse(index)}>
-                  <ListItemIcon sx={{ color: "white" }}>
+                <ListItemButton
+                  sx={{ gap: 2 }}
+                  onClick={() => handleCollapse(index)}
+                >
+                  <ListItemIcon sx={{ color: "white", minWidth: "auto" }}>
                     <item.icon />
                   </ListItemIcon>
                   <ListItemText primary={t(`navbar.${item.label}.link`)} />
@@ -77,15 +90,49 @@ function Navbar({
                       key={subItem.to}
                       to={subItem.to}
                       style={{ textDecoration: "none", color: "inherit" }}
+                      onClick={handleNavClick}
                     >
-                      <ListItemButton sx={{ pl: 4, py: 0.8 }}>
-                        <ListItemIcon sx={{ color: "rgba(255,255,255,0.8)" }}>
-                          <subItem.icon />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={t(`navbar.${item.label}.${subItem.label}`)}
-                        />
-                      </ListItemButton>
+                      {({ isActive }) => (
+                        <ListItem sx={{ display: "block" }}>
+                          <ListItemButton
+                            sx={{
+                              gap: 2,
+                              pl: 2,
+                              py: 0.8,
+                              backgroundColor: isActive
+                                ? "#ffffff"
+                                : "transparent",
+                              "&:hover": {
+                                backgroundColor: isActive
+                                  ? "#ffffff"
+                                  : "#ffffff31",
+                              },
+                            }}
+                          >
+                            <ListItemIcon
+                              sx={{
+                                color: isActive
+                                  ? "var(--color-gradient-1)"
+                                  : "white",
+                                minWidth: "auto",
+                              }}
+                            >
+                              <subItem.icon />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={t(
+                                `navbar.${item.label}.${subItem.label}`
+                              )}
+                              sx={{
+                                color: isActive
+                                  ? "var(--color-gradient-1)"
+                                  : "white",
+                                fontWeight: isActive ? "bold" : "normal",
+                              }}
+                            />
+                          </ListItemButton>
+                        </ListItem>
+                      )}
                     </NavLink>
                   ))}
                 </Collapse>
@@ -98,6 +145,7 @@ function Navbar({
                   color: "inherit",
                   width: "100%",
                 }}
+                onClick={handleNavClick}
               >
                 {({ isActive }) => (
                   <ListItemButton
@@ -149,8 +197,15 @@ function Navbar({
 
   return (
     <>
-      {isMobile ? (
-        <Drawer anchor="left" open={open} onClose={toggleDrawer(false)}>
+      {isMobile ||
+      pathname.includes(`/instructor/courses/my-courses/${id}`) ||
+      pathname.includes(`/student/courses/${id}`) ? (
+        <Drawer
+          anchor="left"
+          open={open}
+          onClose={() => toggleDrawer(false)}
+          variant="temporary"
+        >
           {DrawerList}
         </Drawer>
       ) : (
@@ -170,7 +225,9 @@ function Navbar({
                     <ListItem
                       onClick={() => handleCollapse(index)}
                       sx={{
-                        py: 2,
+                        gap: 2,
+                        backgroundColor:
+                          openIndex === index ? "#ffffff2c" : "transparent",
                         "&:hover": {
                           backgroundColor: "rgba(232, 232, 232, 0.1)",
                         },
@@ -179,15 +236,7 @@ function Navbar({
                       <ListItemIcon sx={{ color: "white", minWidth: "auto" }}>
                         <item.icon />
                       </ListItemIcon>
-                      <ListItemText
-                        primary={t(`navbar.${item.label}.link`)}
-                        slotProps={{
-                          primary: {
-                            fontSize: 12,
-                            fontWeight: "medium",
-                          },
-                        }}
-                      />
+                      <ListItemText primary={t(`navbar.${item.label}.link`)} />
                       <KeyboardArrowDown
                         sx={{
                           transform:
@@ -202,6 +251,7 @@ function Navbar({
                     <NavLink
                       to={item.to}
                       style={{ textDecoration: "none", color: "inherit" }}
+                      onClick={handleNavClick}
                     >
                       {({ isActive }) => (
                         <ListItem
@@ -252,23 +302,49 @@ function Navbar({
                           key={subItem.to}
                           to={subItem.to}
                           style={{ textDecoration: "none", color: "inherit" }}
+                          onClick={handleNavClick}
                         >
-                          <ListItemButton sx={{ pl: 3, py: 0.8 }}>
-                            <ListItemIcon
-                              sx={{ color: "rgba(255,255,255,0.8)" }}
-                            >
-                              <subItem.icon />
-                            </ListItemIcon>
-                            <ListItemText
-                              primary={t(
-                                `navbar.${item.label}.${subItem.label}`
-                              )}
-                              primaryTypographyProps={{
-                                fontSize: 14,
-                                fontWeight: "normal",
-                              }}
-                            />
-                          </ListItemButton>
+                          {({ isActive }) => (
+                            <ListItem>
+                              <ListItemButton
+                                sx={{
+                                  gap: 2,
+                                  pl: 2,
+                                  py: 0.8,
+                                  backgroundColor: isActive
+                                    ? "#ffffff"
+                                    : "transparent",
+                                  "&:hover": {
+                                    backgroundColor: isActive
+                                      ? "#ffffff"
+                                      : "#ffffff31",
+                                  },
+                                }}
+                              >
+                                <ListItemIcon
+                                  sx={{
+                                    color: isActive
+                                      ? "var(--color-gradient-1)"
+                                      : "white",
+                                    minWidth: "auto",
+                                  }}
+                                >
+                                  <subItem.icon />
+                                </ListItemIcon>
+                                <ListItemText
+                                  primary={t(
+                                    `navbar.${item.label}.${subItem.label}`
+                                  )}
+                                  sx={{
+                                    color: isActive
+                                      ? "var(--color-gradient-1)"
+                                      : "white",
+                                    fontWeight: isActive ? "bold" : "normal",
+                                  }}
+                                />
+                              </ListItemButton>
+                            </ListItem>
+                          )}
                         </NavLink>
                       ))}
                     </Collapse>

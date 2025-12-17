@@ -6,17 +6,30 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import type { ICourseLesson } from "../../interfaces/courseLesson";
+import type {
+  ICourseLesson,
+  ICourseLessonPopulated,
+} from "../../interfaces/courseLesson";
 
-function CourseOverview({ lesson }: { lesson: ICourseLesson }) {
+function CourseOverview({
+  lesson,
+  courseOverview,
+}: {
+  lesson: ICourseLesson;
+  courseOverview: ICourseLessonPopulated["courseDetails"];
+}) {
   return (
     <List sx={{ width: "100%", maxWidth: "100%", bgcolor: "background.paper" }}>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+          <Avatar
+            variant="rounded"
+            alt={courseOverview.name}
+            src={courseOverview.image}
+          />
         </ListItemAvatar>
         <ListItemText
-          primary="Master JavaScript"
+          primary={courseOverview.name}
           sx={{
             "& .MuiListItemText-primary": { fontWeight: "bold" },
           }}
@@ -34,20 +47,20 @@ function CourseOverview({ lesson }: { lesson: ICourseLesson }) {
             </>
           }
         />
-        <div className="flex gap-3 items-center">
-          <Avatar
-            alt="Remy Sharp"
-            src="/static/images/avatar/1.jpg"
-            sx={{ width: 32, height: 32 }}
-          />
-          <Typography
-            sx={{ display: "block", marginTop: "8px" }}
-            variant="body2"
-            color="text.secondary"
-          >
-            By: Mohamed Ali Hassan
-          </Typography>
-        </div>
+      </ListItem>
+      <ListItem className="flex gap-3 items-center">
+        <Avatar
+          alt={courseOverview.instructor.name}
+          src={courseOverview.instructor.avatar}
+          sx={{ width: 32, height: 32 }}
+        />
+        <Typography
+          sx={{ display: "block", marginTop: "8px" }}
+          variant="body2"
+          color="text.secondary"
+        >
+          {courseOverview.instructor.name}
+        </Typography>
       </ListItem>
     </List>
   );

@@ -1,9 +1,12 @@
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, Button, Tab, Tabs, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import ReactPlayer from "react-player";
 import CourseOverview from "./CourseOverview";
 import CourseResources from "./CourseResources";
 import { useCourseLesson } from "../../hooks/useCourseLessons";
+import { ArrowCircleRight } from "@mui/icons-material";
+import type { ICourseLessonPopulated } from "../../interfaces/courseLesson";
+import { useTranslation } from "react-i18next";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -28,10 +31,18 @@ function CustomTabPanel(props: TabPanelProps) {
 }
 function CourseLesson({
   selectedLessonId,
+  toggleDrawer,
+  courseOverview,
 }: {
   selectedLessonId?: string | null;
+  toggleDrawer: (newOpen: boolean) => void;
+  courseOverview: ICourseLessonPopulated["courseDetails"];
 }) {
+  const { t } = useTranslation();
+
   const [tabValue, setTabValue] = useState(0);
+
+  const isMobile = useMediaQuery("(max-width:1024px)");
 
   const onTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -48,18 +59,40 @@ function CourseLesson({
 
   return (
     <Box sx={{ width: "100%", borderRadius: 2 }}>
-      <ReactPlayer src={lesson?.video} controls width="100%" height="90%" />
+      {isMobile && (
+        <div onClick={() => toggleDrawer(true)}>
+          <ArrowCircleRight
+            sx={{ color: "var(--color-gradient-2)", fontSize: 30 }}
+          />
+          <Button sx={{ color: "var(--color-gradient-2)" }}>
+            Show Content
+          </Button>
+        </div>
+      )}
+      {isMobile && (
+        <h2 className="font-bold text-xl p-3">
+          {lesson?.order}. {lesson?.title}
+        </h2>
+      )}
+      <ReactPlayer
+        src={lesson?.video}
+        controls
+        style={{ width: "100%", height: "auto", aspectRatio: "16/9" }}
+      />
       <Tabs
         value={tabValue}
         onChange={onTabChange}
-        sx={{ backgroundColor: "white" }}
+        sx={{
+          backgroundColor: "white",
+          overflow: "hidden",
+        }}
       >
-        <Tab label="Overview" />
-        <Tab label="Resources" />
-        <Tab label="Discussion" />
+        <Tab label={t("courseLessons.courseLesson.overviewTabLabel")} />
+        <Tab label={t("courseLessons.courseLesson.resourcesTabLabel")} />
+        <Tab label={t("courseLessons.courseLesson.discussionTabLabel")} />
       </Tabs>
       <CustomTabPanel value={tabValue} index={0}>
-        <CourseOverview lesson={lesson} />
+        <CourseOverview courseOverview={courseOverview} lesson={lesson} />
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={1}>
         <CourseResources lesson={lesson} />

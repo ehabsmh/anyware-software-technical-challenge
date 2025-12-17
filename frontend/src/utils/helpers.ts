@@ -21,3 +21,10 @@ export function showAlert(action: () => void) {
     richColors: true,
   });
 }
+
+// export function applyDirection(lang: string) {
+//   const isRTL = lang === "ar";
+
+//   document.documentElement.lang = lang;
+//   document.documentElement.dir = isRTL ? "rtl" : "ltr";
+// }

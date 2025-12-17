@@ -26,6 +26,7 @@ import { GiCheckMark, GiCrossMark } from "react-icons/gi";
 import { BsExclamationCircle } from "react-icons/bs";
 import { useCorrectQuiz, useSubmitQuiz } from "../../../hooks/useQuizzes";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 type QuizProps = {
   quiz: IQuizUpcoming | IQuizSubmissionPopulated;
@@ -34,6 +35,7 @@ type QuizProps = {
 };
 
 function Quiz({ quiz, review = false, isInstructor = false }: QuizProps) {
+  const { t } = useTranslation();
   const { register, handleSubmit, control, setValue } = useFormContext<
     ISubmitQuiz | ICorrectQuiz
   >();
@@ -100,10 +102,10 @@ function Quiz({ quiz, review = false, isInstructor = false }: QuizProps) {
               <div className="text-xs font-mono absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-red bg-white px-2 rounded-md">
                 <p className="font-bold text-lg text-gray-500">
                   {q.type === "true_false"
-                    ? "T/F"
+                    ? t("createQuizQuestions.question.trueFalse")
                     : q.type === "short_answer"
-                    ? "Short Answer"
-                    : "MCQ"}
+                    ? t("createQuizQuestions.question.shortAnswer")
+                    : t("createQuizQuestions.question.multipleChoice")}
                 </p>
               </div>
             </div>
@@ -228,7 +230,7 @@ function Quiz({ quiz, review = false, isInstructor = false }: QuizProps) {
                 .instructorNote && (
                 <Box className="mt-4 p-4 rounded-lg">
                   <Typography variant="subtitle2" gutterBottom>
-                    Instructor's Note:
+                    {t("textInstructorNote")}:
                   </Typography>
                   <Typography variant="body2">
                     {

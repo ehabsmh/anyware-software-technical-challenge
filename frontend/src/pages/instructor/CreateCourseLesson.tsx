@@ -27,8 +27,11 @@ import {
 } from "../../hooks/useCourseLessons";
 import { useEffect, useState } from "react";
 import type { IValidationError } from "../../interfaces/validationError";
+import { useTranslation } from "react-i18next";
 
 function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
+  const { t } = useTranslation();
+
   const { courseId, lessonId } = useParams();
   const [videoType, setVideoType] = useState<"url" | "file">("url");
   const { data: courseLesson } = useCourseLesson(lessonId!);
@@ -130,13 +133,17 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
 
   return (
     <Form
-      title={editMode ? "Edit Lesson" : "Add Lesson"}
+      title={
+        editMode
+          ? t("courseLessons.lessonCreateForm.titleEditLesson")
+          : t("courseLessons.lessonCreateForm.titleAddLesson")
+      }
       onSubmit={handleSubmit(onSubmit)}
     >
       {/* Title */}
       <TextField
         focused={editMode}
-        label="Title"
+        label={t("courseLessons.lessonCreateForm.lessonTitleInputLabel")}
         variant="outlined"
         fullWidth
         {...register("title", { required: "Lesson title is required" })}
@@ -147,7 +154,7 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
       {/* Content */}
       <TextField
         focused={editMode}
-        label="Content"
+        label={t("courseLessons.lessonCreateForm.lessonContentInputLabel")}
         variant="outlined"
         fullWidth
         multiline
@@ -172,7 +179,7 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
           >
             <FormControl>
               <FormLabel id="demo-radio-buttons-group-label">
-                Video type
+                {t("courseLessons.lessonCreateForm.lessonVideoTypeLabel")}
               </FormLabel>
               <RadioGroup
                 aria-labelledby="demo-radio-buttons-group-label"
@@ -180,11 +187,19 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
                 name="radio-buttons-group"
                 onChange={(e) => setVideoType(e.target.value as "url" | "file")}
               >
-                <FormControlLabel value="url" control={<Radio />} label="URL" />
+                <FormControlLabel
+                  value="url"
+                  control={<Radio />}
+                  label={t(
+                    "courseLessons.lessonCreateForm.lessonVideoUrlInputLabel"
+                  )}
+                />
                 <FormControlLabel
                   value="file"
                   control={<Radio />}
-                  label="File Upload"
+                  label={t(
+                    "courseLessons.lessonCreateForm.lessonVideoUploadLabel"
+                  )}
                 />
               </RadioGroup>
             </FormControl>
@@ -196,7 +211,7 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
                   component="label"
                   sx={{ alignSelf: "start" }}
                 >
-                  Upload Video
+                  {t("courseLessons.lessonCreateForm.lessonVideoUploadLabel")}
                   <input
                     type="file"
                     hidden
@@ -208,12 +223,14 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
                 <Typography variant="body2" color="text.secondary">
                   {watch("video") && (watch("video") as FileList).length > 0
                     ? (watch("video") as FileList)[0].name
-                    : "No video selected"}
+                    : t("courseLessons.lessonCreateForm.noVideoSelectedText")}
                 </Typography>
               </>
             ) : (
               <TextField
-                label="URL"
+                label={t(
+                  "courseLessons.lessonCreateForm.lessonVideoUrlInputLabel"
+                )}
                 variant="outlined"
                 fullWidth
                 {...register("video", { required: "Video url is required" })}
@@ -235,14 +252,16 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
       {/* Resources Section */}
       <Box mt={3}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6">Resources</Typography>
+          <Typography variant="h6">
+            {t("courseLessons.courseContent.addLessonButtonText")}
+          </Typography>
 
           <Button
             startIcon={<Add />}
             variant="outlined"
             onClick={() => append({ name: "", url: "" })}
           >
-            Add Resource
+            {t("courseLessons.lessonCreateForm.lessonAddResourceButtonText")}
           </Button>
         </Box>
 
@@ -252,7 +271,9 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
             <Paper key={field.id} elevation={2} sx={{ p: 2, borderRadius: 2 }}>
               <Box display="flex" gap={2} alignItems="center">
                 <TextField
-                  label="Name"
+                  label={t(
+                    "courseLessons.lessonCreateForm.lessonResourceNameInputLabel"
+                  )}
                   variant="outlined"
                   fullWidth
                   {...register(`resources.${index}.name` as const, {
@@ -263,7 +284,9 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
                 />
 
                 <TextField
-                  label="URL"
+                  label={t(
+                    "courseLessons.lessonCreateForm.lessonResourceUrlInputLabel"
+                  )}
                   variant="outlined"
                   fullWidth
                   {...register(`resources.${index}.url` as const, {
@@ -282,7 +305,7 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
 
           {fields.length === 0 && (
             <Typography color="text.secondary" fontSize={14}>
-              No resources added yet.
+              {t("courseLessons.lessonCreateForm.emptyResourcesListText")}
             </Typography>
           )}
         </Box>

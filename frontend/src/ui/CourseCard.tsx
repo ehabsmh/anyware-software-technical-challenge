@@ -60,7 +60,7 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
               className="text-gray-400 font-bold cursor-pointer"
               onClick={toggleSeeMore}
             >
-              {seeMore ? "See less" : "See more"}
+              {seeMore ? t("textSeeLess") : t("textSeeMore")}
             </button>
           </Typography>
 
@@ -92,7 +92,7 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
               }}
               onClick={() => onView?.(course._id.toString())}
             >
-              View
+              {t("BtnTextViewCourse")}
             </Button>
           )}
         </CardContent>

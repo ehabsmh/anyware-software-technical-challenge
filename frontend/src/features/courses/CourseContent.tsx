@@ -1,4 +1,12 @@
-import { Button, List, ListItem, ListItemText } from "@mui/material";
+import {
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  useMediaQuery,
+} from "@mui/material";
 import type { ICourseLessonPopulated } from "../../interfaces/courseLesson";
 import { Delete, EditNote } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,104 +17,130 @@ import { useAppSelector } from "../../store/hooks";
 type CourseContentProps = {
   lessons: ICourseLessonPopulated["lessons"];
   selectedLessonId?: string | null;
-  onSelect?: (lessonId: string) => void;
+  onSelect: (lessonId: string) => void;
+  open: boolean;
+  toggleDrawer: (newOpen: boolean) => void;
 };
 
 function CourseContent({
   lessons,
   selectedLessonId,
   onSelect,
+  open,
+  toggleDrawer,
 }: CourseContentProps) {
   const { role: userRole } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { mutate: deleteLesson } = useDeleteCourseLesson();
-  return (
-    <nav className="bg-white h-screen w-md text-black overflow-y-auto flex flex-col p-4 shadow-lg ">
-      <div className="flex gap-3">
-        {userRole === "instructor" && (
-          <Button
-            variant="outlined"
-            className="w-full mb-4 border-gradient-2! text-gradient-1! font-bold"
-            onClick={() => navigate(`/instructor/courses/${id}/add-lesson`)}
-          >
-            Add Lesson
-          </Button>
-        )}
-      </div>
-      <List className="space-y-3">
-        <h3 className="font-bold text-xl p-3">Course Content</h3>
+  const isMobile = useMediaQuery("(max-width:1024px)");
 
-        {lessons.map((lesson) => (
+  const { mutate: deleteLesson } = useDeleteCourseLesson();
+
+  const courseContentSidebar = (
+    <List className="mt-2">
+      {lessons.map((lesson) => {
+        const isActive = lesson._id === selectedLessonId;
+
+        return (
           <ListItem
             key={lesson._id}
-            className={`relative mt-7 ${
-              lesson._id !== selectedLessonId
-                ? "hover:font-bold hover:text-gradient-1 cursor-pointer"
-                : ""
-            }`}
-            onClick={() => onSelect && onSelect(lesson._id)}
+            disablePadding
             sx={{
-              background:
-                lesson._id === selectedLessonId
-                  ? "linear-gradient(to left, var(--color-gradient-1), var(--color-gradient-2))"
-                  : "transparent",
-              color: lesson._id === selectedLessonId ? "white" : "black",
+              mb: 1,
+              borderRadius: 2,
+              bgcolor: isActive ? "rgba(204, 204, 204, 0.26)" : "transparent",
+              borderLeft: isActive
+                ? "4px solid var(--color-gradient-2)"
+                : "4px solid transparent",
             }}
           >
-            <ListItemText primary={`${lesson.order}. ${lesson.title}`} />
-            {userRole === "instructor" && (
-              <div className="flex flex-col justify-center items-center">
-                <Delete
-                  fontSize="medium"
-                  className={`cursor-pointer hover:rotate-180 transition-transform! duration-300! ${
-                    lesson._id !== selectedLessonId ? "text-red-700" : ""
-                  }`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    showAlert(() => deleteLesson(lesson._id));
+            <ListItemButton
+              onClick={() => {
+                onSelect(lesson._id);
+                toggleDrawer(false);
+              }}
+              sx={{
+                borderRadius: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                "&:hover .lesson-actions": {
+                  opacity: 1,
+                },
+              }}
+            >
+              {/* Order */}
+              <Box
+                sx={{
+                  minWidth: 32,
+                  height: 32,
+                  borderRadius: "50%",
+                  bgcolor: "rgba(255,255,255,0.15)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 14,
+                  fontWeight: "bold",
+                }}
+              >
+                {lesson.order}
+              </Box>
+
+              {/* Title */}
+              <ListItemText
+                primary={lesson.title}
+                primaryTypographyProps={{
+                  fontSize: 14,
+                  fontWeight: isActive ? "bold" : "normal",
+                  noWrap: true,
+                }}
+              />
+
+              {/* Actions */}
+              {userRole === "instructor" && (
+                <Box
+                  className="lesson-actions"
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    opacity: isActive ? 1 : 0,
+                    transition: "0.2s",
                   }}
-                />
-                <EditNote
-                  fontSize="medium"
-                  className={`cursor-pointer hover:scale-125 transition-transform! duration-200! ${
-                    lesson._id !== selectedLessonId ? "text-amber-600" : ""
-                  }`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(
-                      `/instructor/courses/${id}/edit-lesson/${lesson._id}`
-                    );
-                  }}
-                />
-              </div>
-            )}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Delete
+                    fontSize="small"
+                    sx={{ cursor: "pointer", color: "#ef4444" }}
+                    onClick={() => showAlert(() => deleteLesson(lesson._id))}
+                  />
+                  <EditNote
+                    fontSize="small"
+                    sx={{ cursor: "pointer", color: "#f59e0b" }}
+                    onClick={() =>
+                      navigate(
+                        `/instructor/courses/${id}/edit-lesson/${lesson._id}`
+                      )
+                    }
+                  />
+                </Box>
+              )}
+            </ListItemButton>
           </ListItem>
-        ))}
-        {/* <ListItem className="bg-gradient-to-l from-gradient-1 to-gradient-2 text-white font-bold cursor-pointer duration-200 p-4 rounded-sm shadow-lg">
-          <ListItemText primary="1. introduction to javascript" />
-        </ListItem>
-        <ListItem className="cursor-pointer hover:font-bold hover:text-gradient-1">
-          <ListItemText primary="2. variables and data types" />
-        </ListItem>
-        <ListItem className="cursor-pointer hover:font-bold hover:text-gradient-1">
-          <ListItemText primary="3. functions and scope" />
-        </ListItem>
-        <ListItem className="cursor-pointer hover:font-bold hover:text-gradient-1">
-          <ListItemText primary="4. objects and arrays" />
-        </ListItem>
-        <ListItem className="cursor-pointer hover:font-bold hover:text-gradient-1">
-          <ListItemText primary="5. control flow and loops" />
-        </ListItem>
-        <ListItem className="cursor-pointer hover:font-bold hover:text-gradient-1">
-          <ListItemText primary="6. events and event handling" />
-        </ListItem>
-        <ListItem className="cursor-pointer hover:font-bold hover:text-gradient-1">
-          <ListItemText primary="7. DOM manipulation" />
-        </ListItem> */}
-      </List>
-    </nav>
+        );
+      })}
+    </List>
+  );
+  return (
+    <>
+      {isMobile ? (
+        <Drawer anchor="left" open={open} onClose={() => toggleDrawer(false)}>
+          {courseContentSidebar}
+        </Drawer>
+      ) : (
+        courseContentSidebar
+      )}
+    </>
   );
 }
 

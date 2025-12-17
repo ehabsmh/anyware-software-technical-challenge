@@ -21,8 +21,17 @@ import SubmittedQuizzes from "./pages/student/SubmittedQuizzes";
 import QuizSubmissions from "./pages/instructor/QuizSubmissions";
 import Course from "./pages/Course";
 import CreateCourseLesson from "./pages/instructor/CreateCourseLesson";
+import RequireRole from "./guards/RequireRole";
+import Unauthorized from "./ui/Unauthorized";
+import NotFound from "./ui/NotFound";
+import i18n from "./i18n";
+import DirectionProvider from "./DirectionProvider";
+import useLanguage from "./hooks/useLanguage";
+import RootRedirect from "./guards/RootRedirect";
 
 function App() {
+  const { language } = useLanguage();
+
   const dispatch = useAppDispatch();
 
   const ProtectedAppLayout = requireAuth(AppLayout);
@@ -30,77 +39,106 @@ function App() {
 
   useEffect(() => {
     dispatch(me());
-  }, [dispatch]);
+    i18n.changeLanguage(language);
+  }, [dispatch, language]);
 
   return (
     <>
-      <Routes>
-        <Route path="/" element={<GuestLogin />} />
+      <DirectionProvider language={language}>
+        <Routes>
+          <Route path="/login" element={<GuestLogin />} />
 
-        <Route element={<ProtectedAppLayout />}>
-          <Route path="/student/dashboard" element={<Dashboard />} />
-          <Route path="/student/announcements" element={<Announcements />} />
-          <Route
-            path="/student/submitted-quizzes"
-            element={<SubmittedQuizzes />}
-          />
-          <Route
-            path="/student/submitted-quizzes/:id"
-            element={<SolveQuiz review={true} />}
-          />
-          <Route path="/student/quizzes/solve/:id" element={<SolveQuiz />} />
-          <Route path="/student/courses/" element={<Courses />} />
-          <Route path="/student/courses/:id" element={<Course />} />
-          <Route path="instructor/courses/create" element={<CreateCourse />} />
-          <Route path="instructor/courses/my-courses" element={<Courses />} />
-          <Route
-            path="instructor/courses/my-courses/:id"
-            element={<Course />}
-          />
-          <Route
-            path="/instructor/courses/:courseId/add-lesson"
-            element={<CreateCourseLesson />}
-          />
-          <Route
-            path="/instructor/courses/:courseId/edit-lesson/:lessonId"
-            element={<CreateCourseLesson editMode={true} />}
-          />
-          <Route
-            path="instructor/courses/edit/:id"
-            element={<CreateCourse editMode={true} />}
-          />
-          <Route
-            path="/instructor/announcements/create"
-            element={<CreateAnnouncement />}
-          />
+          <Route path="/" element={<RootRedirect />} />
 
-          <Route
-            path="/instructor/announcements/"
-            element={<AnnouncementsPage />}
-          />
+          <Route element={<ProtectedAppLayout />}>
+            {/* students only */}
+            <Route element={<RequireRole allowedRoles={["student"]} />}>
+              <Route path="/student/dashboard" element={<Dashboard />} />
+              <Route
+                path="/student/announcements"
+                element={<Announcements />}
+              />
+              <Route
+                path="/student/submitted-quizzes"
+                element={<SubmittedQuizzes />}
+              />
+              <Route
+                path="/student/submitted-quizzes/:id"
+                element={<SolveQuiz review={true} />}
+              />
+              <Route
+                path="/student/quizzes/solve/:id"
+                element={<SolveQuiz />}
+              />
+              <Route path="/student/courses/" element={<Courses />} />
+              <Route path="/student/courses/:id" element={<Course />} />
+            </Route>
 
-          <Route
-            path="instructor/announcements/edit/:id"
-            element={<CreateAnnouncement editMode={true} />}
-          />
+            {/* instructors only */}
+            <Route element={<RequireRole allowedRoles={["instructor"]} />}>
+              <Route path="/instructor/dashboard" element={<Dashboard />} />
+              <Route
+                path="instructor/courses/create"
+                element={<CreateCourse />}
+              />
+              <Route
+                path="instructor/courses/my-courses"
+                element={<Courses />}
+              />
+              <Route
+                path="instructor/courses/my-courses/:id"
+                element={<Course />}
+              />
+              <Route
+                path="/instructor/courses/:courseId/add-lesson"
+                element={<CreateCourseLesson />}
+              />
+              <Route
+                path="/instructor/courses/:courseId/edit-lesson/:lessonId"
+                element={<CreateCourseLesson editMode={true} />}
+              />
+              <Route
+                path="instructor/courses/edit/:id"
+                element={<CreateCourse editMode={true} />}
+              />
+              <Route
+                path="/instructor/announcements/create"
+                element={<CreateAnnouncement />}
+              />
 
-          <Route path="/instructor/quizzes/create" element={<CreateQuiz />} />
+              <Route
+                path="/instructor/announcements/view"
+                element={<AnnouncementsPage />}
+              />
 
-          <Route path="/instructor/quizzes/manage" element={<Quizzes />} />
+              <Route
+                path="instructor/announcements/edit/:id"
+                element={<CreateAnnouncement editMode={true} />}
+              />
 
-          <Route
-            path="/instructor/quizzes/:id/submissions"
-            element={<QuizSubmissions />}
-          />
+              <Route
+                path="/instructor/quizzes/create"
+                element={<CreateQuiz />}
+              />
 
-          <Route
-            path="/instructor/quizzes/edit-questions/:id"
-            element={<EditQuestions />}
-          />
-        </Route>
+              <Route path="/instructor/quizzes/manage" element={<Quizzes />} />
 
-        <Route path="*" element={<div>404 Not Found</div>} />
-      </Routes>
+              <Route
+                path="/instructor/quizzes/:id/submissions"
+                element={<QuizSubmissions />}
+              />
+
+              <Route
+                path="/instructor/quizzes/edit-questions/:id"
+                element={<EditQuestions />}
+              />
+            </Route>
+          </Route>
+
+          <Route path="*" element={<NotFound />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
+        </Routes>
+      </DirectionProvider>
 
       <Toaster richColors={true} />
     </>

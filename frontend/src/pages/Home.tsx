@@ -44,15 +44,17 @@ function Home() {
   }>();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { isAuthenticated, role } = useAppSelector((state) => state.user);
+  const { isAuthenticated } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
 
   async function onSubmit(data: { email: string; password: string }) {
     const result = await dispatch(login(data));
     if (result.type === "auth/login/fulfilled") {
+      const { role: userRole } = result.payload;
+
       // navigate to dashboard on successful login
-      if (role === "student") navigate("/student/dashboard");
-      if (role === "instructor") navigate("/instructor/dashboard");
+      if (userRole === "student") navigate("/student/dashboard");
+      if (userRole === "instructor") navigate("/instructor/dashboard");
     }
   }
 
