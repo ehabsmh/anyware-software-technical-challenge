@@ -1,8 +1,7 @@
-import { Card, CardContent, Typography, Button } from "@mui/material";
+import { Card, CardContent, Typography, Button, Box } from "@mui/material";
 import { motion } from "framer-motion";
 import type { ICourse } from "../interfaces/course";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 interface Props {
@@ -10,41 +9,41 @@ interface Props {
   role?: "instructor" | "student" | "admin";
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
-  onView?: (id: string) => void;
+  onView: (id: string) => void;
 }
 
 const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
   const { t } = useTranslation();
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
+
   const [seeMore, setSeeMore] = useState(false);
 
   function toggleSeeMore() {
     setSeeMore(!seeMore);
   }
 
+  const shortDesc =
+    course.description.split(" ").slice(0, 15).join(" ") + "... ";
+
+  const courseDesc = seeMore ? course.description : shortDesc;
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       whileHover={{ scale: 1.03 }}
-      className="w-full max-w-[360px]"
+      className="w-full max-w-90"
     >
       <Card>
-        <div className="w-full h-[210px] flex justify-center items-center bg-gray-100 rounded-t-lg">
+        <Box
+          className="w-full! h-60! flex! justify-center! items-center! bg-gray-100! rounded-t-lg!"
+          onClick={() => onView(course._id)}
+        >
           <img
             src={course.image || "/placeholder.png"}
             alt={course.name}
             className="w-full h-full object-contain cursor-pointer"
-            onClick={() =>
-              navigate(
-                `${pathname.endsWith("/") ? pathname : pathname + "/"}${
-                  course._id
-                }`
-              )
-            }
           />
-        </div>
+        </Box>
         <CardContent>
           <Typography
             variant="h6"
@@ -53,9 +52,7 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
             {course.name}
           </Typography>
           <Typography variant="body2" color="text.secondary" className="mb-2">
-            {!seeMore
-              ? course.description.split(" ").slice(0, 15).join(" ")
-              : course.description}{" "}
+            {courseDesc}
             <button
               className="text-gray-400 font-bold cursor-pointer"
               onClick={toggleSeeMore}

@@ -111,7 +111,8 @@ export const updateCourse = async (id: string, payload: CourseFormValues) => {
 
 export const deleteCourse = async (id: string) => {
   try {
-    const { data } = await api.delete(`/courses/${id}`);
+    const { data }: { data: { success: boolean; course: ICourse } } =
+      await api.delete(`/courses/${id}`);
     return data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
