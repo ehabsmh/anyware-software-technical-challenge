@@ -10,7 +10,6 @@ import { me } from "./features/users/usersSlice";
 import { useAppDispatch } from "./store/hooks";
 import { Toaster } from "sonner";
 import { requireGuest } from "./features/hoc/requireGuest";
-import CreateCourse from "./pages/instructor/CreateCourse";
 import Courses from "./pages/Courses";
 import CreateAnnouncement from "./pages/instructor/CreateAnnouncement";
 import AnnouncementsPage from "./pages/Announcements";
@@ -28,6 +27,8 @@ import i18n from "./i18n";
 import DirectionProvider from "./DirectionProvider";
 import useLanguage from "./hooks/useLanguage";
 import RootRedirect from "./guards/RootRedirect";
+import CreateCourse from "./pages/instructor/CreateCourse";
+import EditCourse from "./pages/instructor/EditCourse";
 
 function App() {
   const { language } = useLanguage();
@@ -82,6 +83,10 @@ function App() {
                 element={<CreateCourse />}
               />
               <Route
+                path="instructor/courses/edit/:id"
+                element={<EditCourse />}
+              />
+              <Route
                 path="instructor/courses/my-courses"
                 element={<Courses />}
               />
@@ -96,10 +101,6 @@ function App() {
               <Route
                 path="/instructor/courses/:courseId/edit-lesson/:lessonId"
                 element={<CreateCourseLesson editMode={true} />}
-              />
-              <Route
-                path="instructor/courses/edit/:id"
-                element={<CreateCourse editMode={true} />}
               />
               <Route
                 path="/instructor/announcements/create"

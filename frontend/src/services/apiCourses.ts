@@ -1,7 +1,7 @@
 import axios from "axios";
 import api from "../config/axios.config";
-import type { CourseFormValues } from "../pages/instructor/CreateCourse";
 import type {
+  CourseFormValues,
   ICourse,
   ICoursePopulated,
   ICourseResponse,

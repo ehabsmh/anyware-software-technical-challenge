@@ -2,7 +2,8 @@ import { Card, CardContent, Typography, Button, Box } from "@mui/material";
 import { motion } from "framer-motion";
 import type { ICourse } from "../interfaces/course";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { collapseString, isStringCollapsable } from "../utils/helpers";
 
 interface Props {
   course: ICourse;
@@ -17,14 +18,19 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
 
   const [seeMore, setSeeMore] = useState(false);
 
+  const isDescCollapsable = useMemo(
+    () => isStringCollapsable(course.description),
+    [course.description]
+  );
+
+  const courseDesc = useMemo(
+    () => (seeMore ? course.description : collapseString(course.description)),
+    [seeMore, course.description]
+  );
+
   function toggleSeeMore() {
     setSeeMore(!seeMore);
   }
-
-  const shortDesc =
-    course.description.split(" ").slice(0, 15).join(" ") + "... ";
-
-  const courseDesc = seeMore ? course.description : shortDesc;
 
   return (
     <motion.div
@@ -53,12 +59,14 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
           </Typography>
           <Typography variant="body2" color="text.secondary" className="mb-2">
             {courseDesc}
-            <button
-              className="text-gray-400 font-bold cursor-pointer"
-              onClick={toggleSeeMore}
-            >
-              {seeMore ? t("textSeeLess") : t("textSeeMore")}
-            </button>
+            {isDescCollapsable && (
+              <button
+                className="text-gray-400 font-bold cursor-pointer"
+                onClick={toggleSeeMore}
+              >
+                {seeMore ? t("textSeeLess") : t("textSeeMore")}
+              </button>
+            )}
           </Typography>
 
           {role === "instructor" && (

@@ -37,3 +37,11 @@
 - Role-based UI handled cleanly
 - Navigation logic should be delegated to parent
 - Description rendering logic can be simplified for readability
+
+### Course Form
+
+- Split Create/Edit logic from form UI
+- Introduced CourseForm as a reusable controlled form
+- Used FormProvider + useFormContext to avoid prop drilling
+- Unified backend validation error handling with applyValidationErrors
+- Improved readability and maintainability

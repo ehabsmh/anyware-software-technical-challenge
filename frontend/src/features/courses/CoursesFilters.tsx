@@ -44,7 +44,6 @@ function CoursesFilters({
               {s.name}{" "}
               {s.isCurrent && (
                 <span style={{ color: "#12557b", fontWeight: "bold" }}>
-                  {" "}
                   (Current)
                 </span>
               )}

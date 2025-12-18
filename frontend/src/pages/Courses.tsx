@@ -34,11 +34,11 @@ function Courses() {
   const items = data?.data.items || [];
   const { totalPages } = data?.data || {};
 
-  function onEdit(courseId: string) {
+  function handleEditCourse(courseId: string) {
     navigate(`/instructor/courses/edit/${courseId}`);
   }
 
-  function onDelete(courseId: string) {
+  function handleDeleteCourse(courseId: string) {
     showAlert(() => deleteCourse(courseId));
   }
 
@@ -49,7 +49,7 @@ function Courses() {
       navigate(`/instructor/courses/my-courses/${courseId}`);
   }
 
-  function handleSemChange(semId: string) {
+  function handleSemesterChange(semId: string) {
     setSelectedSemester(semId);
     setCurrentPage(1);
   }
@@ -80,7 +80,7 @@ function Courses() {
       </Typography>
 
       <CoursesFilters
-        onSemesterChange={handleSemChange}
+        onSemesterChange={handleSemesterChange}
         selectedSemester={selectedSemester}
         currSemesterLoading={semLoading}
         setSearchTerm={setSearchTerm}
@@ -109,8 +109,8 @@ function Courses() {
               key={course._id}
               course={course}
               role={userRole!}
-              onEdit={onEdit}
-              onDelete={onDelete}
+              onEdit={handleEditCourse}
+              onDelete={handleDeleteCourse}
               onView={handleViewCourse}
             />
           ))}
