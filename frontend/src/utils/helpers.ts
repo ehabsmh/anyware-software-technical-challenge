@@ -39,18 +39,16 @@ export function applyValidationErrors<T extends FieldValues>(
   );
 }
 
-const COLLAPSE_WORDS_LIMIT = 15;
+const COLLAPSE_LETTERS_LIMIT = 85;
 
 export function isStringCollapsable(str: string): boolean {
-  const words = str.trim().split(" ");
-
-  return words.length > COLLAPSE_WORDS_LIMIT;
+  return str.length > COLLAPSE_LETTERS_LIMIT;
 }
 
 export function collapseString(str: string): string {
   if (!isStringCollapsable(str)) return str;
 
-  return str.split(" ").slice(0, COLLAPSE_WORDS_LIMIT).join(" ") + "...";
+  return str.slice(0, COLLAPSE_LETTERS_LIMIT) + "...";
 }
 
 // export function applyDirection(lang: string) {

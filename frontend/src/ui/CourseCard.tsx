@@ -18,10 +18,7 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
 
   const [seeMore, setSeeMore] = useState(false);
 
-  const isDescCollapsable = useMemo(
-    () => isStringCollapsable(course.description),
-    [course.description]
-  );
+  const isDescCollapsable = isStringCollapsable(course.description);
 
   const courseDesc = useMemo(
     () => (seeMore ? course.description : collapseString(course.description)),
@@ -45,6 +42,7 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
           onClick={() => onView(course._id)}
         >
           <img
+            loading="lazy"
             src={course.image || "/placeholder.png"}
             alt={course.name}
             className="w-full h-full object-contain cursor-pointer"
@@ -53,7 +51,7 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
         <CardContent>
           <Typography
             variant="h6"
-            className="text-gradient-1 font-semibold text-center"
+            className="text-gradient-1 font-semibold text-center text-lg!"
           >
             {course.name}
           </Typography>
