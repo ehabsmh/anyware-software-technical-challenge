@@ -11,7 +11,7 @@ import {
   useAnnouncements,
   useDeleteAnnouncement,
 } from "../hooks/useAnnouncements";
-import AnnouncementsFilters from "../ui/AnnouncementsFilters";
+import AnnouncementsFilters from "../features/announcements/AnnouncementsFilters";
 import { useState } from "react";
 import { useAppSelector } from "../store/hooks";
 import { Delete, Edit } from "@mui/icons-material";

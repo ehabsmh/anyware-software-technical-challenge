@@ -5,9 +5,9 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
-import { getSemesters } from "../services/apiSemesters";
-import { useCourses } from "../hooks/useCourses";
-import { useAppSelector } from "../store/hooks";
+import { getSemesters } from "../../services/apiSemesters";
+import { useCourses } from "../../hooks/useCourses";
+import { useAppSelector } from "../../store/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
