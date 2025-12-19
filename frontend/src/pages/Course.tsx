@@ -3,24 +3,32 @@ import CourseContent from "../features/courses/CourseContent";
 import CourseLesson from "../features/courses/CourseLesson";
 import { useCourseLessons } from "../hooks/useCourseLessons";
 import { useEffect, useState } from "react";
+import CourseContentSkeleton from "../skeletons/CourseContentSkeleton";
+import CourseLessonSkeleton from "../skeletons/CourseLessonSkeleton";
 
 function Course() {
   const { id } = useParams();
   const { data: courseLessons, isLoading } = useCourseLessons(id!);
 
   const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
+  const [openDrawer, setOpenDrawer] = useState(false);
 
-  const [open, setOpen] = useState(false);
-  const toggleDrawer = (newOpen: boolean) => setOpen(newOpen);
+  const toggleDrawer = (newOpen: boolean) => setOpenDrawer(newOpen);
 
   useEffect(() => {
-    if (courseLessons && courseLessons?.lessons.length > 0) {
+    if (!courseLessons) return;
+
+    if (!selectedLessonId && courseLessons?.lessons.length > 0) {
       setSelectedLessonId(courseLessons.lessons[0]._id);
     }
-  }, [courseLessons]);
-
+  }, [courseLessons, selectedLessonId]);
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex gap-8 overflow-y-auto h-[calc(100vh-86px)]">
+        <CourseContentSkeleton />
+        <CourseLessonSkeleton />
+      </div>
+    );
   }
 
   if (!courseLessons) {
@@ -33,7 +41,7 @@ function Course() {
         lessons={courseLessons.lessons}
         selectedLessonId={selectedLessonId}
         onSelect={setSelectedLessonId}
-        open={open}
+        openDrawer={openDrawer}
         toggleDrawer={toggleDrawer}
       />
       <CourseLesson

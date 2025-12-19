@@ -7,6 +7,7 @@ import { useCourseLesson } from "../../hooks/useCourseLessons";
 import { ArrowCircleRight } from "@mui/icons-material";
 import type { ICourseLessonPopulated } from "../../interfaces/courseLesson";
 import { useTranslation } from "react-i18next";
+import CourseLessonSkeleton from "../../skeletons/CourseLessonSkeleton";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -47,14 +48,15 @@ function CourseLesson({
   const onTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
+
   const { data: lesson, isLoading } = useCourseLesson(selectedLessonId!);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <CourseLessonSkeleton />;
   }
 
   if (!lesson) {
-    return <div>Please select a lesson.</div>;
+    return null;
   }
 
   return (

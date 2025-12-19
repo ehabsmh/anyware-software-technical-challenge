@@ -19,7 +19,7 @@ type CourseContentProps = {
   lessons: ICourseLessonPopulated["lessons"];
   selectedLessonId?: string | null;
   onSelect: (lessonId: string) => void;
-  open: boolean;
+  openDrawer: boolean;
   toggleDrawer: (newOpen: boolean) => void;
 };
 
@@ -27,7 +27,7 @@ function CourseContent({
   lessons,
   selectedLessonId,
   onSelect,
-  open,
+  openDrawer,
   toggleDrawer,
 }: CourseContentProps) {
   const { role: userRole } = useAppSelector((state) => state.user);
@@ -41,8 +41,9 @@ function CourseContent({
   const courseContentSidebar = (
     <List className="mt-2">
       <Button
+        sx={{ mb: 3 }}
         variant="outlined"
-        className="w-full mb-4 border-gradient-2! text-gradient-1! font-bold"
+        className="w-full  border-gradient-2! text-gradient-1! font-bold"
         onClick={() => navigate(`/instructor/courses/${id}/add-lesson`)}
       >
         Add Lesson
@@ -142,7 +143,11 @@ function CourseContent({
   return (
     <>
       {isMobile ? (
-        <Drawer anchor="left" open={open} onClose={() => toggleDrawer(false)}>
+        <Drawer
+          anchor="left"
+          open={openDrawer}
+          onClose={() => toggleDrawer(false)}
+        >
           {courseContentSidebar}
         </Drawer>
       ) : (
