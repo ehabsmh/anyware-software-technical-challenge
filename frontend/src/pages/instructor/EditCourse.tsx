@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { applyValidationErrors } from "../../utils/helpers";
 import CourseForm from "../../features/courses/CourseForm";
 import type { CourseFormValues } from "../../interfaces/course";
+import { useEffect } from "react";
 
 function EditCourse() {
   const formDefaultValues: CourseFormValues = {
@@ -17,7 +18,7 @@ function EditCourse() {
     defaultValues: formDefaultValues,
   });
 
-  const { setError } = methods;
+  const { reset, setError } = methods;
 
   const { id } = useParams<{ id: string }>();
 
@@ -36,6 +37,17 @@ function EditCourse() {
       );
     }
   }
+
+  useEffect(() => {
+    if (courseData) {
+      reset({
+        name: courseData.name,
+        description: courseData.description,
+        semester: courseData.semester._id,
+        image: courseData.image,
+      });
+    }
+  }, [courseData, reset]);
 
   return (
     <FormProvider {...methods}>

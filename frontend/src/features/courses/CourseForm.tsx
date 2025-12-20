@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import Form from "../../ui/Form";
 import { useSemesters } from "../../hooks/useSemesters";
@@ -7,16 +6,10 @@ import type {
   CourseFormValues,
   ICoursePopulated,
 } from "../../interfaces/course";
-import { CloudUpload } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  MenuItem,
-  CircularProgress,
-  Avatar,
-} from "@mui/material";
+import { Button, TextField, CircularProgress } from "@mui/material";
+import FormSelect from "../../ui/FormSelect";
+import type { ISemester } from "../../interfaces/semester";
+import ImageUpload from "../../ui/ImageUpload";
 
 type CourseFormProps = {
   onSubmit: (data: CourseFormValues) => void;
@@ -36,46 +29,10 @@ function CourseForm({
   const {
     handleSubmit,
     register,
-    setValue,
-    watch,
-    reset,
     formState: { errors, isDirty },
   } = useFormContext<CourseFormValues>();
 
   const { data: semesters } = useSemesters();
-
-  const [preview, setPreview] = useState<string | null>(null);
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-
-    if (file) {
-      setPreview(URL.createObjectURL(file));
-      setValue("image", file, { shouldDirty: true });
-    }
-  };
-
-  useEffect(() => {
-    if (editMode && courseData) {
-      reset({
-        name: courseData.name,
-        description: courseData.description,
-        semester: courseData.semester._id,
-        image: courseData.image,
-      });
-
-      setPreview(courseData.image);
-    }
-  }, [editMode, courseData, reset]);
-
-  useEffect(() => {
-    return () => {
-      // Revoke the data uri to avoid memory leaks
-      if (preview?.startsWith("blob:")) {
-        URL.revokeObjectURL(preview);
-      }
-    };
-  }, [preview]);
 
   return (
     <Form
@@ -117,63 +74,16 @@ function CourseForm({
       />
 
       {/* Semester */}
-      <TextField
-        select
+      <FormSelect
+        name="semester"
         label={t("createCoursePage.semesterSelectLabel")}
-        slotProps={{ inputLabel: { shrink: editMode ? true : undefined } }}
-        fullWidth
-        value={watch("semester") || ""}
-        {...register("semester", { required: "Semester is required" })}
-        error={!!errors.semester}
-        helperText={errors.semester?.message}
-      >
-        <MenuItem value="">
-          {t("createCoursePage.semesterSelectLabel")}
-        </MenuItem>
-
-        {semesters?.map((sem) => (
-          <MenuItem key={sem._id} value={sem._id}>
-            {sem.name}
-          </MenuItem>
-        ))}
-      </TextField>
+        options={semesters as ISemester[]}
+        getOptionLabel={(semester) => semester.name}
+        getOptionValue={(semester) => semester._id}
+      />
 
       {/* Image Upload */}
-      <Box className="flex flex-col items-center gap-2">
-        <Button
-          variant="outlined"
-          component="label"
-          startIcon={<CloudUpload />}
-          sx={{
-            borderColor: "var(--color-gradient-1)",
-            color: "var(--color-gradient-1)",
-            "&:hover": {
-              borderColor: "var(--color-gradient-2)",
-              color: "var(--color-gradient-2)",
-            },
-          }}
-        >
-          {t("createCoursePage.imageUploadLabel")}
-          <input
-            type="file"
-            accept="image/*"
-            hidden
-            onChange={handleImageChange}
-          />
-        </Button>
-        {preview && (
-          <Avatar
-            src={preview}
-            alt="Preview"
-            sx={{ width: 100, height: 100, borderRadius: "12px" }}
-          />
-        )}
-        {errors.image && (
-          <Typography color="error" fontSize={13}>
-            {errors.image.message}
-          </Typography>
-        )}
-      </Box>
+      <ImageUpload image={courseData?.image} />
 
       {/* Submit */}
       <Button

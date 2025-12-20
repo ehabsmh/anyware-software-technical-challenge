@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentSemester, getSemesters } from "../services/apiSemesters";
 
-export function useSemesters() {
+export function useSemesters({ includeCourses = false } = {}) {
   return useQuery({
     queryKey: ["semesters"],
-    queryFn: () => getSemesters(),
+    queryFn: () => getSemesters(includeCourses),
   });
 }
 

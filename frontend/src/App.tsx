@@ -29,6 +29,7 @@ import useLanguage from "./hooks/useLanguage";
 import RootRedirect from "./guards/RootRedirect";
 import CreateCourse from "./pages/instructor/CreateCourse";
 import EditCourse from "./pages/instructor/EditCourse";
+import EditAnnouncement from "./pages/instructor/EditAnnouncement";
 
 function App() {
   const { language } = useLanguage();
@@ -114,7 +115,7 @@ function App() {
 
               <Route
                 path="instructor/announcements/edit/:id"
-                element={<CreateAnnouncement editMode={true} />}
+                element={<EditAnnouncement />}
               />
 
               <Route

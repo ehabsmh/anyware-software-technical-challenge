@@ -15,8 +15,14 @@ class SemesterService {
     return semester;
   }
 
-  static async getSemesters() {
-    const semesters = await Semester.find();
+  static async getSemesters(includeCourses = false) {
+    const semesters = includeCourses
+      ? await Semester.find({}, "name isCurrent courses").populate(
+          "courses",
+          "_id name image"
+        )
+      : await Semester.find();
+
     return semesters;
   }
 
