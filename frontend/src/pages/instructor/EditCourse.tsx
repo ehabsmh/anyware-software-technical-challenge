@@ -6,14 +6,14 @@ import CourseForm from "../../features/courses/CourseForm";
 import type { CourseFormValues } from "../../interfaces/course";
 import { useEffect } from "react";
 
-function EditCourse() {
-  const formDefaultValues: CourseFormValues = {
-    name: "",
-    description: "",
-    semester: "",
-    image: null,
-  };
+const formDefaultValues: CourseFormValues = {
+  name: "",
+  description: "",
+  semester: "",
+  image: null,
+};
 
+function EditCourse() {
   const methods = useForm<CourseFormValues>({
     defaultValues: formDefaultValues,
   });

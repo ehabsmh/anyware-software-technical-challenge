@@ -4,14 +4,14 @@ import { useCreateCourse } from "../../hooks/useCourses";
 import { applyValidationErrors } from "../../utils/helpers";
 import type { CourseFormValues } from "../../interfaces/course";
 
-function CreateCourse() {
-  const formDefaultValues: CourseFormValues = {
-    name: "",
-    description: "",
-    semester: "",
-    image: null,
-  };
+const formDefaultValues: CourseFormValues = {
+  name: "",
+  description: "",
+  semester: "",
+  image: null,
+};
 
+function CreateCourse() {
   const methods = useForm<CourseFormValues>({
     defaultValues: formDefaultValues,
   });
