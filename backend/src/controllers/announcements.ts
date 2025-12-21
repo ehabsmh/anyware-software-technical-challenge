@@ -48,16 +48,17 @@ class AnnouncementController {
     res.status(201).json(newAnnouncement);
   }
 
-  static async update(req: Request, res: Response) {
+  static async update(req: CustomRequest, res: Response) {
     const { id } = req.params;
-    const { title, content, author, course, semester } = req.body;
+    const { title, content, course, semester } = req.body;
+    const userId = req.user!._id;
 
     const updatedAnnouncement = await AnnouncementService.update(id!, {
       title,
       content,
-      author,
       course,
       semester,
+      userId: userId.toString(),
     });
 
     res.json(updatedAnnouncement);

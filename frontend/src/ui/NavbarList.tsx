@@ -56,7 +56,7 @@ function NavbarList({
 
   return (
     <>
-      <List className="mt-4 flex flex-col gap-6">
+      <List className="mt-4 flex flex-col gap-4">
         <ListItem className="flex flex-col justify-center items-center text-3xl font-bold">
           <Link to={"/"} className="flex items-center gap-3">
             {t("logoName")}
@@ -70,7 +70,7 @@ function NavbarList({
               <ListItem
                 onClick={() => handleCollapse(index)}
                 sx={{
-                  gap: 2,
+                  gap: 1.5,
                   mb: 0,
                   backgroundColor:
                     openIndex === index ? "#ffffff2c" : "transparent",

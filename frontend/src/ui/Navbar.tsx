@@ -39,7 +39,7 @@ function Navbar({
           </nav>
         </Drawer>
       ) : (
-        <nav className="bg-linear-to-b from-gradient-1 to-gradient-2 h-screen w-52 text-white overflow-y-auto flex flex-col justify-between">
+        <nav className="bg-linear-to-b from-gradient-1 to-gradient-2 h-screen w-60 text-white overflow-y-auto flex flex-col justify-between">
           <NavbarList onItemClick={handleItemClick} userRole={userRole} />
         </nav>
       )}

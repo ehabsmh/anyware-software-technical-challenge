@@ -9,7 +9,6 @@ import Form from "../../ui/Form";
 import { useSemesters } from "../../hooks/useSemesters";
 import FormSelect from "../../ui/FormSelect";
 import type { ISemesterCourses } from "../../interfaces/semester";
-import { useEffect } from "react";
 
 type AnnouncementFormProps = {
   onSubmit: (data: Partial<IAnnouncement>) => void;
@@ -29,7 +28,6 @@ function AnnouncementForm({
     register,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors },
   } = useFormContext<Partial<IAnnouncement>>();
 
@@ -39,10 +37,6 @@ function AnnouncementForm({
 
   const semesterId = watch("semester");
   const semester = semesters?.find((sem) => sem._id === semesterId);
-
-  useEffect(() => {
-    setValue("course", "");
-  }, [semesterId, setValue]);
 
   return (
     <Form

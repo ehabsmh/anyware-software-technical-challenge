@@ -85,19 +85,33 @@ class AnnouncementService {
     return announcement.save();
   }
 
-  static async update(id: string, data: Partial<IAnnouncement>) {
+  static async update(
+    id: string,
+    data: Partial<IAnnouncement> & { userId: string }
+  ) {
     const allowedFields = (({ title, content, course, semester }) => ({
       title,
       content,
       course,
       semester,
     }))(data);
-    const announcement = await Announcement.findByIdAndUpdate(
-      id,
-      allowedFields,
-      { new: true }
-    );
+
+    const announcement = await Announcement.findById(id);
     if (!announcement) throw new AppError("Announcement not found", 404);
+
+    const { userId } = data;
+
+    if (announcement.author.toString() !== userId) {
+      throw new AppError(
+        "You are not authorized to update this announcement",
+        403
+      );
+    }
+
+    Object.assign(announcement, allowedFields);
+
+    await announcement.save();
+
     return announcement;
   }
 
