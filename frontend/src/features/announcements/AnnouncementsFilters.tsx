@@ -5,11 +5,9 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
-import { getSemesters } from "../../services/apiSemesters";
-import { useCourses } from "../../hooks/useCourses";
 import { useAppSelector } from "../../store/hooks";
-import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { useSemesters } from "../../hooks/useSemesters";
 
 export default function AnnouncementsFilters({
   selectedSemesterId,
@@ -27,16 +25,14 @@ export default function AnnouncementsFilters({
   onToggleMineOnly: () => void;
 }) {
   const { t } = useTranslation();
-  const { data: semesters } = useQuery({
-    queryKey: ["semesters"],
-    queryFn: getSemesters,
-  });
+
+  const { data: semesters } = useSemesters({ includeCourses: true });
 
   const { role: userRole } = useAppSelector((state) => state.user);
 
-  // Get Courses based on the chosen semester
-  const { data } = useCourses(selectedSemesterId);
-  const courses = data?.data.items;
+  // Get Courses based on the selected semester
+  const courses =
+    semesters?.find((s) => s._id === selectedSemesterId)?.courses || [];
 
   return (
     <Toolbar

@@ -8,7 +8,6 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useNavigate } from "react-router";
 
 export interface Column<T> {
   id: string;
@@ -25,6 +24,7 @@ interface Props<T extends { _id: string }> {
   limit: number;
   total: number;
   onPageChange: (newPage: number) => void;
+  onClick?: (rowId: string) => void;
 }
 
 export default function GenericTable<
@@ -33,8 +33,8 @@ export default function GenericTable<
     totalPoints?: number;
     _id: string;
   }
->({ columns, rows, page, limit, total, onPageChange }: Props<T>) {
-  const navigate = useNavigate();
+>({ columns, rows, page, limit, total, onPageChange, onClick }: Props<T>) {
+  // const navigate = useNavigate();
   return (
     <Box className="w-screen lg:w-auto">
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -54,24 +54,9 @@ export default function GenericTable<
               {rows?.map((row) => (
                 <TableRow
                   key={row._id}
-                  hover={
-                    row.score !== undefined && row.totalPoints !== undefined
-                      ? true
-                      : false
-                  }
-                  className={`${
-                    row.score !== undefined && row.totalPoints !== undefined
-                      ? "cursor-pointer"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    if (
-                      row.score !== undefined &&
-                      row.totalPoints !== undefined
-                    ) {
-                      navigate(`/student/submitted-quizzes/${row._id}`);
-                    }
-                  }}
+                  hover={onClick ? true : false}
+                  className={`${onClick ? "cursor-pointer" : ""}`}
+                  onClick={() => onClick && onClick(row._id)}
                 >
                   {columns.map((col) => (
                     <TableCell

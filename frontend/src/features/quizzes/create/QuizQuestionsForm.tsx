@@ -10,16 +10,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const initialQuestionCreate: IQuiz["questions"][number] = {
-  question: "",
-  type: "",
-  options: [],
-  answer: [],
-  points: 0,
-};
-
-const initialQuestionEdit: IQuiz["questions"][number] = {
-  _id: "",
+const initialQuestion: IQuiz["questions"][number] = {
   question: "",
   type: "",
   options: [],
@@ -51,13 +42,6 @@ function QuizQuestionsForm({ editMode, onBack }: QuizQuestionsFormProps) {
 
   function onSubmit(data: IQuiz) {
     try {
-      if (editMode) {
-        updateQuizQuestions({ id: quizId!, questions: data.questions });
-        return;
-      }
-
-      console.log(data);
-
       data.questions = data.questions.map((question) => {
         if (question.type === "mcq" && Array.isArray(question.answer)) {
           question.answer = question.answer
@@ -67,6 +51,11 @@ function QuizQuestionsForm({ editMode, onBack }: QuizQuestionsFormProps) {
 
         return question;
       });
+
+      if (editMode) {
+        updateQuizQuestions({ id: quizId!, questions: data.questions });
+        return;
+      }
 
       createQuiz(data);
     } catch (error) {
@@ -85,11 +74,7 @@ function QuizQuestionsForm({ editMode, onBack }: QuizQuestionsFormProps) {
       <div className="flex gap-5 items-center mb-4">
         <Button
           variant="contained"
-          onClick={() =>
-            editMode
-              ? append(initialQuestionEdit)
-              : append(initialQuestionCreate)
-          }
+          onClick={() => append(initialQuestion)}
           sx={{ mb: 3, backgroundColor: "var(--color-gradient-1)" }}
         >
           {t("createQuizQuestions.addQuestionButtonText")}

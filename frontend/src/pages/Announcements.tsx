@@ -19,7 +19,6 @@ import { Delete, EditNoteOutlined } from "@mui/icons-material";
 import { showAlert } from "../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import AnnouncementSkeleton from "../skeletons/announcementSkeleton";
-import AnnouncementFilterSkeleton from "../skeletons/announcementFilterSkeleton";
 
 function AnnouncementsPage() {
   const [selectedSemesterId, setSelectedSemesterId] = useState("");
@@ -61,18 +60,14 @@ function AnnouncementsPage() {
 
   return (
     <Box className="bg-main overflow-y-auto p-8 h-[calc(100vh-86px)]">
-      {announcementsLoading ? (
-        <AnnouncementFilterSkeleton />
-      ) : (
-        <AnnouncementsFilters
-          selectedSemesterId={selectedSemesterId}
-          onSelectSemester={onSelectSemester}
-          selectedCourseId={selectedCourseId}
-          onSelectCourse={onSelectCourse}
-          mineOnly={mineOnly}
-          onToggleMineOnly={onToggleMineOnly}
-        />
-      )}
+      <AnnouncementsFilters
+        selectedSemesterId={selectedSemesterId}
+        onSelectSemester={onSelectSemester}
+        selectedCourseId={selectedCourseId}
+        onSelectCourse={onSelectCourse}
+        mineOnly={mineOnly}
+        onToggleMineOnly={onToggleMineOnly}
+      />
       {/* Announcements list */}
       {announcementsLoading ? (
         [...Array(4)].map((_, i) => <AnnouncementSkeleton key={i} />)

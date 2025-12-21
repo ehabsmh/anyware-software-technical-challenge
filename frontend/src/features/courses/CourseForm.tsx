@@ -8,7 +8,6 @@ import type {
 } from "../../interfaces/course";
 import { Button, TextField, CircularProgress } from "@mui/material";
 import FormSelect from "../../ui/FormSelect";
-import type { ISemester } from "../../interfaces/semester";
 import ImageUpload from "../../ui/ImageUpload";
 
 type CourseFormProps = {
@@ -77,7 +76,7 @@ function CourseForm({
       <FormSelect
         name="semester"
         label={t("createCoursePage.semesterSelectLabel")}
-        options={semesters as ISemester[]}
+        options={semesters ?? []}
         getOptionLabel={(semester) => semester.name}
         getOptionValue={(semester) => semester._id}
       />
