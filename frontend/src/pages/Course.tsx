@@ -3,24 +3,32 @@ import CourseContent from "../features/courses/CourseContent";
 import CourseLesson from "../features/courses/CourseLesson";
 import { useCourseLessons } from "../hooks/useCourseLessons";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import CourseContentSkeleton from "../skeletons/CourseContentSkeleton";
+import CourseLessonSkeleton from "../skeletons/CourseLessonSkeleton";
 
 function Course() {
-  const { i18n } = useTranslation();
   const { id } = useParams();
   const { data: courseLessons, isLoading } = useCourseLessons(id!);
+
   const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
-  const [open, setOpen] = useState(false);
-  const toggleDrawer = (newOpen: boolean) => setOpen(newOpen);
+  const [openDrawer, setOpenDrawer] = useState(false);
+
+  const toggleDrawer = (newOpen: boolean) => setOpenDrawer(newOpen);
 
   useEffect(() => {
-    if (courseLessons && courseLessons?.lessons.length > 0) {
+    if (!courseLessons) return;
+
+    if (!selectedLessonId && courseLessons?.lessons.length > 0) {
       setSelectedLessonId(courseLessons.lessons[0]._id);
     }
-  }, [courseLessons]);
-
+  }, [courseLessons, selectedLessonId]);
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex gap-8 overflow-y-auto h-[calc(100vh-86px)]">
+        <CourseContentSkeleton />
+        <CourseLessonSkeleton />
+      </div>
+    );
   }
 
   if (!courseLessons) {
@@ -28,16 +36,12 @@ function Course() {
   }
 
   return (
-    <div
-      className={`flex gap-8 overflow-y-auto h-[calc(100vh-86px)] ${
-        i18n.language === "en" ? "flex-row-reverse" : "flex-row"
-      }`}
-    >
+    <div className="flex gap-8 overflow-y-auto h-[calc(100vh-86px)]">
       <CourseContent
         lessons={courseLessons.lessons}
         selectedLessonId={selectedLessonId}
         onSelect={setSelectedLessonId}
-        open={open}
+        openDrawer={openDrawer}
         toggleDrawer={toggleDrawer}
       />
       <CourseLesson

@@ -134,7 +134,7 @@ class CourseService {
     const course = await Course.findByIdAndDelete(id);
     if (!course) throw new AppError("Course not found.", 404);
 
-    return { message: "Course deleted successfully", course };
+    return course;
   }
 
   static async courseExists(id: string) {

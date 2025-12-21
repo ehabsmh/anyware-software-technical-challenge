@@ -119,9 +119,9 @@ class CourseController {
       throw new AppError("id is required", 400);
     }
 
-    const { message, course } = await CourseService.deleteCourse(id);
+    const course = await CourseService.deleteCourse(id);
 
-    res.status(200).json({ status: "success", message, data: course });
+    res.status(200).json({ status: "success", course });
   }
 }
 

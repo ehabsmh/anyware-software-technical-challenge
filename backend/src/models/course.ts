@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import { ICourse } from "../interfaces/course";
+import { Semester } from "./index";
 
 const courseSchema = new Schema<ICourse>(
   {
@@ -11,6 +12,16 @@ const courseSchema = new Schema<ICourse>(
   },
   { timestamps: true }
 );
+
+courseSchema.pre("deleteOne", { document: true }, async function () {
+  const courseId = this._id;
+
+  // Pull course from semesters
+  await Semester.updateMany(
+    { courses: courseId },
+    { $pull: { courses: courseId } }
+  );
+});
 
 const Course = model<ICourse>("Course", courseSchema);
 

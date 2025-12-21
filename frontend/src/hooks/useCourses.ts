@@ -89,13 +89,13 @@ export function useUpdateCourse() {
   });
 }
 
-export function useDeleteCourse(semesterId?: string) {
+export function useDeleteCourse() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deleteCourse(id),
-    onSuccess: () => {
+    onSuccess: (deletedCourse) => {
       qc.invalidateQueries({
-        queryKey: [...coursesKey(semesterId)],
+        queryKey: [...coursesKey(deletedCourse?.course.semester)],
       });
       toast.success("Course has been deleted!");
     },

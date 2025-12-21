@@ -1,10 +1,15 @@
 import axios from "axios";
 import api from "../config/axios.config";
-import type { ISemester } from "../interfaces/semester";
+import type { ISemester, ISemesterCourses } from "../interfaces/semester";
 
-export async function getSemesters() {
+export async function getSemesters(includeCourses = false) {
   try {
-    const { data }: { data: ISemester[] } = await api.get("/semesters");
+    const { data }: { data: ISemester[] | ISemesterCourses[] } = await api.get(
+      "/semesters",
+      {
+        params: { includeCourses },
+      }
+    );
     return data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {

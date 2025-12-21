@@ -6,15 +6,16 @@ import {
   Stack,
   Pagination,
   Avatar,
+  Divider,
 } from "@mui/material";
 import {
   useAnnouncements,
   useDeleteAnnouncement,
 } from "../hooks/useAnnouncements";
-import AnnouncementsFilters from "../ui/AnnouncementsFilters";
+import AnnouncementsFilters from "../features/announcements/AnnouncementsFilters";
 import { useState } from "react";
 import { useAppSelector } from "../store/hooks";
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, EditNoteOutlined } from "@mui/icons-material";
 import { showAlert } from "../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import AnnouncementSkeleton from "../skeletons/announcementSkeleton";
@@ -76,54 +77,65 @@ function AnnouncementsPage() {
       {announcementsLoading ? (
         [...Array(4)].map((_, i) => <AnnouncementSkeleton key={i} />)
       ) : (
-        <Box className="space-y-10 mt-5">
+        <Box sx={{ width: "100%" }} className="space-y-10 mt-5">
           {announcements.map((a) => (
             <Card
               key={a._id}
+              sx={{ width: "100%", overflow: "visible" }}
               className="rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 relative"
             >
               {user._id === a.author._id && (
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: 5,
-                    right: 8,
-                    cursor: "pointer",
-
-                    display: "flex",
-                    gap: "12px",
-                  }}
-                >
-                  <Delete
-                    sx={{ color: "#e11919" }}
-                    onClick={() => onDeleteAnnouncement(a._id)}
-                  />
-                  <Edit
-                    sx={{ color: "#cb8800" }}
-                    onClick={() =>
-                      navigate(`/instructor/announcements/edit/${a._id}`)
-                    }
-                  />
-                </Box>
+                <div className="flex gap-1.5 absolute -top-4 right-0">
+                  <div className="h-8 w-8 rounded-full bg-main flex justify-center items-center cursor-pointer">
+                    <EditNoteOutlined
+                      sx={{
+                        color: "#aba460",
+                        transition: "color 0.3s",
+                        "&:hover": { color: "#feb806" },
+                      }}
+                      onClick={() =>
+                        navigate(`/instructor/announcements/edit/${a._id}`)
+                      }
+                    />
+                  </div>
+                  <div className="h-8 w-8 rounded-full bg-main flex justify-center items-center cursor-pointer">
+                    <Delete
+                      sx={{
+                        color: "#f75555",
+                        transition: "color 0.3s",
+                        fontSize: "20px",
+                        "&:hover": { color: "#ed1405" },
+                      }}
+                      onClick={() => onDeleteAnnouncement(a._id)}
+                    />
+                  </div>
+                </div>
               )}
 
-              <CardContent sx={{ mt: 1.2 }}>
+              <CardContent sx={{ mt: 1, "&:last-child": { pb: 1.3 } }}>
                 <Typography variant="h6" className="text-gradient-1 font-bold">
                   {a.title}
                 </Typography>
-                <Typography variant="body1" className="text-gray-700 mt-1">
+                <Divider sx={{ my: 1 }} />
+                <Typography
+                  variant="body1"
+                  className="text-gray-700 mt-1"
+                  sx={{ whiteSpace: "pre-wrap" }}
+                >
                   {a.content}
                 </Typography>
-                <Box className="flex justify-between items-center mt-3 text-sm text-gray-500">
+                <Box className="flex justify-between items-center mt-10 text-sm text-gray-500">
                   <Box className="flex items-center space-x-2">
                     <Avatar
                       alt={a.author.name}
                       src={a.author.avatar}
-                      sx={{ width: 35, height: 35 }}
+                      sx={{ width: 30, height: 30 }}
                     />
-                    <span>{a.author.name}</span>
+                    <span className="text-xs">{a.author.name}</span>
                   </Box>
-                  <span>{new Date(a.createdAt).toLocaleDateString()}</span>
+                  <span className="text-xs">
+                    {new Date(a.createdAt).toLocaleDateString()}
+                  </span>
                 </Box>
               </CardContent>
             </Card>

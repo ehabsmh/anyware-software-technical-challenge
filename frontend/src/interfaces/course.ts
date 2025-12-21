@@ -26,3 +26,10 @@ export interface ICoursePopulated
   semester: { _id: string; name: string; endDate: string; startDate: string };
   instructor: { _id: string; name: string; avatar: string };
 }
+
+export interface CourseFormValues {
+  name: string;
+  description: string;
+  semester: string;
+  image: File | string | null;
+}

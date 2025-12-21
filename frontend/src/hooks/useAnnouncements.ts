@@ -35,7 +35,7 @@ export function useAnnouncements({
   });
 }
 
-export function useLatesetAnnouncements() {
+export function useLatestAnnouncements() {
   return useQuery({
     queryKey: ["announcements", "latest"],
     queryFn: () => fetchLatestAnnouncements(5),
@@ -75,7 +75,7 @@ export function useCreateAnnouncement() {
       queryClient.invalidateQueries({ queryKey: ["announcements"] });
 
       toast.success(t("createAnnouncementPage.successfulCreationMessage"));
-      navigate("/instructor/announcements");
+      navigate("/instructor/announcements/view");
     },
 
     onError: (error: any) => {
@@ -114,7 +114,7 @@ export function useEditAnnouncement() {
       queryClient.invalidateQueries({ queryKey: ["announcements"] });
 
       toast.success("Announcement updated successfully!");
-      navigate("/instructor/announcements");
+      navigate("/instructor/announcements/view");
     },
     onError: (error: any) => {
       if (error.type !== "validation") {

@@ -41,6 +41,7 @@ i18n.use(initReactI18next).init({
             "Are you sure you want to delete this item?",
           yesActionButtonText: "Yes",
           noActionButtonText: "No",
+          noCoursesFoundMessage: "No courses found.",
         },
         createCoursePage: {
           titleNewCourse: "New Course",
@@ -241,6 +242,7 @@ i18n.use(initReactI18next).init({
           deleteConfirmationMessage: "هل أنت متأكد أنك تريد حذف هذا العنصر؟",
           yesActionButtonText: "نعم",
           noActionButtonText: "لا",
+          noCoursesFoundMessage: "لم يتم العثور على دورات.",
         },
         createCoursePage: {
           titleNewCourse: "دورة جديدة",

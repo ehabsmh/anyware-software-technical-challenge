@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
-import { useLatesetAnnouncements } from "../../hooks/useAnnouncements";
+import { useLatestAnnouncements } from "../../hooks/useAnnouncements";
 import Announcement from "./Announcement";
 import { Link } from "react-router-dom";
 import LatestAnnouncementsSkeleton from "../../skeletons/latestAnnouncementsSkeleton";
 
 function Announcements() {
   const { t } = useTranslation();
-  const { data: latest, isLoading, isError } = useLatesetAnnouncements();
+  const { data: latest, isLoading, isError } = useLatestAnnouncements();
 
   return (
     <section className="bg-white lg:p-6 p-2 rounded-2xl shadow-lg w-full">
