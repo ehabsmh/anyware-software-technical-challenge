@@ -9,7 +9,7 @@ export interface IQuiz {
   timeLimitInMinutes: number;
   totalPoints: number;
   questions: {
-    _id: string;
+    _id?: string;
     type: "" | "mcq" | "true_false" | "short_answer";
     question: string;
     options?: string[];

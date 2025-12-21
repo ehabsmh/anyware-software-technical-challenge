@@ -39,7 +39,7 @@ function FormSelect<T>({
           error={!!errors[name]?.message}
           helperText={errors[name]?.message as string}
         >
-          {options.map((option) => {
+          {options?.map((option) => {
             const value = getOptionValue(option);
             const label = getOptionLabel(option);
             return getOptionAvatar ? (

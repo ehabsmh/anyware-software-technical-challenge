@@ -1,10 +1,9 @@
-import { Avatar, Box, Button, MenuItem, TextField } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { getSemesters } from "../../../services/apiSemesters";
-import { useEffect, useState } from "react";
-import { useCourses } from "../../../hooks/useCourses";
-import { Controller, useFormContext } from "react-hook-form";
+import { Box, Button, TextField } from "@mui/material";
+import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useSemesters } from "../../../hooks/useSemesters";
+import FormSelect from "../../../ui/FormSelect";
+import type { ISemesterCourses } from "../../../interfaces/semester";
 
 function QuizInfoForm({
   onNext,
@@ -14,25 +13,23 @@ function QuizInfoForm({
   editMode?: boolean;
 }) {
   const { t } = useTranslation();
-  const { data: semesters } = useQuery({
-    queryKey: ["semesters"],
-    queryFn: getSemesters,
-  });
-
-  const [chosenSemesterId, setChosenSemesterId] = useState("");
-
-  const { data } = useCourses(chosenSemesterId);
-  const courses = data?.data.items;
 
   const {
     register,
     trigger,
-    getValues,
-    control,
+    watch,
     formState: { errors },
   } = useFormContext();
 
-  // Handle Next with validation
+  const semesterId = watch("semester") || "";
+
+  const { data: semesters, isLoading: isSemestersLoading } = useSemesters({
+    includeCourses: true,
+  });
+
+  const courses = semesters?.find((s) => s._id === semesterId)?.courses || [];
+
+  // Handle Next button with validation
   async function handleNext() {
     const isValid = await trigger([
       "semester",
@@ -48,77 +45,26 @@ function QuizInfoForm({
     onNext();
   }
 
-  // Set initial chosenSemesterId if form already hold values
-  useEffect(() => {
-    const semester = getValues("semester");
-    if (semester) {
-      setChosenSemesterId(semester);
-    }
-  }, [getValues]);
-
   return (
     <>
-      {!editMode && (
-        <Controller
+      {!editMode && !isSemestersLoading && (
+        <FormSelect
           name="semester"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              select
-              label={t("createQuizInfo.semesterLabel")}
-              fullWidth
-              onChange={(e) => {
-                field.onChange(e.target.value);
-                setChosenSemesterId(e.target.value);
-              }}
-              value={field.value || ""}
-              error={!!errors.semester}
-              helperText={
-                errors.semester ? String(errors.semester.message) : ""
-              }
-            >
-              <MenuItem value="">Select semester</MenuItem>
-
-              {semesters?.map((sem) => (
-                <MenuItem key={sem._id} value={sem._id}>
-                  {sem.name}
-                </MenuItem>
-              ))}
-            </TextField>
-          )}
+          label={t("createQuizInfo.semesterLabel")}
+          options={semesters as ISemesterCourses[]}
+          getOptionValue={(s) => s._id}
+          getOptionLabel={(s) => s.name}
         />
       )}
 
-      {!editMode && chosenSemesterId && (
-        <Controller
+      {!editMode && semesterId && (
+        <FormSelect
           name="course"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              select
-              label={t("createQuizInfo.courseLabel")}
-              fullWidth
-              value={field.value || ""}
-              onChange={(e) => field.onChange(e.target.value)}
-              error={!!errors.course}
-              helperText={errors.course ? String(errors.course.message) : ""}
-            >
-              <MenuItem value="">Select course</MenuItem>
-
-              {courses?.map((course) => (
-                <MenuItem key={course._id} value={course._id}>
-                  <div className="flex items-center gap-3">
-                    <Avatar
-                      src={course.image}
-                      alt=""
-                      sx={{ borderRadius: 0 }}
-                    />
-                    <p>{course.name}</p>
-                  </div>
-                </MenuItem>
-              ))}
-            </TextField>
-          )}
+          label={t("createQuizInfo.courseLabel")}
+          options={courses as ISemesterCourses["courses"]}
+          getOptionValue={(c) => c._id}
+          getOptionLabel={(c) => c.name}
+          getOptionAvatar={(c) => c.image}
         />
       )}
 

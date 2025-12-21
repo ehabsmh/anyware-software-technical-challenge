@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ArrowDropDown, Delete } from "@mui/icons-material";
 import {
   Accordion,
@@ -23,13 +24,13 @@ function QuestionAccordion({
   deleteQuestion: () => void;
 }) {
   const { t } = useTranslation();
+
   const {
     register,
-    // trigger,
     watch,
     control,
     resetField,
-    // formState: { errors },
+    formState: { errors },
   } = useFormContext();
 
   const questionTypeOptions = {
@@ -76,7 +77,7 @@ function QuestionAccordion({
           {...register(`questions.${qIndex}.question`, {
             required: "Question text is required",
           })}
-          // error={!!errors.questions?.[0]?.question}
+          error={!!(errors.questions as any)?.[qIndex]?.question}
         />
 
         <Controller

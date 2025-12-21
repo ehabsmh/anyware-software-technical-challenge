@@ -6,9 +6,26 @@ import {
   useCreateQuiz,
   useUpdateQuizQuestions,
 } from "../../../hooks/useQuizzes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
+const initialQuestionCreate: IQuiz["questions"][number] = {
+  question: "",
+  type: "",
+  options: [],
+  answer: [],
+  points: 0,
+};
+
+const initialQuestionEdit: IQuiz["questions"][number] = {
+  _id: "",
+  question: "",
+  type: "",
+  options: [],
+  answer: [],
+  points: 0,
+};
 
 type QuizQuestionsFormProps = {
   editMode?: boolean;
@@ -17,9 +34,12 @@ type QuizQuestionsFormProps = {
 
 function QuizQuestionsForm({ editMode, onBack }: QuizQuestionsFormProps) {
   const { t } = useTranslation();
+
   const { handleSubmit, control } = useFormContext<IQuiz>();
+
   const { mutate: createQuiz } = useCreateQuiz();
   const { mutate: updateQuizQuestions } = useUpdateQuizQuestions();
+
   const { id: quizId } = useParams();
 
   const [deleteMode, setDeleteMode] = useState(false);
@@ -29,21 +49,14 @@ function QuizQuestionsForm({ editMode, onBack }: QuizQuestionsFormProps) {
     name: "questions",
   });
 
-  const initialQuestion: IQuiz["questions"][number] = {
-    _id: "",
-    question: "",
-    type: "",
-    options: [],
-    answer: [],
-    points: 0,
-  };
-
   function onSubmit(data: IQuiz) {
     try {
       if (editMode) {
         updateQuizQuestions({ id: quizId!, questions: data.questions });
         return;
       }
+
+      console.log(data);
 
       data.questions = data.questions.map((question) => {
         if (question.type === "mcq" && Array.isArray(question.answer)) {
@@ -61,26 +74,38 @@ function QuizQuestionsForm({ editMode, onBack }: QuizQuestionsFormProps) {
     }
   }
 
+  useEffect(() => {
+    if (fields.length === 0) {
+      setDeleteMode(false);
+    }
+  }, [fields.length]);
+
   return (
     <div>
       <div className="flex gap-5 items-center mb-4">
         <Button
           variant="contained"
-          onClick={() => append(initialQuestion)}
+          onClick={() =>
+            editMode
+              ? append(initialQuestionEdit)
+              : append(initialQuestionCreate)
+          }
           sx={{ mb: 3, backgroundColor: "var(--color-gradient-1)" }}
         >
           {t("createQuizQuestions.addQuestionButtonText")}
         </Button>
-        <Button
-          variant="outlined"
-          sx={{ mb: 3 }}
-          color="error"
-          onClick={() => setDeleteMode((prev) => !prev)}
-        >
-          {deleteMode
-            ? t("createQuizQuestions.cancelDeleteButtonText")
-            : t("createQuizQuestions.deleteButtonText")}
-        </Button>
+        {fields.length > 0 && (
+          <Button
+            variant="outlined"
+            sx={{ mb: 3 }}
+            color="error"
+            onClick={() => setDeleteMode((prev) => !prev)}
+          >
+            {deleteMode
+              ? t("createQuizQuestions.cancelDeleteButtonText")
+              : t("createQuizQuestions.deleteButtonText")}
+          </Button>
+        )}
       </div>
 
       {fields.map((field, index) => (
