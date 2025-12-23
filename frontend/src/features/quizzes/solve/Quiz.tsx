@@ -50,7 +50,7 @@ function Quiz({ quiz, review = false, isInstructor = false }: QuizProps) {
     if (review) return;
 
     (quiz as IQuizUpcoming).questions.forEach((q, qIndex) => {
-      setValue(`answers.${qIndex}.questionId`, q._id);
+      setValue(`answers.${qIndex}.questionId`, q._id as string);
     });
   }, [quiz, setValue, review]);
 
@@ -229,10 +229,14 @@ function Quiz({ quiz, review = false, isInstructor = false }: QuizProps) {
               (quiz as IQuizSubmissionPopulated).answers[qIndex]
                 .instructorNote && (
                 <Box className="mt-4 p-4 rounded-lg">
-                  <Typography variant="subtitle2" gutterBottom>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ color: "#5d9245b5", fontWeight: "bold" }}
+                    gutterBottom
+                  >
                     {t("textInstructorNote")}:
                   </Typography>
-                  <Typography variant="body2">
+                  <Typography variant="body1">
                     {
                       (quiz as IQuizSubmissionPopulated).answers[qIndex]
                         .instructorNote
@@ -289,18 +293,6 @@ function Quiz({ quiz, review = false, isInstructor = false }: QuizProps) {
             )}
           </Button>
         )}
-
-        {/* {review && isInstructor && (
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ mt: 2 }}
-            fullWidth
-            onClick={handleSubmit(instructorSubmit)}
-          >
-            Save Correction
-          </Button>
-        )} */}
       </CardContent>
     </Card>
   );

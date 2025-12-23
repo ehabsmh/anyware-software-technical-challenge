@@ -44,7 +44,8 @@ function useQuizzesColumns() {
       {
         id: "numQuestions",
         label: t("manageQuizzes.questionsNumTableHeader"),
-        width: "100",
+        width: "130",
+        align: "center",
       },
       {
         id: "actions",

@@ -43,7 +43,14 @@ function CourseOverview({
               >
                 {lesson?.title}
               </Typography>{" "}
-              — {lesson?.content}
+              —{" "}
+              <Typography
+                component="span"
+                variant="body2"
+                sx={{ whiteSpace: "pre-wrap" }}
+              >
+                {lesson?.content}
+              </Typography>
             </>
           }
         />

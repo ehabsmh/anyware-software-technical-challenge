@@ -3,7 +3,7 @@ import z from "zod";
 export const CreateLessonSchema = z.object({
   course: z.string().length(24, "Course ID must be 24 characters long"),
   title: z.string().max(70, "Title must be at most 70 characters long"),
-  content: z.string().max(500, "Content must be at most 500 characters long"),
+  content: z.string().max(1000, "Content must be at most 1000 characters long"),
   video: z.url("Video must be a valid URL").optional(),
   resources: z
     .array(

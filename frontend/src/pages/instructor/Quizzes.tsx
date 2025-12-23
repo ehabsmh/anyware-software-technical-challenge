@@ -33,7 +33,7 @@ function Quizzes() {
   }, [debouncedTopic, debouncedCourse]);
 
   return (
-    <>
+    <div className="h-[calc(100vh-86px)] overflow-y-auto md:p-8 bg-main">
       <div className="flex md:gap-16 gap-4 md:flex-row flex-col mb-4">
         <Search
           label="Search Topic"
@@ -60,7 +60,7 @@ function Quizzes() {
           onPageChange={(newPage) => setCurrentPage(newPage)}
         />
       )}
-    </>
+    </div>
   );
 }
 

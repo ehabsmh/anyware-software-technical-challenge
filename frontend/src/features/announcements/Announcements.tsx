@@ -20,7 +20,7 @@ function Announcements() {
           </p>
         </div>
         <Link
-          to="/announcements"
+          to="/student/announcements"
           className="text-gradient-2 font-bold text-sm px-4 py-2 rounded-lg shadow-md hover:opacity-95 transition"
         >
           {t("dashboard.announcements.viewAllButtonText")}

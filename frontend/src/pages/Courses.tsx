@@ -26,7 +26,8 @@ function Courses() {
   const { data, isLoading } = useCourses(
     selectedSemester,
     searchTerm,
-    currentPage
+    currentPage,
+    9
   );
 
   const { mutate: deleteCourse } = useDeleteCourse();

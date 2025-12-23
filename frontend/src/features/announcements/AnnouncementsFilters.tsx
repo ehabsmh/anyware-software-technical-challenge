@@ -79,7 +79,10 @@ export default function AnnouncementsFilters({
           },
         }}
         value={selectedSemesterId}
-        onChange={(e) => onSelectSemester(e.target.value)}
+        onChange={(e) => {
+          onSelectSemester(e.target.value);
+          onSelectCourse("");
+        }}
       >
         <MenuItem value="">
           {t("announcementsFilters.allSemestersLabel")}

@@ -97,7 +97,7 @@ function QuestionAccordion({
                 resetField(`questions.${qIndex}.options`);
                 resetField(`questions.${qIndex}.answer`);
               }}
-              error={!!watch(`questions.${qIndex}.type`)}
+              // error={!!watch(`questions.${qIndex}.type`)}
             >
               <MenuItem value="mcq">
                 {t("createQuizQuestions.question.multipleChoice")}
