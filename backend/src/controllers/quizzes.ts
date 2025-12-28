@@ -22,7 +22,8 @@ class QuizController {
       const quizObj = quiz.toObject();
 
       const safeQuestions = quizObj.questions.map(
-        ({ type, question, options }) => ({
+        ({ _id, type, question, options }) => ({
+          _id,
           type,
           question,
           options,
@@ -34,6 +35,7 @@ class QuizController {
         questions: safeQuestions,
       });
     }
+
     res.json(quiz);
   }
 

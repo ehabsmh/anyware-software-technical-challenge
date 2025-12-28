@@ -233,6 +233,7 @@ class QuizService {
     // Validate Ids
     if (!Types.ObjectId.isValid(quizId))
       throw new AppError("Invalid id for quiz", 400);
+
     if (!Types.ObjectId.isValid(userId))
       throw new AppError("Invalid id for user", 400);
 
