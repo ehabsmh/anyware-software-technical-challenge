@@ -8,7 +8,6 @@ import { useTranslation } from "react-i18next";
 import Form from "../../ui/Form";
 import { useSemesters } from "../../hooks/useSemesters";
 import FormSelect from "../../ui/FormSelect";
-import type { ISemesterCourses } from "../../interfaces/semester";
 
 type AnnouncementFormProps = {
   onSubmit: (data: Partial<IAnnouncement>) => void;
@@ -72,7 +71,7 @@ function AnnouncementForm({
         <FormSelect
           name="semester"
           label={t("createAnnouncementPage.semesterSelectLabel")}
-          options={(semesters as ISemesterCourses[]) ?? []}
+          options={semesters ?? []}
           getOptionLabel={(semester) => semester.name}
           getOptionValue={(semester) => semester._id}
         />
@@ -82,7 +81,7 @@ function AnnouncementForm({
         <FormSelect
           name="course"
           label={t("createAnnouncementPage.courseSelectLabel")}
-          options={(semester?.courses as ISemesterCourses["courses"]) ?? []}
+          options={semester?.courses ?? []}
           getOptionValue={(course) => course._id}
           getOptionLabel={(course) => course.name}
           getOptionAvatar={(course) => course.image}

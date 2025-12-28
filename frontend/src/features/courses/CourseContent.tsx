@@ -40,14 +40,16 @@ function CourseContent({
 
   const courseContentSidebar = (
     <List className="mt-2">
-      <Button
-        sx={{ mb: 3 }}
-        variant="outlined"
-        className="w-full  border-gradient-2! text-gradient-1! font-bold"
-        onClick={() => navigate(`/instructor/courses/${id}/add-lesson`)}
-      >
-        Add Lesson
-      </Button>
+      {userRole === "instructor" && (
+        <Button
+          sx={{ mb: 3 }}
+          variant="outlined"
+          className="w-full  border-gradient-2! text-gradient-1! font-bold"
+          onClick={() => navigate(`/instructor/courses/${id}/add-lesson`)}
+        >
+          Add Lesson
+        </Button>
+      )}
       {lessons.map((lesson) => {
         const isActive = lesson._id === selectedLessonId;
 

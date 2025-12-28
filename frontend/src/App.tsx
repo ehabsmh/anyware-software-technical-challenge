@@ -130,6 +130,15 @@ function App() {
                 element={<QuizSubmissions />}
               />
 
+              {/* <Route
+                path="/instructor/quizzes/solve/:id"
+                element={<SolveQuiz />}
+              /> */}
+              <Route
+                path="/instructor/quizzes/:quizId/submissions/:id"
+                element={<SolveQuiz review={true} />}
+              />
+
               <Route
                 path="/instructor/quizzes/edit-questions/:id"
                 element={<EditQuestions />}

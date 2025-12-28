@@ -1,4 +1,4 @@
-# Anyware Software - Full Stack Challenge
+# LMS - Coligo
 
 This project is a **Full Stack demo application** built for the Anyware Software technical challenge.
 
@@ -30,6 +30,122 @@ anyware-software-technical-challenge/
 │
 └── README.md
 ```
+
+---
+
+## ✨ Features
+
+### 🎓 Courses Management
+
+- Full CRUD for courses (Create, Edit, Delete, View)
+
+- Advanced filtering:
+
+  - Filter by semester
+
+  - Debounced search by course name
+
+  - Server-side pagination
+
+- Role-based access:
+
+  - Instructors manage courses
+
+  - Students have read-only access
+
+---
+
+### 📚 Course Lessons
+
+- Create lessons with:
+
+  - Title & description
+
+  - Video support (URL or uploaded file)
+
+  - Learning resources (name + URL)
+
+- Edit lesson content (excluding video replacement)
+
+- Course overview page displaying:
+
+  - Course & lesson details
+
+  - Instructor profile (avatar & name)
+
+- Resources section per lesson
+
+- Discussion UI (planned feature – coming soon)
+
+### 📢 Announcements
+
+Centralized announcements feed (no separate announcement pages)
+
+Full CRUD for instructors
+
+Advanced filters:
+
+By semester
+
+By course (unlocked after semester selection)
+
+Mine only
+
+Infinite scrolling with pagination
+
+Students can view announcements related only to their courses
+
+📝 Quizzes & Assessments
+
+Multi-step quiz creation:
+
+Quiz info (semester, course, topic, due date, time limit, total points)
+
+Dynamic question builder
+
+Supported question types:
+
+Multiple Choice (MCQ)
+
+True / False
+
+Short Answer
+
+Instructor quiz management:
+
+Draft & Publish workflow
+
+Edit quiz info or questions
+
+View and manage submissions
+
+Submissions review system:
+
+Automatic correction (MCQ & True/False)
+
+Manual correction for short answers
+
+Per-question feedback & scoring
+
+👥 Role-Based Experience
+
+Instructor Dashboard
+
+Courses, quizzes, announcements management
+
+Student Dashboard
+
+Latest announcements
+
+Upcoming quizzes and deadlines
+
+Strict permission enforcement across the system
+
+🌍 Internationalization
+
+Fully multilingual UI (English / Arabic)
+
+Dynamic language switching
 
 ---
 

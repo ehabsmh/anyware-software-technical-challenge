@@ -13,13 +13,12 @@ import {
   useDeleteAnnouncement,
 } from "../hooks/useAnnouncements";
 import AnnouncementsFilters from "../features/announcements/AnnouncementsFilters";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../store/hooks";
 import { Delete, EditNoteOutlined } from "@mui/icons-material";
 import { showAlert } from "../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import AnnouncementSkeleton from "../skeletons/announcementSkeleton";
-import AnnouncementFilterSkeleton from "../skeletons/announcementFilterSkeleton";
 
 function AnnouncementsPage() {
   const [selectedSemesterId, setSelectedSemesterId] = useState("");
@@ -37,7 +36,7 @@ function AnnouncementsPage() {
     courseId: selectedCourseId,
     mineOnly: mineOnly,
     page: currentPage,
-    limit: 4,
+    limit: 5,
   });
 
   const announcements = data?.items || [];
@@ -59,20 +58,20 @@ function AnnouncementsPage() {
     showAlert(() => deleteAnnouncement(announcementId));
   }
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedSemesterId, selectedCourseId, mineOnly]);
+
   return (
     <Box className="bg-main overflow-y-auto p-8 h-[calc(100vh-86px)]">
-      {announcementsLoading ? (
-        <AnnouncementFilterSkeleton />
-      ) : (
-        <AnnouncementsFilters
-          selectedSemesterId={selectedSemesterId}
-          onSelectSemester={onSelectSemester}
-          selectedCourseId={selectedCourseId}
-          onSelectCourse={onSelectCourse}
-          mineOnly={mineOnly}
-          onToggleMineOnly={onToggleMineOnly}
-        />
-      )}
+      <AnnouncementsFilters
+        selectedSemesterId={selectedSemesterId}
+        onSelectSemester={onSelectSemester}
+        selectedCourseId={selectedCourseId}
+        onSelectCourse={onSelectCourse}
+        mineOnly={mineOnly}
+        onToggleMineOnly={onToggleMineOnly}
+      />
       {/* Announcements list */}
       {announcementsLoading ? (
         [...Array(4)].map((_, i) => <AnnouncementSkeleton key={i} />)
@@ -86,11 +85,12 @@ function AnnouncementsPage() {
             >
               {user._id === a.author._id && (
                 <div className="flex gap-1.5 absolute -top-4 right-0">
-                  <div className="h-8 w-8 rounded-full bg-main flex justify-center items-center cursor-pointer">
+                  <div className="h-8 w-8 rounded-full bg-main flex justify-center items-center">
                     <EditNoteOutlined
                       sx={{
                         color: "#aba460",
                         transition: "color 0.3s",
+                        cursor: "pointer",
                         "&:hover": { color: "#feb806" },
                       }}
                       onClick={() =>
@@ -98,12 +98,13 @@ function AnnouncementsPage() {
                       }
                     />
                   </div>
-                  <div className="h-8 w-8 rounded-full bg-main flex justify-center items-center cursor-pointer">
+                  <div className="h-8 w-8 rounded-full bg-main flex justify-center items-center">
                     <Delete
                       sx={{
                         color: "#f75555",
                         transition: "color 0.3s",
                         fontSize: "20px",
+                        cursor: "pointer",
                         "&:hover": { color: "#ed1405" },
                       }}
                       onClick={() => onDeleteAnnouncement(a._id)}

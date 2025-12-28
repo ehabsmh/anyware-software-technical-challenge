@@ -22,7 +22,8 @@ class QuizController {
       const quizObj = quiz.toObject();
 
       const safeQuestions = quizObj.questions.map(
-        ({ type, question, options }) => ({
+        ({ _id, type, question, options }) => ({
+          _id,
           type,
           question,
           options,
@@ -34,6 +35,7 @@ class QuizController {
         questions: safeQuestions,
       });
     }
+
     res.json(quiz);
   }
 
@@ -59,9 +61,9 @@ class QuizController {
     res.json(quizzes);
   }
 
-  static async getUpcomingDue(req: Request, res: Response) {
-    const limit = req.query.limit ? Number(req.query.limit) : undefined;
-    const quizzes = await QuizService.getUpcomingDue(limit);
+  static async getUpcomingDue(req: CustomRequest, res: Response) {
+    const userId = req.user?._id;
+    const quizzes = await QuizService.getUpcomingDue(String(userId));
     res.json(quizzes);
   }
 

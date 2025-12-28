@@ -48,7 +48,7 @@ const quizSubmissionSchema = new Schema<IQuizSubmission>(
         isCorrect: {
           type: String,
           enum: ["true", "false", "partially"],
-          default: "false",
+          default: "partially",
         },
 
         points: { type: Number, default: 0 },

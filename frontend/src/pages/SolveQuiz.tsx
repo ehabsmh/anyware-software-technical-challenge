@@ -16,7 +16,7 @@ function SolveQuiz({ review = false }: { review?: boolean }) {
     (state) => state.user
   );
 
-  const { id: quizId } = useParams<{ id: string }>();
+  const { id: quizId } = useParams();
 
   const { data: currentQuiz, isLoading } = useQuiz(quizId || "", review);
 

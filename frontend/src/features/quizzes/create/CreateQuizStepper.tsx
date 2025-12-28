@@ -143,7 +143,7 @@ export default function CreateQuizStepper() {
         ))}
       </Stepper>
       <FormProvider {...methods}>
-        <Box className="bg-main xl:w-4/7 lg:w-4/5 mx-auto! w-full p-4">
+        <Box className="bg-main md:w-4/5 mx-auto! w-full p-4">
           <Card
             sx={{
               width: "100%",

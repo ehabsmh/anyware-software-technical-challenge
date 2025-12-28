@@ -53,7 +53,7 @@ class QuizService {
     return { items, total, page, limit, totalPages: Math.ceil(total / limit) };
   }
 
-  static async getUpcomingDue(limit = 2) {
+  static async getUpcomingDue(userId: string) {
     const today = new Date();
 
     const quizzes = await Quiz.find({
@@ -61,11 +61,24 @@ class QuizService {
       status: "published",
     })
       .sort({ dueDate: 1 })
-      .limit(limit)
       .populate("course", "_id name instructor")
       .populate("semester", "_id name startDate endDate");
 
-    return quizzes;
+    // Fetch submissions by the user for these quizzes
+    const submissions = await QuizSubmission.find({
+      userId,
+      quizId: { $in: quizzes.map((q) => q._id) },
+    }).select("quizId");
+
+    // Create a set of quiz IDs that the user has already solved
+    const solvedQuizIds = new Set(submissions.map((s) => s.quizId.toString()));
+
+    // Filter out quizzes that the user has already solved
+    const unsolvedQuizzes = quizzes.filter(
+      (quiz) => !solvedQuizIds.has(quiz._id.toString())
+    );
+
+    return unsolvedQuizzes;
   }
 
   static async getInstructorQuizzes(
@@ -220,6 +233,7 @@ class QuizService {
     // Validate Ids
     if (!Types.ObjectId.isValid(quizId))
       throw new AppError("Invalid id for quiz", 400);
+
     if (!Types.ObjectId.isValid(userId))
       throw new AppError("Invalid id for user", 400);
 

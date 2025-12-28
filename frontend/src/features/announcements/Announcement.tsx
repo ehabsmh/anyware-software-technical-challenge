@@ -23,7 +23,7 @@ function Announcement({ author, content, course }: AnnouncementProps) {
 
   return (
     <Card
-      className="!shadow-none mb-6"
+      className="mb-5"
       sx={{
         display: "flex",
         flexDirection: isMobileOrTablet ? "column" : "row",
@@ -36,8 +36,11 @@ function Announcement({ author, content, course }: AnnouncementProps) {
           display: "flex",
           alignItems: "center",
           mb: isMobileOrTablet ? 1 : 0,
+          width: isMobileOrTablet ? "100%" : "",
+          // backgroundColor: "red",
           minWidth: isMobileOrTablet ? "100%" : 200,
         }}
+        className="lg:w-44! 2xl:w-56!"
       >
         <CardHeader
           avatar={<Avatar src={author.avatar} />}
@@ -62,7 +65,6 @@ function Announcement({ author, content, course }: AnnouncementProps) {
           sx={{ p: 0 }}
         />
       </Box>
-
       <Divider
         orientation={isMobileOrTablet ? "horizontal" : "vertical"}
         flexItem

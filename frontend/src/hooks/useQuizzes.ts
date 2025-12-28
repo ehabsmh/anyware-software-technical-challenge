@@ -161,7 +161,12 @@ export function useSubmitQuiz() {
 
 export function useQuizSubmissions(quizId: string, page = 1, limit = 5) {
   return useQuery({
-    queryKey: ["quizSubmissions"],
+    queryKey: [
+      "quizSubmissions",
+      `quiz-id:${quizId}`,
+      `page:${page}`,
+      `limit:${limit}`,
+    ],
     queryFn: () => fetchQuizSubmissions(quizId, page, limit),
   });
 }
