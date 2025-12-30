@@ -1,10 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { IUser } from "../interfaces/user";
+import { IEnrollment } from "../interfaces/enrollment";
 
 export interface CustomRequest extends Request {
   user?: IUser;
+  enrollment?: IEnrollment;
+  enrolledCourseIds?: string[] | null;
 }
+
 function auth(req: CustomRequest, res: Response, next: NextFunction) {
   const token = req.cookies["Authorization"];
 

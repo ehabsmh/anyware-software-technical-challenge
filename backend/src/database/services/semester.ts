@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 import { Semester } from "../../models";
 import AppError from "../../utils/error";
 
@@ -15,12 +15,24 @@ class SemesterService {
     return semester;
   }
 
-  static async getSemesters(includeCourses = false) {
+  static async getSemesters(
+    includeCourses = false,
+    enrolledCourseIds: ObjectId[] | null
+  ) {
+    const filter: any = {};
+
+    if (enrolledCourseIds && enrolledCourseIds.length > 0) {
+      filter.courses = { $in: enrolledCourseIds };
+    }
     const semesters = includeCourses
-      ? await Semester.find({}, "name isCurrent courses").populate(
-          "courses",
-          "_id name image"
-        )
+      ? await Semester.find(filter, "name isCurrent courses").populate({
+          path: "courses",
+          select: "name image",
+          match:
+            enrolledCourseIds && enrolledCourseIds.length > 0
+              ? { _id: { $in: enrolledCourseIds } }
+              : {},
+        })
       : await Semester.find();
 
     return semesters;

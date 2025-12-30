@@ -4,16 +4,27 @@ import type { ICourse } from "../interfaces/course";
 import { useTranslation } from "react-i18next";
 import { useMemo, useState } from "react";
 import { collapseString, isStringCollapsable } from "../utils/helpers";
+import type { IEnrollment } from "../interfaces/enrollment";
 
 interface Props {
-  course: ICourse;
+  course: ICourse | IEnrollment["courseId"];
   role?: "instructor" | "student" | "admin";
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
   onView: (id: string) => void;
+  onEnroll?: (id: string) => void;
+  enrolledIds?: string[];
 }
 
-const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
+const CourseCard = ({
+  course,
+  role,
+  onEdit,
+  onDelete,
+  onView,
+  onEnroll,
+  enrolledIds,
+}: Props) => {
   const { t } = useTranslation();
 
   const [seeMore, setSeeMore] = useState(false);
@@ -39,13 +50,19 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
       <Card>
         <Box
           className="w-full! h-60! flex! justify-center! items-center! bg-gray-100! rounded-t-lg!"
+          sx={{
+            cursor:
+              enrolledIds?.includes(course._id) || role === "instructor"
+                ? "pointer"
+                : "default",
+          }}
           onClick={() => onView(course._id)}
         >
           <img
             loading="lazy"
             src={course.image || "/placeholder.png"}
             alt={course.name}
-            className="w-full h-full object-contain cursor-pointer"
+            className="w-full h-full object-contain"
           />
         </Box>
         <CardContent>
@@ -87,16 +104,28 @@ const CourseCard = ({ course, role, onEdit, onDelete, onView }: Props) => {
           )}
 
           {role === "student" && (
-            <Button
-              variant="contained"
-              sx={{
-                background: "linear-gradient(90deg, #12557b, #408391)",
-                mt: 2,
-              }}
-              onClick={() => onView?.(course._id.toString())}
-            >
-              {t("BtnTextViewCourse")}
-            </Button>
+            <div className="flex justify-center gap-2 mt-2">
+              {enrolledIds?.includes(course._id.toString()) && (
+                <Button
+                  variant="contained"
+                  sx={{
+                    background: "linear-gradient(90deg, #12557b, #408391)",
+                  }}
+                  onClick={() => onView?.(course._id.toString())}
+                >
+                  {t("BtnTextViewCourse")}
+                </Button>
+              )}
+              {!enrolledIds?.includes(course._id.toString()) && (
+                <Button
+                  variant="outlined"
+                  color="success"
+                  onClick={() => onEnroll?.(course._id.toString())}
+                >
+                  Enroll
+                </Button>
+              )}
+            </div>
           )}
         </CardContent>
       </Card>

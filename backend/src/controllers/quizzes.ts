@@ -14,11 +14,12 @@ class QuizController {
 
   static async getById(req: CustomRequest, res: Response) {
     const { id } = req.params;
-    const user = req.user;
+    const { _id: userId, role: userRole } = req.user!;
+    const enrolledCourseIds = req.enrolledCourseIds || [];
 
-    const quiz = await QuizService.getById(id!);
+    const quiz = await QuizService.getById(id!, enrolledCourseIds);
 
-    if (user?.role === "student") {
+    if (userRole === "student") {
       const quizObj = quiz.toObject();
 
       const safeQuestions = quizObj.questions.map(
@@ -62,8 +63,12 @@ class QuizController {
   }
 
   static async getUpcomingDue(req: CustomRequest, res: Response) {
-    const userId = req.user?._id;
-    const quizzes = await QuizService.getUpcomingDue(String(userId));
+    const userId = req.user?._id!;
+    const enrolledCourseIds = req.enrolledCourseIds || [];
+    const quizzes = await QuizService.getUpcomingDue(
+      userId.toString(),
+      enrolledCourseIds
+    );
     res.json(quizzes);
   }
 

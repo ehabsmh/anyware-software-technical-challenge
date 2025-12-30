@@ -47,11 +47,11 @@ class LessonService {
     return lessonsObj;
   }
 
-  static async getLessonById(lessonId: string) {
+  static async getLessonById(lessonId: string, courseId: string) {
     if (!Types.ObjectId.isValid(lessonId)) {
       throw new AppError("Invalid lesson ID", 400);
     }
-    const lesson = await Lesson.findById(lessonId);
+    const lesson = await Lesson.findOne({ _id: lessonId, course: courseId });
     if (!lesson) throw new AppError("Lesson not found", 404);
     return lesson;
   }

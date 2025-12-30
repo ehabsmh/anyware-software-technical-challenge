@@ -18,8 +18,15 @@ export async function fetchUpcomingQuizzes() {
 }
 
 export async function fetchQuizById(id: string) {
-  const { data }: { data: IQuizUpcoming } = await api.get(`/quizzes/${id}`);
-  return data;
+  try {
+    const { data }: { data: IQuizUpcoming } = await api.get(`/quizzes/${id}`);
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      console.log(error.response.data);
+      throw new Error(error.response.data.error || "Failed to fetch quiz.");
+    }
+  }
 }
 
 export async function fetchInstructorQuizzes(options: {

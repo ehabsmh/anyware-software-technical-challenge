@@ -5,11 +5,12 @@ import { validate, validateFormData } from "../middlewares/validation";
 import { CreateLessonSchema, UpdateLessonSchema } from "../validations/lesson";
 import { uploadVideos } from "../configs/multer.config";
 import { handleCreateLesson } from "../middlewares/detectRequestType";
+import { isEnrolled } from "../middlewares/enrollments";
 
 const lessonsRouter = express.Router();
 
-lessonsRouter.get("/", LessonsController.getLessonsByCourse);
-lessonsRouter.get("/:id", LessonsController.getLessonById);
+lessonsRouter.get("/", auth, isEnrolled, LessonsController.getLessonsByCourse);
+lessonsRouter.get("/:id", auth, isEnrolled, LessonsController.getLessonById);
 
 lessonsRouter.post(
   "/",

@@ -7,12 +7,13 @@ import AppError from "../utils/error";
 class LessonsController {
   static async getLessonById(req: Request, res: Response) {
     const lessonId = req.params.id;
+    const courseId = req.query.courseId as string;
 
     if (!lessonId) {
       return res.status(400).json({ error: "Lesson ID is required" });
     }
 
-    const lesson = await LessonService.getLessonById(lessonId);
+    const lesson = await LessonService.getLessonById(lessonId, courseId);
 
     res.json(lesson);
   }

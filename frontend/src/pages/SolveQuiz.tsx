@@ -18,7 +18,7 @@ function SolveQuiz({ review = false }: { review?: boolean }) {
 
   const { id: quizId } = useParams();
 
-  const { data: currentQuiz, isLoading } = useQuiz(quizId || "", review);
+  const { data: currentQuiz, isLoading, error } = useQuiz(quizId || "", review);
 
   const methods = useForm<ISubmitQuiz | ICorrectQuiz>({
     defaultValues:
@@ -41,6 +41,14 @@ function SolveQuiz({ review = false }: { review?: boolean }) {
       });
     }
   }, [review, currentQuiz, methods]);
+
+  if (error) {
+    return (
+      <section className="overflow-y-auto w-full h-[calc(100vh-86px)]">
+        <div className="text-red-500">Failed to load quiz data.</div>
+      </section>
+    );
+  }
 
   return (
     <section className="overflow-y-auto w-full h-[calc(100vh-86px)]">

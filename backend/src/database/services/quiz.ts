@@ -6,6 +6,7 @@ import { IQuestion, IQuiz, IQuizSubmission } from "../../interfaces/quiz";
 import CourseService from "./course";
 import UserService from "./user";
 import { pickAllowedFields } from "../../utils/helpers";
+import EnrollmentService from "./enrollment";
 
 class QuizService {
   static async getAll(page = 1, limit = 10) {
@@ -24,10 +25,13 @@ class QuizService {
     return { items, total, page, limit, totalPages: Math.ceil(total / limit) };
   }
 
-  static async getById(id: string) {
+  static async getById(id: string, enrolledCourseIds: string[]) {
     if (!Types.ObjectId.isValid(id)) throw new AppError("Invalid id", 400);
 
-    const quiz = await Quiz.findById(id)
+    const quiz = await Quiz.findOne({
+      _id: id,
+      course: { $in: enrolledCourseIds },
+    })
       .populate("course", "_id name instructor")
       .populate("semester", "_id name startDate endDate");
     if (!quiz) throw new AppError("Quiz not found", 404);
@@ -53,12 +57,13 @@ class QuizService {
     return { items, total, page, limit, totalPages: Math.ceil(total / limit) };
   }
 
-  static async getUpcomingDue(userId: string) {
+  static async getUpcomingDue(userId: string, enrolledCourseIds: string[]) {
     const today = new Date();
 
     const quizzes = await Quiz.find({
       dueDate: { $gte: today },
       status: "published",
+      course: { $in: enrolledCourseIds },
     })
       .sort({ dueDate: 1 })
       .populate("course", "_id name instructor")
@@ -77,6 +82,13 @@ class QuizService {
     const unsolvedQuizzes = quizzes.filter(
       (quiz) => !solvedQuizIds.has(quiz._id.toString())
     );
+
+    // // Get enrolled course ids
+
+    // // Filter quizzes by enrolled courses
+    // const studentQuizzes = unsolvedQuizzes.filter((quiz) =>
+    //   enrolledCourseIds.includes(quiz.course._id.toString())
+    // );
 
     return unsolvedQuizzes;
   }

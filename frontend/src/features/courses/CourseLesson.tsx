@@ -49,7 +49,10 @@ function CourseLesson({
     setTabValue(newValue);
   };
 
-  const { data: lesson, isLoading } = useCourseLesson(selectedLessonId!);
+  const { data: lesson, isLoading } = useCourseLesson(
+    selectedLessonId!,
+    courseOverview._id
+  );
 
   if (isLoading) {
     return <CourseLessonSkeleton />;

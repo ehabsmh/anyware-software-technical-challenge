@@ -6,27 +6,36 @@ import type {
   ICoursePopulated,
   ICourseResponse,
 } from "../interfaces/course";
+import type { IEnrollmentResponse } from "../interfaces/enrollment";
 
-export async function getCourses(
-  semesterId: string,
-  name?: string,
+type TypeGetCourses = {
+  semesterId: string;
+  name?: string;
+  page?: number;
+  limit?: number;
+  enrolledOnly?: boolean;
+};
+
+export async function getCourses({
+  semesterId,
+  name = "",
   page = 1,
-  limit = 8
-) {
-  try {
-    const { data }: { data: ICourseResponse } = await api.get(
-      `/courses/semester/${semesterId}`,
-      {
-        params: { page, limit, name },
-      }
-    );
-
+  limit = 8,
+  enrolledOnly,
+}: TypeGetCourses) {
+  if (enrolledOnly) {
+    const { data } = await api.get<IEnrollmentResponse>(`/enrollments`, {
+      params: { semester: semesterId, page, limit, name },
+    });
     return data;
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Failed to create course.");
-    }
   }
+
+  const { data } = await api.get<ICourseResponse>(
+    `/courses/semester/${semesterId}`,
+    { params: { page, limit, name } }
+  );
+
+  return data;
 }
 
 export const getCourseById = async (id: string) => {
@@ -120,3 +129,38 @@ export const deleteCourse = async (id: string) => {
     }
   }
 };
+
+export async function getEnrolledCoursesIds(semesterId: string) {
+  try {
+    const { data } = await api.get<string[]>("/enrollments/ids", {
+      params: { semesterId },
+    });
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(
+        error.response.data.error || "Failed to fetch enrolled courses IDs."
+      );
+    }
+  }
+}
+
+export async function enrollInCourse({
+  courseId,
+  semesterId,
+}: {
+  courseId: string;
+  semesterId: string;
+}) {
+  try {
+    const { data } = await api.post("/enrollments", { courseId, semesterId });
+
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(
+        error.response.data.error || "Failed to enroll in course."
+      );
+    }
+  }
+}

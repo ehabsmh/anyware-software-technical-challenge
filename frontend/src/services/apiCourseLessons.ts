@@ -24,10 +24,11 @@ export async function fetchCourseLessons(courseId: string) {
   }
 }
 
-export async function fetchLessonById(lessonId: string) {
+export async function fetchLessonById(lessonId: string, courseId: string) {
   try {
     const { data }: { data: ICourseLesson } = await api.get(
-      `courses/lessons/${lessonId}`
+      `courses/lessons/${lessonId}`,
+      { params: { courseId } }
     );
 
     return data;

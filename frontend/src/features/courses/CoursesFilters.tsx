@@ -3,17 +3,19 @@ import SearchCourses from "../../ui/SearchCourses";
 import { useTranslation } from "react-i18next";
 import { useSemesters } from "../../hooks/useSemesters";
 
+type CoursesFiltersProps = {
+  onSemesterChange: (semId: string) => void;
+  selectedSemester: string;
+  currSemesterLoading: boolean;
+  setSearchTerm: (term: string) => void;
+};
+
 function CoursesFilters({
   onSemesterChange,
   selectedSemester,
   currSemesterLoading,
   setSearchTerm,
-}: {
-  onSemesterChange: (semId: string) => void;
-  selectedSemester: string;
-  currSemesterLoading: boolean;
-  setSearchTerm: (term: string) => void;
-}) {
+}: CoursesFiltersProps) {
   const { t } = useTranslation();
 
   const { data: semesters } = useSemesters();

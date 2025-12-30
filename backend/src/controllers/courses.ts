@@ -8,27 +8,19 @@ import { IValidationError } from "../interfaces/validationError";
 class CourseController {
   static async getCoursesBySemester(req: CustomRequest, res: Response) {
     const { semesterId } = req.params;
-    const { page, limit, name } = req.query;
     const user = req.user;
 
     if (!semesterId) {
       throw new AppError("semester ID is required", 400);
     }
 
-    const parsedPage = Number(page);
-
-    if (page && isNaN(parsedPage)) {
-      throw new AppError("Page must be a valid number", 400);
-    }
-
-    const parsedLimit = Number(limit);
-    if (limit && isNaN(parsedLimit)) {
-      throw new AppError("Limit must be a valid number", 400);
-    }
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 9;
+    const name = req.query.name as string | undefined;
 
     const result = await CourseService.getCoursesBySemester(semesterId, {
-      page: parsedPage || 1,
-      limit: parsedLimit || 10,
+      page,
+      limit,
       name: typeof name === "string" ? name : undefined,
       instructorId:
         user?.role === "instructor" ? user._id.toString() : undefined,

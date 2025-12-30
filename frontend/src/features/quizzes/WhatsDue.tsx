@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 function WhatsDue() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { upcoming, loading, error } = useAppSelector(upcomingQuizzes);
+  const { upcoming, loading } = useAppSelector(upcomingQuizzes);
 
   useEffect(() => {
     dispatch(loadUpcomingQuizzes());
@@ -25,9 +25,9 @@ function WhatsDue() {
   if (loading) {
     return <div>Loading...</div>;
   }
-  if (error) {
-    return <div className="text-red-500">Failed to load data.</div>;
-  }
+  // if (error) {
+  //   return <div className="text-red-500">Failed to load data.</div>;
+  // }
 
   return (
     <Card className="shadow-md rounded-2xl">

@@ -22,10 +22,10 @@ export function useCourseLessons(courseId: string) {
   });
 }
 
-export function useCourseLesson(lessonId: string) {
+export function useCourseLesson(lessonId: string, courseId: string) {
   return useQuery({
     queryKey: ["courseLesson", lessonId],
-    queryFn: () => fetchLessonById(lessonId),
+    queryFn: () => fetchLessonById(lessonId, courseId),
     enabled: !!lessonId,
   });
 }

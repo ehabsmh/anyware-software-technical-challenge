@@ -4,6 +4,7 @@ import asyncHandler from "../utils/asyncHandler";
 import { auth, isInstructor, isStudent } from "../middlewares/auth";
 import { validate } from "../middlewares/validation";
 import { CreateAnnouncementSchema } from "../validations/announcement";
+import { attachEnrollments } from "../middlewares/enrollments";
 
 const announcementsRouter = express.Router();
 
@@ -11,9 +12,15 @@ announcementsRouter.get(
   "/latest",
   auth,
   isStudent,
+  attachEnrollments,
   asyncHandler(AnnouncementController.getLatest)
 );
-announcementsRouter.get("/", auth, asyncHandler(AnnouncementController.getAll));
+announcementsRouter.get(
+  "/",
+  auth,
+  attachEnrollments,
+  asyncHandler(AnnouncementController.getAll)
+);
 announcementsRouter.get(
   "/:id",
   auth,

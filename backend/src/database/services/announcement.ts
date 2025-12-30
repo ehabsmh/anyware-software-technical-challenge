@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 import { IAnnouncement } from "../../interfaces/announcement";
 import { Announcement } from "../../models";
 import AppError from "../../utils/error";
@@ -14,16 +14,29 @@ interface IAnnouncementsOptions {
 }
 
 class AnnouncementService {
-  static async getLatest(limit = 4) {
-    return Announcement.find({}, "-semester")
+  static async getLatest(limit = 4, enrolledCoursesIds: ObjectId[] = []) {
+    return Announcement.find(
+      { course: { $in: enrolledCoursesIds } },
+      "-semester"
+    )
       .sort({ createdAt: -1 })
       .limit(limit)
       .populate("course", "name instructor")
       .populate("author", "name avatar");
   }
 
-  static async getAll(user: IUser, options: IAnnouncementsOptions) {
-    const { semesterId, courseId, mineOnly, page = 1, limit = 8 } = options;
+  static async getAll(
+    user: IUser,
+    options: IAnnouncementsOptions & { enrolledCourseIds: ObjectId[] }
+  ) {
+    const {
+      semesterId,
+      courseId,
+      mineOnly,
+      enrolledCourseIds,
+      page = 1,
+      limit = 8,
+    } = options;
 
     const filter: any = {};
 
@@ -32,24 +45,31 @@ class AnnouncementService {
       if (currentSem) filter.semester = currentSem._id;
     }
 
-    // Student can filter by semesterId
+    if (semesterId) filter.semester = semesterId;
+
     if (user.role === "student") {
-      if (semesterId) filter.semester = semesterId;
-      if (courseId) filter.course = courseId;
+      filter.course = { $in: enrolledCourseIds };
     }
 
-    // Instructor can filter by mineOnly, courseId, semesterId
+    if (courseId) {
+      // Ensure the student is enrolled in the course
+      if (
+        user.role === "student" &&
+        !enrolledCourseIds.find(
+          (enrolledCourseId) =>
+            enrolledCourseId.toString() === courseId.toString()
+        )
+      ) {
+        return { items: [], total: 0, page, limit, totalPages: 0 };
+      }
+
+      filter.course = courseId;
+    }
+
     if (user.role === "instructor") {
-      if (semesterId) filter.semester = semesterId;
-      if (courseId) filter.course = courseId;
       if (mineOnly) {
         filter.author = user._id;
       }
-    }
-
-    if (user.role === "admin") {
-      if (courseId) filter.course = courseId;
-      if (semesterId) filter.semester = semesterId;
     }
 
     const skip = (page - 1) * limit;

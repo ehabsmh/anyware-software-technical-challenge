@@ -5,6 +5,15 @@ import Semester from "./semester";
 import Announcement from "./announcement";
 import Quiz from "./quiz";
 import User from "./user";
+import Enrollment from "./enrollment";
 import { QuizSubmission } from "./quiz";
 
-export { Course, Semester, Announcement, Quiz, User, QuizSubmission };
+export {
+  Course,
+  Semester,
+  Announcement,
+  Quiz,
+  User,
+  QuizSubmission,
+  Enrollment,
+};

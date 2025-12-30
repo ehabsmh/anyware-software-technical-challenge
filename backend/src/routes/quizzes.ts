@@ -2,6 +2,7 @@ import express from "express";
 import QuizController from "../controllers/quizzes";
 import asyncHandler from "../utils/asyncHandler";
 import { auth, isInstructor, isStudent } from "../middlewares/auth";
+import { attachEnrollments, isEnrolled } from "../middlewares/enrollments";
 
 const quizzesRouter = express.Router();
 
@@ -14,6 +15,7 @@ quizzesRouter.get(
   "/upcoming",
   auth,
   isStudent,
+  attachEnrollments,
   asyncHandler(QuizController.getUpcomingDue)
 );
 quizzesRouter.get(
@@ -23,7 +25,12 @@ quizzesRouter.get(
   asyncHandler(QuizController.getInstructorQuizzes)
 );
 
-quizzesRouter.get("/:id", auth, asyncHandler(QuizController.getById));
+quizzesRouter.get(
+  "/:id",
+  auth,
+  attachEnrollments,
+  asyncHandler(QuizController.getById)
+);
 
 quizzesRouter.get(
   "/:id/questions",
