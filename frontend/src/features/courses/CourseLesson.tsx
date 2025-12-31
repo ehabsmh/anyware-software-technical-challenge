@@ -8,6 +8,7 @@ import { ArrowCircleRight } from "@mui/icons-material";
 import type { ICourseLessonPopulated } from "../../interfaces/courseLesson";
 import { useTranslation } from "react-i18next";
 import CourseLessonSkeleton from "../../skeletons/CourseLessonSkeleton";
+import LessonNote from "../notes/LessonNote";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -94,6 +95,7 @@ function CourseLesson({
       >
         <Tab label={t("courseLessons.courseLesson.overviewTabLabel")} />
         <Tab label={t("courseLessons.courseLesson.resourcesTabLabel")} />
+        <Tab label="Note" />
         <Tab label={t("courseLessons.courseLesson.discussionTabLabel")} />
       </Tabs>
       <CustomTabPanel value={tabValue} index={0}>
@@ -103,6 +105,9 @@ function CourseLesson({
         <CourseResources lesson={lesson} />
       </CustomTabPanel>
       <CustomTabPanel value={tabValue} index={2}>
+        <LessonNote lesson={lesson} />
+      </CustomTabPanel>
+      <CustomTabPanel value={tabValue} index={3}>
         Soon
       </CustomTabPanel>
     </Box>

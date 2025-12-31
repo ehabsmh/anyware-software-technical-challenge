@@ -2,6 +2,7 @@ import { NextFunction, Response } from "express";
 import { CustomRequest } from "./auth";
 import { Enrollment } from "../models";
 import AppError from "../utils/error";
+import Lesson from "../models/lesson";
 
 export async function isEnrolled(
   req: CustomRequest,
@@ -15,8 +16,17 @@ export async function isEnrolled(
     return next();
   }
 
-  const courseId =
-    req.params.courseId || req.query.courseId || req.body.courseId;
+  let courseId = req.params.courseId || req.query.courseId || req.body.courseId;
+
+  if (!courseId && req.params.lessonId) {
+    const lesson = await Lesson.findById(req.params.lessonId).select("course");
+    if (!lesson) {
+      return next(new AppError("Lesson not found", 404));
+    }
+
+    courseId = lesson.course.toString();
+    req.courseId = courseId;
+  }
 
   if (!courseId) {
     return next(new AppError("Course ID is required", 400));

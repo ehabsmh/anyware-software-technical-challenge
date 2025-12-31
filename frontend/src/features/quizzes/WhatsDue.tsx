@@ -10,8 +10,8 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { loadUpcomingQuizzes, upcomingQuizzes } from "./quizzesSlice";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { format } from "date-fns/esm";
 import { useTranslation } from "react-i18next";
+import { format } from "date-fns";
 
 function WhatsDue() {
   const { t } = useTranslation();

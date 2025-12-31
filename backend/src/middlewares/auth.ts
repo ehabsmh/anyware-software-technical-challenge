@@ -7,6 +7,7 @@ export interface CustomRequest extends Request {
   user?: IUser;
   enrollment?: IEnrollment;
   enrolledCourseIds?: string[] | null;
+  courseId?: string;
 }
 
 function auth(req: CustomRequest, res: Response, next: NextFunction) {

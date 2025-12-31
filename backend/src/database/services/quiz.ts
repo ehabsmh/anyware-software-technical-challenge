@@ -2,11 +2,10 @@ import { Types } from "mongoose";
 import { Quiz, QuizSubmission, User } from "../../models";
 import AppError from "../../utils/error";
 import SemesterService from "./semester";
-import { IQuestion, IQuiz, IQuizSubmission } from "../../interfaces/quiz";
+import { IQuiz, IQuizSubmission } from "../../interfaces/quiz";
 import CourseService from "./course";
 import UserService from "./user";
 import { pickAllowedFields } from "../../utils/helpers";
-import EnrollmentService from "./enrollment";
 
 class QuizService {
   static async getAll(page = 1, limit = 10) {

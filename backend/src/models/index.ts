@@ -6,6 +6,7 @@ import Announcement from "./announcement";
 import Quiz from "./quiz";
 import User from "./user";
 import Enrollment from "./enrollment";
+import Note from "./note";
 import { QuizSubmission } from "./quiz";
 
 export {
@@ -16,4 +17,5 @@ export {
   User,
   QuizSubmission,
   Enrollment,
+  Note,
 };
