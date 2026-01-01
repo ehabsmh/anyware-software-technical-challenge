@@ -1,7 +1,6 @@
 import { GrAnnounce, GrDocumentTest, GrUserAdmin } from "react-icons/gr";
 import { LuLetterText } from "react-icons/lu";
-import { BiHome, BiChart } from "react-icons/bi";
-import { GiGraduateCap } from "react-icons/gi";
+import { BiHome } from "react-icons/bi";
 
 export const navConfig = {
   admin: [
@@ -58,7 +57,7 @@ export const navConfig = {
   ],
 
   instructor: [
-    { to: "/instructor/dashboard", label: "dashboard", icon: BiHome },
+    // { to: "/instructor/dashboard", label: "dashboard", icon: BiHome },
     {
       to: "/instructor/courses",
       label: "courses",
@@ -110,22 +109,22 @@ export const navConfig = {
         },
       ],
     },
-    {
-      to: "/instructor/students",
-      label: "students",
-      icon: GiGraduateCap,
-      subLinks: [
-        {
-          to: "/instructor/students/list",
-          label: "student list",
-          icon: GiGraduateCap,
-        },
-        {
-          to: "/instructor/students/performance",
-          label: "performance",
-          icon: BiChart,
-        },
-      ],
-    },
+    // {
+    //   to: "/instructor/students",
+    //   label: "students",
+    //   icon: GiGraduateCap,
+    //   subLinks: [
+    //     {
+    //       to: "/instructor/students/list",
+    //       label: "student list",
+    //       icon: GiGraduateCap,
+    //     },
+    //     {
+    //       to: "/instructor/students/performance",
+    //       label: "performance",
+    //       icon: BiChart,
+    //     },
+    //   ],
+    // },
   ],
 };

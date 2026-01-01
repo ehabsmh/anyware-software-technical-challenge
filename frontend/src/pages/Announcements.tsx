@@ -63,7 +63,7 @@ function AnnouncementsPage() {
   }, [selectedSemesterId, selectedCourseId, mineOnly]);
 
   return (
-    <Box className="bg-main overflow-y-auto p-8 h-[calc(100vh-86px)]">
+    <>
       <AnnouncementsFilters
         selectedSemesterId={selectedSemesterId}
         onSelectSemester={onSelectSemester}
@@ -160,7 +160,7 @@ function AnnouncementsPage() {
               </Stack>
             </div>
           )}
-    </Box>
+    </>
   );
 }
 

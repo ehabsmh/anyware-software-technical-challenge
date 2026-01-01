@@ -36,7 +36,7 @@ function Course() {
   }
 
   return (
-    <div className="flex gap-8 overflow-y-auto h-[calc(100vh-86px)]">
+    <div className="md:flex gap-8 md:w-full w-[calc(100vw-24px)]">
       <CourseContent
         lessons={courseLessons.lessons}
         selectedLessonId={selectedLessonId}

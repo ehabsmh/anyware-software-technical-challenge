@@ -3,9 +3,19 @@ import type { IQuizSubmissionPopulated } from "../interfaces/quiz";
 import { Avatar } from "@mui/material";
 import { Check, Clear } from "@mui/icons-material";
 import { useMemo } from "react";
+import { format } from "date-fns";
+import { enUS } from "date-fns/locale/en-US";
+import { arSA } from "date-fns/locale/ar-SA";
+import useLanguage from "./useLanguage";
+
+const localesMap = {
+  en: enUS,
+  ar: arSA,
+};
 
 function useQuizSubmissionsColumns() {
   const { t } = useTranslation();
+  const { language } = useLanguage();
 
   const columns = useMemo(
     () => [
@@ -26,7 +36,10 @@ function useQuizSubmissionsColumns() {
       {
         id: "submittedAt",
         label: t("quizSubmissions.submittedAtTableHeader"),
-        render: (row: IQuizSubmissionPopulated) => row.submittedAt,
+        render: (row: IQuizSubmissionPopulated) =>
+          format(new Date(row.submittedAt), "PPPppp", {
+            locale: localesMap[language],
+          }),
       },
       {
         id: "score",

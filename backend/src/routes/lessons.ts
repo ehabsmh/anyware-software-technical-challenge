@@ -10,7 +10,12 @@ import { isEnrolled } from "../middlewares/enrollments";
 const lessonsRouter = express.Router();
 
 lessonsRouter.get("/", auth, isEnrolled, LessonsController.getLessonsByCourse);
-lessonsRouter.get("/:id", auth, isEnrolled, LessonsController.getLessonById);
+lessonsRouter.get(
+  "/:lessonId",
+  auth,
+  isEnrolled,
+  LessonsController.getLessonById
+);
 
 lessonsRouter.post(
   "/",

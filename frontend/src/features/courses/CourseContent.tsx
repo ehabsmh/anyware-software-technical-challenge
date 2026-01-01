@@ -14,6 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDeleteCourseLesson } from "../../hooks/useCourseLessons";
 import { showAlert } from "../../utils/helpers";
 import { useAppSelector } from "../../store/hooks";
+import { useTranslation } from "react-i18next";
 
 type CourseContentProps = {
   lessons: ICourseLessonPopulated["lessons"];
@@ -30,6 +31,7 @@ function CourseContent({
   openDrawer,
   toggleDrawer,
 }: CourseContentProps) {
+  const { t } = useTranslation();
   const { role: userRole } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   const { id } = useParams();
@@ -47,7 +49,7 @@ function CourseContent({
           className="w-full  border-gradient-2! text-gradient-1! font-bold"
           onClick={() => navigate(`/instructor/courses/${id}/add-lesson`)}
         >
-          Add Lesson
+          {t("courseLessons.courseContent.addLessonButtonText")}
         </Button>
       )}
       {lessons.map((lesson) => {
@@ -101,10 +103,12 @@ function CourseContent({
               {/* Title */}
               <ListItemText
                 primary={lesson.title}
-                primaryTypographyProps={{
-                  fontSize: 14,
-                  fontWeight: isActive ? "bold" : "normal",
-                  noWrap: true,
+                slotProps={{
+                  primary: {
+                    fontSize: 14,
+                    fontWeight: isActive ? "bold" : "normal",
+                    noWrap: true,
+                  },
                 }}
               />
 

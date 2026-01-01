@@ -14,7 +14,7 @@ import QuizInfoForm from "./QuizInfoForm";
 import QuizQuestionsForm from "./QuizQuestionsForm";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { Box, Card } from "@mui/material";
+import { Box, Card, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
@@ -104,6 +104,7 @@ export default function CreateQuizStepper() {
     t("createQuizQuestions.titleCreateQuizQuestions"),
   ];
   const [activeStep, setActiveStep] = useState(0);
+  const isMobileOrTablet = useMediaQuery("(max-width:1024px)");
 
   const methods = useForm({
     defaultValues: {
@@ -143,13 +144,13 @@ export default function CreateQuizStepper() {
         ))}
       </Stepper>
       <FormProvider {...methods}>
-        <Box className="bg-main md:w-4/5 mx-auto! w-full p-4">
+        <Box className="bg-main md:w-4/5 mx-auto! w-full md:p-4">
           <Card
             sx={{
               width: "100%",
-              borderRadius: "16px",
+              borderRadius: "12px",
               boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
-              p: 4,
+              p: isMobileOrTablet ? 2 : 4,
             }}
           >
             <form className="flex flex-col gap-4">

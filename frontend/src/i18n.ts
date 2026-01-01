@@ -164,7 +164,12 @@ i18n.use(initReactI18next).init({
           courseLesson: {
             overviewTabLabel: "Overview",
             resourcesTabLabel: "Resources",
+            noResourcesText: "No resources for this lesson",
+            notesTabLabel: "Note",
             discussionTabLabel: "Discussion",
+            notePlaceholderText: "Write your notes for this lesson...",
+            noteUpdatedAtText: "Last updated",
+            savingNoteText: "Saving...",
           },
           lessonCreateForm: {
             titleAddLesson: "Add Lesson",
@@ -364,7 +369,12 @@ i18n.use(initReactI18next).init({
           courseLesson: {
             overviewTabLabel: "نظرة عامة",
             resourcesTabLabel: "الموارد",
+            noResourcesText: "لا توجد موارد لهذا الدرس",
+            notesTabLabel: "ملاحظات",
             discussionTabLabel: "المناقشة",
+            notePlaceholderText: "اكتب ملاحظاتك لهذا الدرس",
+            noteUpdatedAtText: "تم التعديل في",
+            savingNoteText: "...حفظ",
           },
           lessonCreateForm: {
             titleAddLesson: "إضافة درس",

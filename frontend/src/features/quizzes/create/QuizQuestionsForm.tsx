@@ -74,15 +74,21 @@ function QuizQuestionsForm({ editMode, onBack }: QuizQuestionsFormProps) {
       <div className="flex gap-5 items-center mb-4">
         <Button
           variant="contained"
+          className="md:text-normal text-xs!"
           onClick={() => append(initialQuestion)}
-          sx={{ mb: 3, backgroundColor: "var(--color-gradient-1)" }}
+          sx={{
+            mb: 3,
+            width: "100%",
+            backgroundColor: "var(--color-gradient-1)",
+          }}
         >
           {t("createQuizQuestions.addQuestionButtonText")}
         </Button>
         {fields.length > 0 && (
           <Button
             variant="outlined"
-            sx={{ mb: 3 }}
+            sx={{ mb: 3, width: "100%" }}
+            className="md:text-normal text-xs!"
             color="error"
             onClick={() => setDeleteMode((prev) => !prev)}
           >

@@ -34,7 +34,7 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
 
   const { courseId, lessonId } = useParams();
   const [videoType, setVideoType] = useState<"url" | "file">("url");
-  const { data: courseLesson } = useCourseLesson(lessonId!);
+  const { data: courseLesson } = useCourseLesson(lessonId!, courseId!);
 
   const defaultValuesCreate = {
     course: courseId!,
@@ -132,7 +132,7 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
   }, [courseLesson, editMode, lessonId, reset]);
 
   return (
-    <Box className="bg-main overflow-y-auto p-8 h-[calc(100vh-86px)]">
+    <>
       <Form
         title={
           editMode
@@ -337,7 +337,7 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
           )}
         </Button>
       </Form>
-    </Box>
+    </>
   );
 }
 

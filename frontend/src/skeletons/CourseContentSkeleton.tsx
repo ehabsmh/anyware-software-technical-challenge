@@ -14,16 +14,14 @@ function CourseContentSkeleton() {
       />
 
       {Array.from({ length: 15 }).map((_, index) => (
-        <>
-          <Skeleton
-            key={index}
-            height={30}
-            sx={{
-              mb: 1,
-              borderRadius: 2,
-            }}
-          />
-        </>
+        <Skeleton
+          key={index}
+          height={30}
+          sx={{
+            mb: 1,
+            borderRadius: 2,
+          }}
+        />
       ))}
     </Box>
   );

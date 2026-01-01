@@ -9,6 +9,7 @@ import type { ICourseLessonPopulated } from "../../interfaces/courseLesson";
 import { useTranslation } from "react-i18next";
 import CourseLessonSkeleton from "../../skeletons/CourseLessonSkeleton";
 import LessonNote from "../notes/LessonNote";
+import { useAppSelector } from "../../store/hooks";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -41,6 +42,8 @@ function CourseLesson({
   courseOverview: ICourseLessonPopulated["courseDetails"];
 }) {
   const { t } = useTranslation();
+
+  const { role: userRole } = useAppSelector((state) => state.user);
 
   const [tabValue, setTabValue] = useState(0);
 
@@ -88,14 +91,16 @@ function CourseLesson({
       <Tabs
         value={tabValue}
         onChange={onTabChange}
-        sx={{
-          backgroundColor: "white",
-          overflow: "hidden",
-        }}
+        variant={isMobile ? "scrollable" : "standard"}
+        scrollButtons
+        allowScrollButtonsMobile
+        aria-label="scrollable force tabs example"
       >
         <Tab label={t("courseLessons.courseLesson.overviewTabLabel")} />
         <Tab label={t("courseLessons.courseLesson.resourcesTabLabel")} />
-        <Tab label="Note" />
+        {userRole === "student" && (
+          <Tab label={t("courseLessons.courseLesson.notesTabLabel")} />
+        )}
         <Tab label={t("courseLessons.courseLesson.discussionTabLabel")} />
       </Tabs>
       <CustomTabPanel value={tabValue} index={0}>

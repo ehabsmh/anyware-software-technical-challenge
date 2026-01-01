@@ -6,7 +6,7 @@ import AppError from "../utils/error";
 
 class LessonsController {
   static async getLessonById(req: Request, res: Response) {
-    const lessonId = req.params.id;
+    const lessonId = req.params.lessonId;
     const courseId = req.query.courseId as string;
 
     if (!lessonId) {

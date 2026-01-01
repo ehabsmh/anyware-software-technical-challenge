@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../store/hooks";
 import { useTranslation } from "react-i18next";
@@ -27,7 +27,7 @@ function Courses() {
   }, [currSemester, semLoading]);
 
   return (
-    <Box className="bg-main overflow-y-auto p-8 h-[calc(100vh-86px)]">
+    <>
       {/* Header */}
       <Typography
         component="h2"
@@ -69,7 +69,7 @@ function Courses() {
           setCurrentPage={setCurrentPage}
         />
       )}
-    </Box>
+    </>
   );
 }
 

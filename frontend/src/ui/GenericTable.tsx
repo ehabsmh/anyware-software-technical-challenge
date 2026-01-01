@@ -34,9 +34,8 @@ export default function GenericTable<
     _id: string;
   }
 >({ columns, rows, page, limit, total, onPageChange, onClick }: Props<T>) {
-  // const navigate = useNavigate();
   return (
-    <Box className="w-screen lg:w-auto">
+    <Box className="w-[calc(100vw-24px)] md:w-full lg:w-auto">
       <Paper sx={{ width: "100%", mb: 2 }}>
         <TableContainer className="overflow-x-auto">
           <Table aria-labelledby="tableTitle">

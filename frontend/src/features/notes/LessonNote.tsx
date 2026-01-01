@@ -4,8 +4,20 @@ import type { ICourseLesson } from "../../interfaces/courseLesson";
 import { format } from "date-fns";
 import { useLessonNote, useSaveContent } from "../../hooks/useNotes";
 import { useDebounce } from "use-debounce";
+import { useTranslation } from "react-i18next";
+import useLanguage from "../../hooks/useLanguage";
+import { enUS } from "date-fns/locale/en-US";
+import { arSA } from "date-fns/locale/ar-SA";
+
+const localesMap = {
+  en: enUS,
+  ar: arSA,
+};
 
 function LessonNote({ lesson }: { lesson: ICourseLesson }) {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
+
   const [contentState, setContentState] = useState({
     lessonId: lesson._id,
     content: "",
@@ -20,7 +32,9 @@ function LessonNote({ lesson }: { lesson: ICourseLesson }) {
   const lessonNote = data?.data;
 
   const updatedAt = lessonNote?.updatedAt
-    ? format(new Date(lessonNote.updatedAt), "PPpp")
+    ? format(new Date(lessonNote.updatedAt), "PPpp", {
+        locale: localesMap[language],
+      })
     : null;
 
   // Update content when lessonNote changes
@@ -64,16 +78,6 @@ function LessonNote({ lesson }: { lesson: ICourseLesson }) {
         <Typography variant="subtitle1" fontWeight={600}>
           {lesson.order}. {lesson.title}
         </Typography>
-
-        {isPending ? (
-          <Typography variant="caption" color="text.secondary">
-            Saving...
-          </Typography>
-        ) : isSuccess || updatedAt ? (
-          <Typography variant="caption" color="text.secondary">
-            {updatedAt && `Last updated · ${updatedAt}`}
-          </Typography>
-        ) : null}
       </Box>
 
       <Box
@@ -85,7 +89,7 @@ function LessonNote({ lesson }: { lesson: ICourseLesson }) {
             content: e.target.value,
           })
         }
-        placeholder="Write your notes for this lesson..."
+        placeholder={t("courseLessons.courseLesson.notePlaceholderText")}
         sx={{
           width: "100%",
           minHeight: 180,
@@ -103,6 +107,18 @@ function LessonNote({ lesson }: { lesson: ICourseLesson }) {
           },
         }}
       />
+      {isPending ? (
+        <Typography variant="caption" color="text.secondary">
+          {t("courseLessons.courseLesson.savingNoteText")}
+        </Typography>
+      ) : isSuccess || updatedAt ? (
+        <Typography variant="caption" color="text.secondary">
+          {updatedAt &&
+            `${t(
+              "courseLessons.courseLesson.noteUpdatedAtText"
+            )} · ${updatedAt}`}
+        </Typography>
+      ) : null}
     </Paper>
   );
 }

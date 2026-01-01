@@ -47,7 +47,13 @@ const CourseCard = ({
       whileHover={{ scale: 1.03 }}
       className="w-full max-w-90"
     >
-      <Card>
+      <Card
+        sx={{
+          minHeight: "320px",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Box
           className="w-full! h-60! flex! justify-center! items-center! bg-gray-100! rounded-t-lg!"
           sx={{

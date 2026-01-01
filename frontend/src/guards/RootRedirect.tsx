@@ -9,6 +9,9 @@ function RootRedirect() {
   }
 
   if (isAuthenticated) {
+    if (role === "instructor") {
+      return <Navigate to="/instructor/courses/my-courses" replace />;
+    }
     return <Navigate to={`/${role}/dashboard`} replace />;
   }
 

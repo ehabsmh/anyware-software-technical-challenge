@@ -78,7 +78,6 @@ function App() {
 
             {/* instructors only */}
             <Route element={<RequireRole allowedRoles={["instructor"]} />}>
-              <Route path="/instructor/dashboard" element={<Dashboard />} />
               <Route
                 path="instructor/courses/create"
                 element={<CreateCourse />}

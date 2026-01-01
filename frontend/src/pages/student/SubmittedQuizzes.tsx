@@ -21,7 +21,7 @@ function SubmittedQuizzes() {
   const { page = 1, limit = 5, total = 0 } = data || {};
 
   return (
-    <div className="h-[calc(100vh-86px)] overflow-y-auto md:p-8 bg-main">
+    <>
       {studentSubmissionsLoading ? (
         <TableSkeleton columns={columns} rowsCount={5} limit={limit} />
       ) : (
@@ -37,7 +37,7 @@ function SubmittedQuizzes() {
           onClick={(rowId) => navigate(`/student/submitted-quizzes/${rowId}`)}
         />
       )}
-    </div>
+    </>
   );
 }
 

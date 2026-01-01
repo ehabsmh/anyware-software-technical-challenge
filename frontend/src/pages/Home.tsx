@@ -54,7 +54,7 @@ function Home() {
 
       // navigate to dashboard on successful login
       if (userRole === "student") navigate("/student/dashboard");
-      if (userRole === "instructor") navigate("/instructor/dashboard");
+      if (userRole === "instructor") navigate("/instructor/courses/my-courses");
     }
   }
 
