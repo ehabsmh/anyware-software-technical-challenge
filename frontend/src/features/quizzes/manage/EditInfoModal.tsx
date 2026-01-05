@@ -32,7 +32,6 @@ function EditInfoModal({
       topic: row.topic,
       dueDate: dueDate,
       timeLimitInMinutes: row.timeLimitInMinutes,
-      attemptsAllowed: row.attemptsAllowed,
       totalPoints: row.totalPoints,
     },
   });

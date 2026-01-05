@@ -49,7 +49,7 @@ function CourseLesson({
 
   const isMobile = useMediaQuery("(max-width:1024px)");
 
-  const onTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const onTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 

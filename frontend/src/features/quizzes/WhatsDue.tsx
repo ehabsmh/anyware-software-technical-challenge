@@ -6,21 +6,14 @@ import {
   Divider,
   Button,
 } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { loadUpcomingQuizzes, upcomingQuizzes } from "./quizzesSlice";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
+import { useUpcomingQuizzes } from "./useQuizzes";
 
 function WhatsDue() {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-  const { upcoming, loading } = useAppSelector(upcomingQuizzes);
-
-  useEffect(() => {
-    dispatch(loadUpcomingQuizzes());
-  }, [dispatch]);
+  const { data: upcoming, isLoading: loading } = useUpcomingQuizzes();
 
   if (loading) {
     return <div>Loading...</div>;
@@ -43,8 +36,8 @@ function WhatsDue() {
       />
       <Divider />
       <CardContent className="space-y-4">
-        {upcoming.length > 0 ? (
-          upcoming.map((item, idx) => (
+        {upcoming && upcoming.length > 0 ? (
+          upcoming?.map((item, idx) => (
             <div key={idx} className="flex flex-col">
               <Typography variant="body2" className="text-gray-500">
                 Course: {item.course.name}
