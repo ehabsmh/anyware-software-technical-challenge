@@ -98,8 +98,8 @@ class UsersController {
 
       res.cookie("Authorization", userToken, {
         httpOnly: true, // Prevent JavaScript access (XSS protection)
-        sameSite: "strict", // Prevent CSRF attacks
-        secure: process.env.ON_PRODUCTION === "true", // Use secure cookies in production
+        secure: true,
+        sameSite: "none",
         path: "/",
         maxAge: 7 * 24 * 60 * 60 * 1000, // Set expiration time (e.g., 7 days)
       });
@@ -177,6 +177,8 @@ class UsersController {
 
       res.cookie("Authorization", userToken, {
         httpOnly: true, // Prevent JavaScript access (XSS protection)
+        secure: true,
+        sameSite: "none",
         path: "/",
         maxAge: 7 * 24 * 60 * 60 * 1000, // Set expiration time (e.g., 7 days)
       });
@@ -195,8 +197,11 @@ class UsersController {
         return;
       }
       res.clearCookie("Authorization", {
+        httpOnly: true, // Prevent JavaScript access (XSS protection)
+        secure: true,
+        sameSite: "none",
         path: "/",
-        secure: process.env.ON_PRODUCTION === "true",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // Set expiration time (e.g., 7 days)
       });
       res.status(200).json({ message: "User logged out successfully." });
     } catch (err) {
