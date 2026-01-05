@@ -25,8 +25,9 @@ export async function getCourses({
 }: TypeGetCourses) {
   if (enrolledOnly) {
     const { data } = await api.get<IEnrollmentResponse>(`/enrollments`, {
-      params: { semester: semesterId, page, limit, name },
+      params: { semesterId, page, limit, name },
     });
+
     return data;
   }
 
@@ -53,7 +54,6 @@ export const getCourseById = async (id: string) => {
 
 export async function createCourse(payload: CourseFormValues) {
   try {
-    console.log("xx", payload);
     const formData = new FormData();
     formData.append("name", payload.name);
     formData.append("description", payload.description);
@@ -66,11 +66,8 @@ export async function createCourse(payload: CourseFormValues) {
     const { data }: { data: { success: boolean; course: ICourse } } =
       await api.post("/courses", formData);
 
-    console.log(data);
-
     return data;
   } catch (error) {
-    console.log(error);
     if (axios.isAxiosError(error) && error.response) {
       const response = error.response.data;
 
@@ -93,7 +90,6 @@ export const updateCourse = async (id: string, payload: CourseFormValues) => {
     if (payload.name) form.append("name", payload.name);
     if (payload.description) form.append("description", payload.description);
     if (payload.semester) form.append("semester", payload.semester);
-    console.log(payload.image);
     if (payload.image) form.append("image", payload.image);
 
     const { data }: { data: { status: string; data: ICourse } } =

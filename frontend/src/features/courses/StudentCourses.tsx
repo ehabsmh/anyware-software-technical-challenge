@@ -44,8 +44,7 @@ function StudentCourses({
   const { data: enrolledCoursesIds } =
     useGetEnrolledCoursesIds(selectedSemester);
 
-  const { mutate: enrollInCourse, isPending: isEnrolling } =
-    useEnrollInCourse();
+  const { mutate: enrollInCourse } = useEnrollInCourse();
 
   const showPagination = totalPages && totalPages > 1 && selectedSemester;
 

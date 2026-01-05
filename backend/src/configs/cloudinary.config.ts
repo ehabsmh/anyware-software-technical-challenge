@@ -2,6 +2,7 @@ import { v2 as cloudinary } from "cloudinary";
 import AppError from "../utils/error";
 import streamifier from "streamifier";
 import { unlink } from "fs";
+import log from "../utils/logger";
 
 cloudinary.config({
   secure: true,
@@ -42,8 +43,6 @@ export const uploadStream = async (file: any, folderName: string) => {
     ],
   });
 
-  console.log(url);
-
   return url;
 };
 
@@ -59,14 +58,15 @@ export const uploadVideo = async (filePath: string, folderName: string) => {
         if (error) {
           return reject(new AppError("Video upload failed", 500));
         }
+
+        unlink(filePath, (err) => {
+          if (err) {
+            log.error(`Error deleting temp video file: ${err}`);
+          }
+        });
+
         resolve(result?.secure_url);
       }
     );
-
-    unlink(filePath, (err) => {
-      if (err) {
-        console.error("Error deleting temp video file:", err);
-      }
-    });
   });
 };

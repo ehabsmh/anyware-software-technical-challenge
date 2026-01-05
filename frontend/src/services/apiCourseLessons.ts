@@ -48,10 +48,8 @@ export async function createCourseLesson(payload: ICreateCourseLessonPayload) {
       formData.append("course", payload.course);
       formData.append("title", payload.title);
       formData.append("content", payload.content);
-      console.log(payload.video);
       formData.append("video", payload.video);
       if (payload.resources) {
-        console.log(payload.resources);
         formData.append("resources", JSON.stringify(payload.resources));
       }
     }

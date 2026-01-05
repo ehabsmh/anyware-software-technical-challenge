@@ -102,8 +102,6 @@ function CreateCourseLesson({ editMode = false }: { editMode?: boolean }) {
     if (editMode) {
       const dataUpdate = data as IUpdateCourseLessonPayload;
 
-      console.log(dataUpdate);
-
       updateLesson(dataUpdate, {
         onError: (error) => {
           if (error.type === "validation") {

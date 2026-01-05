@@ -5,13 +5,12 @@ import bcrypt from "bcrypt";
 const userSchema = new Schema<IUser, UserModel, IUserMethods>(
   {
     name: String,
-    email: String,
+    email: { type: String, lowercase: true },
     password: String,
     phone: String,
     avatar: String,
     gender: String,
     role: { type: String, enum: ["student", "instructor", "admin"] },
-    enrolledIn: { type: [Schema.Types.ObjectId], ref: "Course" },
   },
   { timestamps: true }
 );

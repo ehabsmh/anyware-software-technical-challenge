@@ -36,18 +36,18 @@ function Course() {
   }
 
   return (
-    <div className="md:flex gap-8 md:w-full w-[calc(100vw-24px)]">
+    <div className="md:flex gap-5 md:w-full w-[calc(100vw-24px)]">
+      <CourseLesson
+        selectedLessonId={selectedLessonId}
+        toggleDrawer={toggleDrawer}
+        courseOverview={courseLessons.courseDetails}
+      />
       <CourseContent
         lessons={courseLessons.lessons}
         selectedLessonId={selectedLessonId}
         onSelect={setSelectedLessonId}
         openDrawer={openDrawer}
         toggleDrawer={toggleDrawer}
-      />
-      <CourseLesson
-        selectedLessonId={selectedLessonId}
-        toggleDrawer={toggleDrawer}
-        courseOverview={courseLessons.courseDetails}
       />
     </div>
   );

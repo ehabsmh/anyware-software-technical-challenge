@@ -1,4 +1,4 @@
-import { Avatar, MenuItem, TextField } from "@mui/material";
+import { Avatar, MenuItem, TextField, Typography } from "@mui/material";
 import { Controller, useFormContext } from "react-hook-form";
 
 type FormSelectProps<T> = {
@@ -50,7 +50,7 @@ function FormSelect<T>({
                     alt={label}
                     sx={{ borderRadius: 1 }}
                   />
-                  <p>{label}</p>
+                  <Typography sx={{ textWrap: "wrap" }}>{label}</Typography>
                 </div>
               </MenuItem>
             ) : (

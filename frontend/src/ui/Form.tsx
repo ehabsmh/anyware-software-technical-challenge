@@ -10,7 +10,7 @@ function Form({
   onSubmit?: () => void;
 }) {
   return (
-    <Box className="bg-main xl:w-4/7 lg:w-4/5 mx-auto p-4">
+    <Box className="bg-main lg:w-4/5 mx-auto">
       <Card
         sx={{
           width: "100%",

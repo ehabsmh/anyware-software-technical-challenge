@@ -23,7 +23,6 @@ export async function fetchQuizById(id: string) {
     return data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      console.log(error.response.data);
       throw new Error(error.response.data.error || "Failed to fetch quiz.");
     }
   }
@@ -43,7 +42,6 @@ export async function fetchInstructorQuizzes(options: {
         params: { page, limit, topic, course },
       }
     );
-    console.log(data);
     return data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -150,8 +148,6 @@ export async function submitQuiz(payload: ISubmitQuiz) {
     return data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      console.log(error.response.data);
-
       throw new Error(error.response.data.error || "Failed to submit quiz");
     }
   }
@@ -159,7 +155,6 @@ export async function submitQuiz(payload: ISubmitQuiz) {
 
 export async function createQuiz(quizData: IQuiz) {
   try {
-    console.log("data");
     const { data }: { data: IQuiz } = await api.post("/quizzes", quizData);
 
     return data;

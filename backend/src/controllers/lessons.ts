@@ -3,6 +3,7 @@ import LessonService from "../database/services/lesson";
 import { uploadVideo } from "../configs/cloudinary.config";
 import CourseService from "../database/services/course";
 import AppError from "../utils/error";
+import slugify from "slugify";
 
 class LessonsController {
   static async getLessonById(req: Request, res: Response) {
@@ -39,10 +40,14 @@ class LessonsController {
 
     let videoUrl = video;
 
+    const sluggedCourseName = slugify(courseName, {
+      lower: true,
+    });
+
     if (videoFile) {
       videoUrl = (await uploadVideo(
         videoFile.path,
-        `courses/${courseName}/lessons/`
+        `courses/${sluggedCourseName}/lessons/`
       )) as string;
     }
 

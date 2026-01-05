@@ -1,5 +1,4 @@
 import { Drawer, useMediaQuery } from "@mui/material";
-import { useParams, useLocation } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
 import NavbarList from "./NavbarList";
 
@@ -13,17 +12,11 @@ function Navbar({
   const isMobile = useMediaQuery("(max-width:1024px)");
   const userRole = useAppSelector((state) => state.user.role);
 
-  const { id } = useParams();
-  const { pathname } = useLocation();
-
   const handleItemClick = () => {
     toggleDrawer(false);
   };
 
-  const shouldRenderDrawer =
-    isMobile ||
-    pathname.includes(`/instructor/courses/my-courses/${id}`) ||
-    pathname.includes(`/student/courses/${id}`);
+  const shouldRenderDrawer = isMobile;
 
   return (
     <>
@@ -39,7 +32,7 @@ function Navbar({
           </nav>
         </Drawer>
       ) : (
-        <nav className="bg-linear-to-b from-gradient-1 to-gradient-2 h-screen w-60 text-white overflow-y-auto flex flex-col justify-between">
+        <nav className="bg-linear-to-b from-gradient-1 to-gradient-2 h-screen  text-white overflow-y-auto flex flex-col justify-between">
           <NavbarList onItemClick={handleItemClick} userRole={userRole} />
         </nav>
       )}

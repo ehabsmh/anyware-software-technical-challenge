@@ -64,15 +64,15 @@ function Announcement({ author, content, course }: AnnouncementProps) {
           }
           sx={{ p: 0 }}
         />
+        <Divider
+          orientation={isMobileOrTablet ? "horizontal" : "vertical"}
+          flexItem
+          sx={{
+            my: isMobileOrTablet ? 1 : 0,
+            mx: isMobileOrTablet ? 0 : 2,
+          }}
+        />
       </Box>
-      <Divider
-        orientation={isMobileOrTablet ? "horizontal" : "vertical"}
-        flexItem
-        sx={{
-          my: isMobileOrTablet ? 1 : 0,
-          mx: isMobileOrTablet ? 0 : 2,
-        }}
-      />
 
       <CardContent
         sx={{

@@ -10,3 +10,10 @@ export interface ISemester extends Document {
   updatedAt: Date;
   isCurrent: boolean;
 }
+
+export interface ISemesterPayload {
+  name: string;
+  startDate: Date;
+  endDate: Date;
+  isCurrent?: boolean;
+}

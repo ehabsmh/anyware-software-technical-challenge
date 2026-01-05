@@ -87,7 +87,6 @@ class CourseController {
     let imageUrl = "";
 
     if (image) imageUrl = await uploadStream(image, "courses");
-    console.log(imageUrl);
 
     if (!id) {
       throw new AppError("id is required", 400);

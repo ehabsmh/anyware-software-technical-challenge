@@ -39,7 +39,7 @@ export function applyValidationErrors<T extends FieldValues>(
   );
 }
 
-const COLLAPSE_LETTERS_LIMIT = 25;
+const COLLAPSE_LETTERS_LIMIT = 20;
 
 export function isStringCollapsable(str: string): boolean {
   return str.length > COLLAPSE_LETTERS_LIMIT;

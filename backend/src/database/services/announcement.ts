@@ -14,7 +14,7 @@ interface IAnnouncementsOptions {
 }
 
 class AnnouncementService {
-  static async getLatest(limit = 4, enrolledCoursesIds: ObjectId[] = []) {
+  static async getLatest(limit = 4, enrolledCoursesIds: string[] = []) {
     return Announcement.find(
       { course: { $in: enrolledCoursesIds } },
       "-semester"
@@ -27,7 +27,7 @@ class AnnouncementService {
 
   static async getAll(
     user: IUser,
-    options: IAnnouncementsOptions & { enrolledCourseIds: ObjectId[] }
+    options: IAnnouncementsOptions & { enrolledCourseIds: string[] }
   ) {
     const {
       semesterId,
@@ -40,10 +40,10 @@ class AnnouncementService {
 
     const filter: any = {};
 
-    if (!semesterId) {
-      const currentSem = await SemesterService.getCurrentSemester();
-      if (currentSem) filter.semester = currentSem._id;
-    }
+    // if (!semesterId) {
+    //   const currentSem = await SemesterService.getCurrentSemester();
+    //   if (currentSem) filter.semester = currentSem._id;
+    // }
 
     if (semesterId) filter.semester = semesterId;
 

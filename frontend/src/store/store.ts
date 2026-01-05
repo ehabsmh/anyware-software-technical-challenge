@@ -1,11 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import announcementsReducer from "../features/announcements/announcementsSlice";
 import { quizzesReducer } from "../features/quizzes/quizzesSlice";
 import { userReducer } from "../features/users/usersSlice";
 
 export const store = configureStore({
   reducer: {
-    announcements: announcementsReducer,
     quizzes: quizzesReducer,
     user: userReducer,
   },

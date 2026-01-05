@@ -109,10 +109,12 @@ function CourseLesson({
       <CustomTabPanel value={tabValue} index={1}>
         <CourseResources lesson={lesson} />
       </CustomTabPanel>
-      <CustomTabPanel value={tabValue} index={2}>
-        <LessonNote lesson={lesson} />
-      </CustomTabPanel>
-      <CustomTabPanel value={tabValue} index={3}>
+      {userRole === "student" && (
+        <CustomTabPanel value={tabValue} index={2}>
+          <LessonNote lesson={lesson} />
+        </CustomTabPanel>
+      )}
+      <CustomTabPanel value={tabValue} index={userRole === "student" ? 3 : 2}>
         Soon
       </CustomTabPanel>
     </Box>

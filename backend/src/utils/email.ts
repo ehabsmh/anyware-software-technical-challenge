@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import { IUser } from "../interfaces/user";
-import { Types } from "mongoose";
+import { Schema } from "mongoose";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const generateHtmlContent = (userId: Types.ObjectId) => {
+const generateHtmlContent = (userId: Schema.Types.ObjectId) => {
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -90,6 +90,4 @@ export async function sendEmail(to: IUser) {
     subject: "Welcome to Coligo", // Subject line
     html: generateHtmlContent(to._id),
   });
-
-  console.log("Message sent: %s", info.messageId);
 }

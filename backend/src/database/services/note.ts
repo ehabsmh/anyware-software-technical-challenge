@@ -33,9 +33,6 @@ class NoteService {
 
     if (!lesson) throw new AppError("Lesson not found", 404);
 
-    console.log("content:", content);
-    console.log("lesson-id:", lessonId);
-
     if (!content?.trim()) {
       return await Note.findOne({
         student: studentId,
@@ -58,8 +55,6 @@ class NoteService {
       },
       { new: true, upsert: true, runValidators: true }
     ).select("content updatedAt");
-
-    console.log("note:", note);
 
     return note;
   }

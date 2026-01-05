@@ -4,7 +4,6 @@ import { useAppSelector } from "../store/hooks";
 import { Language } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useLocation, useParams } from "react-router-dom";
 import useLanguage from "../hooks/useLanguage";
 
 function Header({
@@ -18,8 +17,6 @@ function Header({
     userName.split(" ")[0],
     userName.split(" ").at(-1),
   ];
-  const { id } = useParams();
-  const { pathname } = useLocation();
 
   const isMobile = useMediaQuery("(max-width:1024px)");
 
@@ -27,18 +24,8 @@ function Header({
 
   return (
     <header className="w-full bg-white/60 py-5">
-      <div className="flex items-center justify-between md:px-10 px-3">
+      <div className="flex items-center justify-between md:pr-3 px-3">
         {isMobile ? (
-          <div className="flex items-center gap-5">
-            <IconButton onClick={() => toggleDrawer(true)}>
-              <MenuIcon />
-            </IconButton>
-            <h1 className="font-bold lg:text-2xl text-md text-gray-500">
-              {t("header.welcome")}, {firstName} {lastName}
-            </h1>
-          </div>
-        ) : pathname.includes(`/instructor/courses/my-courses/${id}`) ||
-          pathname.includes(`/student/courses/${id}`) ? (
           <div className="flex items-center gap-5">
             <IconButton onClick={() => toggleDrawer(true)}>
               <MenuIcon />

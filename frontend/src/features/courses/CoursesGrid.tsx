@@ -8,22 +8,11 @@ type CoursesGridProps = {
 
 function CoursesGrid({ children, isLoading }: CoursesGridProps) {
   return (
-    <>
-      {/* Courses Grid */}
-      {isLoading && (
-        <Box className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {[...Array(6)].map((_, i) => (
-            <CourseSkeleton key={i} />
-          ))}
-        </Box>
-      )}
+    <Box className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      {isLoading && [...Array(6)].map((_, i) => <CourseSkeleton key={i} />)}
 
-      {!isLoading && (
-        <Box className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {children}
-        </Box>
-      )}
-    </>
+      {!isLoading && children}
+    </Box>
   );
 }
 

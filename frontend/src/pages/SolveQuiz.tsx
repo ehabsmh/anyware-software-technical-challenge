@@ -43,15 +43,11 @@ function SolveQuiz({ review = false }: { review?: boolean }) {
   }, [review, currentQuiz, methods]);
 
   if (error) {
-    return (
-      <section className="overflow-y-auto w-full h-[calc(100vh-86px)]">
-        <div className="text-red-500">Failed to load quiz data.</div>
-      </section>
-    );
+    return <div className="text-red-500">Failed to load quiz data.</div>;
   }
 
   return (
-    <section className="overflow-y-auto w-full h-[calc(100vh-86px)]">
+    <section>
       <Box className="max-w-4xl mx-auto mt-8">
         {isLoading ? (
           <div className="flex justify-center items-center">
