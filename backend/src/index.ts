@@ -17,10 +17,7 @@ export const {
 } = process.env;
 
 app.use(
-  cors({
-    origin: ["http://localhost:5173", "https://coligo-lms-app.vercel.app/"],
-    credentials: true,
-  })
+  cors({ origin: "https://coligo-lms-app.vercel.app", credentials: true })
 );
 app.use(express.json());
 app.use(cookieParser());
