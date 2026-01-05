@@ -9,7 +9,7 @@ import {
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
-import { useUpcomingQuizzes } from "./useQuizzes";
+import { useUpcomingQuizzes } from "../../hooks/useQuizzes";
 
 function WhatsDue() {
   const { t } = useTranslation();

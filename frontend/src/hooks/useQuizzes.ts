@@ -15,12 +15,20 @@ import {
   fetchQuizSubmissionById,
   fetchQuizSubmissions,
   fetchStudentSubmissions,
+  fetchUpcomingQuizzes,
   submitQuiz,
   updateQuizInfo,
   updateQuizQuestions,
 } from "../services/apiQuizzes";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+
+export function useUpcomingQuizzes() {
+  return useQuery({
+    queryKey: ["upcoming-quizzes"],
+    queryFn: () => fetchUpcomingQuizzes(),
+  });
+}
 
 export function useInstructorQuizzes(options: {
   page?: number;
