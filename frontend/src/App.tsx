@@ -22,6 +22,7 @@ const Dashboard = lazy(() => import("./pages/student/Dashboard"));
 const Announcements = lazy(() => import("./pages/Announcements"));
 const SolveQuiz = lazy(() => import("./pages/SolveQuiz"));
 const Courses = lazy(() => import("./pages/Courses"));
+const Course = lazy(() => import("./pages/Course"));
 const SubmittedQuizzes = lazy(() => import("./pages/student/SubmittedQuizzes"));
 const QuizSubmissions = lazy(
   () => import("./pages/instructor/QuizSubmissions")
@@ -91,7 +92,7 @@ function App() {
                 element={<SolveQuiz />}
               />
               <Route path="/student/courses" element={<Courses />} />
-              <Route path="/student/courses/:id" element={<Courses />} />
+              <Route path="/student/courses/:id" element={<Course />} />
             </Route>
 
             {/* Instructors */}
@@ -110,7 +111,7 @@ function App() {
               />
               <Route
                 path="/instructor/courses/my-courses/:id"
-                element={<Courses />}
+                element={<Course />}
               />
               <Route
                 path="/instructor/courses/:courseId/add-lesson"
