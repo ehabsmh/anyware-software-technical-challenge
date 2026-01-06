@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { IUser } from "../../interfaces/user";
-import { getMe, userLogin, userLogout } from "../../services/apiAuth";
+import {
+  getMe,
+  userDemoLogin,
+  userLogin,
+  userLogout,
+} from "../../services/apiAuth";
 import { toast } from "sonner";
 
 interface IUserInitialState extends IUser {
@@ -18,7 +23,6 @@ const initialState: IUserInitialState = {
   phone: "",
   role: "student",
   avatar: "",
-  enrolledIn: [],
   loading: false,
   error: null,
   isAuthenticated: false,
@@ -30,6 +34,14 @@ export const login = createAsyncThunk(
   "auth/login",
   async (userData: { email: string; password: string }) => {
     const { user } = await userLogin(userData);
+    return user;
+  }
+);
+
+export const demoLogin = createAsyncThunk(
+  "auth/login/demo/:role",
+  async (userRole: "student" | "instructor") => {
+    const { user } = await userDemoLogin(userRole);
     return user;
   }
 );
@@ -68,6 +80,29 @@ const userSlice = createSlice({
         state.isLoadingUser = false;
       })
       .addCase(login.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? null;
+        state.isAuthenticated = false;
+        state.isLoadingUser = false;
+        toast.error(state.error);
+      });
+
+    // Demo Login
+    builder
+      .addCase(demoLogin.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.isAuthenticated = false;
+        state.isLoadingUser = true;
+      })
+      .addCase(demoLogin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        Object.assign(state, action.payload);
+        state.isAuthenticated = true;
+        state.isLoadingUser = false;
+      })
+      .addCase(demoLogin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? null;
         state.isAuthenticated = false;

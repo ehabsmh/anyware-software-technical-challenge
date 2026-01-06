@@ -11,6 +11,7 @@ import {
 const authRouter = express.Router();
 
 authRouter.post("/login", UsersController.login);
+authRouter.post("/login/demo/:role", UsersController.demoLogin);
 authRouter.post(
   "/register",
   auth,

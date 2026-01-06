@@ -77,6 +77,11 @@ function AnnouncementsPage() {
         [...Array(4)].map((_, i) => <AnnouncementSkeleton key={i} />)
       ) : (
         <Box sx={{ width: "100%" }} className="space-y-10 mt-5">
+          {!announcementsLoading && !announcements.length && (
+            <Typography variant="body2" color="textSecondary">
+              No Announcements found or enroll in courses.
+            </Typography>
+          )}
           {announcements.map((a) => (
             <Card
               key={a._id}

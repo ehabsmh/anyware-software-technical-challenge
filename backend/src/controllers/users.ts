@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 import { CustomRequest } from "../middlewares/auth";
 import { uploadStream } from "../configs/cloudinary.config";
 import { JWT_SECRET_KEY } from "..";
+import UserService from "../database/services/user";
 
 class UsersController {
   static async register(req: CustomRequest, res: Response, next: NextFunction) {
@@ -138,60 +139,50 @@ class UsersController {
     const { email, password } = req.body;
     try {
       // fields required
-      if (!email) throw new AppError("Email is required", 400);
-      if (!password) throw new AppError("Password is required", 400);
+      if (!email || !password)
+        throw new AppError("Email and password required", 400);
 
       // find user
       const user = await User.findOne({ email });
-      if (!user) throw new AppError("Email is incorrect", 404);
 
       // if password is undefined, user should create a password.
-      if (!user.password) {
+      if (user && !user.password) {
         throw new AppError("Password is not set yet. Check your email.", 400);
       }
+
+      if (!user || !user.password)
+        throw new AppError("Invalid credentials", 400);
 
       // Compare password with the hashed one
       const isMatch = await user.comparePassword(password);
 
-      if (!isMatch) {
-        throw new AppError("Password is incorrect", 400);
-      }
+      if (!isMatch) throw new AppError("Invalid credentials", 400);
 
-      if (!JWT_SECRET_KEY) {
-        throw new AppError("Specify a JWT_SECRET_KEY in your env file.", 404);
-      }
-
-      // const userObj = user.toObject();
-      const userInfo = {
-        _id: user._id,
-        role: user.role,
-        avatar: user.avatar,
-        name: user.name,
-        gender: user.gender,
-        email: user.email,
-        phone: user.phone,
-        enrolledIn: user.enrolledIn,
-      };
-
-      const userToken = jwt.sign(userInfo, JWT_SECRET_KEY);
-
-      res.cookie("Authorization", userToken, {
-        httpOnly: true, // Prevent JavaScript access (XSS protection)
-        secure: true,
-        sameSite: "none",
-        path: "/",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // Set expiration time (e.g., 7 days)
-      });
+      const userInfo = await UserService.loginUser(user, res);
       res.json({ user: userInfo });
     } catch (err) {
       next(err);
     }
   }
 
+  static async demoLogin(req: Request, res: Response) {
+    const { role } = req.params;
+    if (!role) throw new AppError("role is required", 400);
+
+    if (!["student", "instructor"].includes(role)) {
+      throw new AppError("Invalid role", 400);
+    }
+
+    const user = await User.findOne({ role, isDemo: true });
+
+    if (!user) throw new AppError("Demo user not found", 404);
+
+    const userInfo = await UserService.loginUser(user, res);
+    res.json({ user: userInfo });
+  }
+
   static async logout(req: CustomRequest, res: Response): Promise<void> {
     try {
-      const user = req.user;
-
       if (!req.cookies.Authorization) {
         res.status(400).json({ message: "User is not logged in." });
         return;

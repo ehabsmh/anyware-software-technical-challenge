@@ -43,6 +43,11 @@ i18n.use(initReactI18next).init({
           noActionButtonText: "No",
           noCoursesFoundMessage: "No courses found.",
         },
+        coursesPage: {
+          enrolledBtnText: "Enrolled",
+          allCoursesBtnText: "All courses",
+          enrollCourseBtnText: "Enroll",
+        },
         createCoursePage: {
           titleNewCourse: "New Course",
           titleEditCourse: "Edit Course",
@@ -154,6 +159,11 @@ i18n.use(initReactI18next).init({
             title: "What's Due",
             description: "Upcoming quizzes for you",
             viewAllButtonText: "All",
+            startQuizBtnText: "Start Quiz",
+            noQuizzesBtnText: "No upcoming quizzes",
+            courseTitle: "Course",
+            topicTitle: "Topic",
+            dueDateTitle: "Due Date",
           },
         },
         courseLessons: {
@@ -248,6 +258,11 @@ i18n.use(initReactI18next).init({
           yesActionButtonText: "نعم",
           noActionButtonText: "لا",
           noCoursesFoundMessage: "لم يتم العثور على دورات.",
+        },
+        coursesPage: {
+          enrolledBtnText: "مسجل",
+          allCoursesBtnText: "الجميع",
+          enrollCourseBtnText: "سجل",
         },
         createCoursePage: {
           titleNewCourse: "دورة جديدة",
@@ -359,6 +374,11 @@ i18n.use(initReactI18next).init({
             title: "ما هو مستحق",
             description: "الاختبارات القادمة لك",
             viewAllButtonText: "الكل",
+            startQuizBtnText: "إبدأ الإمتحان",
+            noQuizzesBtnText: "لا توجد امتحانات حاليا",
+            courseTitle: "الدورة",
+            topicTitle: "الموضوع",
+            dueDateTitle: "اخر ميعاد",
           },
         },
         courseLessons: {

@@ -142,7 +142,7 @@ const CourseCard = ({
                     color="success"
                     onClick={() => onEnroll?.(course._id.toString())}
                   >
-                    Enroll
+                    {t("coursesPage.enrollCourseBtnText")}
                   </Button>
                 )}
               </>

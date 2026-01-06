@@ -67,10 +67,10 @@ function StudentCourses({
       {/* Toggle buttons */}
       <div className="flex gap-2 mb-4">
         <Button onClick={() => handleEnrollChange(true)} variant="contained">
-          Enrolled
+          {t("coursesPage.enrolledBtnText")}
         </Button>
         <Button onClick={() => handleEnrollChange(false)} variant="outlined">
-          All Courses
+          {t("coursesPage.allCoursesBtnText")}
         </Button>
       </div>
 

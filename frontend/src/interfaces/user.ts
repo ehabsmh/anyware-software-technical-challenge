@@ -6,5 +6,4 @@ export interface IUser {
   phone: string;
   role: "student" | "admin" | "instructor";
   avatar: string;
-  enrolledIn: string[];
 }

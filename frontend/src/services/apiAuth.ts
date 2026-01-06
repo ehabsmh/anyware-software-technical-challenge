@@ -13,6 +13,17 @@ export async function userLogin(userData: { email: string; password: string }) {
   }
 }
 
+export async function userDemoLogin(userRole: "student" | "instructor") {
+  try {
+    const { data } = await api.post(`/auth/login/demo/${userRole}`);
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error || "Failed to login");
+    }
+  }
+}
+
 export async function getMe() {
   try {
     const { data } = await api.get("/auth/me");

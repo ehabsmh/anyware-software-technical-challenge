@@ -5,5 +5,7 @@
 @theme {
   --color-main: #F7F6F6;
   --color-gradient-1: #12557b;
+  --color-gradient-1-hover: #094062;
   --color-gradient-2: #408391;
+  --color-gradient-2-hover: #2e6876;
 }

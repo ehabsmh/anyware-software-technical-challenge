@@ -14,10 +14,17 @@ export const {
   MONGO_URI,
   GMAIL_PASSWORD,
   CLOUDINARY_URL,
+  NODE_ENV,
 } = process.env;
 
 app.use(
-  cors({ origin: "https://coligo-lms-app.vercel.app", credentials: true })
+  cors({
+    origin:
+      NODE_ENV === "production"
+        ? "https://coligo-lms-app.vercel.app"
+        : "http://localhost:5173",
+    credentials: true,
+  })
 );
 app.use(express.json());
 app.use(cookieParser());
