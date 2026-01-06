@@ -13,6 +13,8 @@ import {
   Checkbox,
   Tooltip,
   CircularProgress,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import type {
   ICorrectQuiz,
@@ -36,6 +38,8 @@ type QuizProps = {
 
 function Quiz({ quiz, review = false, isInstructor = false }: QuizProps) {
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobileOrTablet = useMediaQuery(theme.breakpoints.down("md"));
   const { register, handleSubmit, control, setValue } = useFormContext<
     ISubmitQuiz | ICorrectQuiz
   >();
@@ -90,7 +94,10 @@ function Quiz({ quiz, review = false, isInstructor = false }: QuizProps) {
         sx={{
           "& .MuiCardHeader-title": {
             fontWeight: "bold",
-            fontSize: "1.5rem",
+            fontSize: isMobileOrTablet ? "1rem" : "1.3rem",
+          },
+          "& .MuiCardHeader-subheader": {
+            fontSize: isMobileOrTablet ? "0.8rem" : "1rem",
           },
         }}
       />
@@ -111,7 +118,12 @@ function Quiz({ quiz, review = false, isInstructor = false }: QuizProps) {
             </div>
             <div className="flex justify-between">
               <div className="flex items-center gap-4">
-                <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                <Typography
+                  sx={{ fontSize: isMobileOrTablet ? "0.77rem" : "0.9rem" }}
+                  variant="subtitle1"
+                  fontWeight="bold"
+                  gutterBottom
+                >
                   Q{qIndex + 1}. {q.question}
                 </Typography>
                 {review &&
@@ -160,9 +172,10 @@ function Quiz({ quiz, review = false, isInstructor = false }: QuizProps) {
                         return (
                           <div
                             key={oIndex}
-                            className="flex gap-2 items-center mb-2"
+                            className="flex gap-2 text-sm items-center mb-2"
                           >
                             <Checkbox
+                              size={isMobileOrTablet ? "small" : "medium"}
                               checked={checked}
                               disabled={review}
                               onChange={() => {
@@ -196,13 +209,17 @@ function Quiz({ quiz, review = false, isInstructor = false }: QuizProps) {
                     <RadioGroup {...field} value={field.value || ""}>
                       <FormControlLabel
                         value={"true"}
-                        control={<Radio />}
+                        control={
+                          <Radio size={isMobileOrTablet ? "small" : "medium"} />
+                        }
                         label="True"
                         disabled={review}
                       />
                       <FormControlLabel
                         value={"false"}
-                        control={<Radio />}
+                        control={
+                          <Radio size={isMobileOrTablet ? "small" : "medium"} />
+                        }
                         label="False"
                         disabled={review}
                       />
