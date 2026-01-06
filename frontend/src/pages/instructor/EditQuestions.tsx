@@ -5,7 +5,6 @@ import type { IQuiz } from "../../interfaces/quiz";
 import { fetchQuizQuestions } from "../../services/apiQuizzes";
 import { toast } from "sonner";
 import { useParams } from "react-router-dom";
-import { Box } from "@mui/material";
 
 function EditQuestions() {
   const [questions, setQuestions] = useState<IQuiz["questions"]>([]);
@@ -29,11 +28,9 @@ function EditQuestions() {
   }, [questions, methods]);
 
   return (
-    <Box className="bg-main overflow-y-auto p-8 h-[calc(100vh-86px)]">
-      <FormProvider {...methods}>
-        <QuizQuestionsForm editMode={true} />
-      </FormProvider>
-    </Box>
+    <FormProvider {...methods}>
+      <QuizQuestionsForm editMode={true} />
+    </FormProvider>
   );
 }
 
