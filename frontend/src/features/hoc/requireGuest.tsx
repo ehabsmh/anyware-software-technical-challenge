@@ -17,7 +17,10 @@ export const requireGuest = (Component: React.ComponentType) => {
     }
 
     if (isAuthenticated) {
-      return <Navigate to={`/${role}/dashboard`} />;
+      if (role === "instructor") {
+        return <Navigate to={`/instructor/courses/my-courses`} />;
+      }
+      return <Navigate to={`/${role}/dashboard`} replace />;
     }
 
     return <Component />;

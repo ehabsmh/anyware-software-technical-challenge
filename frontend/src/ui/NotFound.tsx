@@ -30,7 +30,7 @@ export default function NotFound() {
         homePath = "/admin/dashboard";
         break;
       case "instructor":
-        homePath = "/instructor/dashboard";
+        homePath = "/instructor/courses/my-courses";
         break;
       case "student":
         homePath = "/student/dashboard";
