@@ -15,6 +15,7 @@ import { useDeleteCourseLesson } from "../../hooks/useCourseLessons";
 import { showAlert } from "../../utils/helpers";
 import { useAppSelector } from "../../store/hooks";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 type CourseContentProps = {
   lessons: ICourseLessonPopulated["lessons"];
@@ -32,13 +33,22 @@ function CourseContent({
   toggleDrawer,
 }: CourseContentProps) {
   const { t } = useTranslation();
-  const { role: userRole } = useAppSelector((state) => state.user);
+  const { role: userRole, email: userEmail } = useAppSelector(
+    (state) => state.user
+  );
   const navigate = useNavigate();
   const { id } = useParams();
 
   const isMobile = useMediaQuery("(max-width:1024px)");
 
   const { mutate: deleteLesson } = useDeleteCourseLesson();
+
+  function onDeleteLesson(lessonId: string) {
+    if (userEmail === "instructor_demo@lms.com")
+      return toast.error("Course cannot be deleted, due to user restrictions!");
+
+    showAlert(() => deleteLesson(lessonId));
+  }
 
   const courseContentSidebar = (
     <Box
@@ -111,7 +121,7 @@ function CourseContent({
                   <Box
                     onClick={(e) => {
                       e.stopPropagation();
-                      showAlert(() => deleteLesson(lesson._id));
+                      onDeleteLesson(lesson._id);
                     }}
                     sx={{
                       width: "25px",
