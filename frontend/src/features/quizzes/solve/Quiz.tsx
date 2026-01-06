@@ -100,7 +100,7 @@ function Quiz({ quiz, review = false, isInstructor = false }: QuizProps) {
           <Box key={q._id} className="mb-6">
             <div className="bg-gradient-2 w-full h-[0.20rem] rounded-full relative mb-3">
               <div className="text-xs font-mono absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-red bg-white px-2 rounded-md">
-                <p className="font-bold text-lg text-gray-500">
+                <p className="font-bold text-xs md:text-sm text-gray-500">
                   {q.type === "true_false"
                     ? t("createQuizQuestions.question.trueFalse")
                     : q.type === "short_answer"
