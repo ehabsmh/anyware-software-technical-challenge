@@ -15,7 +15,6 @@ import { useDeleteCourseLesson } from "../../hooks/useCourseLessons";
 import { showAlert } from "../../utils/helpers";
 import { useAppSelector } from "../../store/hooks";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
 
 type CourseContentProps = {
   lessons: ICourseLessonPopulated["lessons"];
@@ -33,9 +32,8 @@ function CourseContent({
   toggleDrawer,
 }: CourseContentProps) {
   const { t } = useTranslation();
-  const { role: userRole, email: userEmail } = useAppSelector(
-    (state) => state.user
-  );
+  const { role: userRole } = useAppSelector((state) => state.user);
+
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -44,8 +42,8 @@ function CourseContent({
   const { mutate: deleteLesson } = useDeleteCourseLesson();
 
   function onDeleteLesson(lessonId: string) {
-    if (userEmail === "instructor_demo@lms.com")
-      return toast.error("Course cannot be deleted, due to user restrictions!");
+    // if (userEmail === "instructor_demo@lms.com")
+    //   return toast.error("Course cannot be deleted, due to user restrictions!");
 
     showAlert(() => deleteLesson(lessonId));
   }

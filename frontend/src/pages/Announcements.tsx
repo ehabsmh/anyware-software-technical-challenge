@@ -19,7 +19,7 @@ import { Delete, EditNoteOutlined } from "@mui/icons-material";
 import { showAlert } from "../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import AnnouncementSkeleton from "../skeletons/announcementSkeleton";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 
 function AnnouncementsPage() {
   const [selectedSemesterId, setSelectedSemesterId] = useState("");
@@ -56,8 +56,8 @@ function AnnouncementsPage() {
   }
 
   function onDeleteAnnouncement(announcementId: string) {
-    if (user.email === "instructor_demo@lms.com")
-      return toast.error("Course cannot be deleted, due to user restrictions!");
+    // if (user.email === "instructor_demo@lms.com")
+    //   return toast.error("Course cannot be deleted, due to user restrictions!");
 
     showAlert(() => deleteAnnouncement(announcementId));
   }

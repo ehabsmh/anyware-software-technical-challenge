@@ -6,8 +6,6 @@ import CourseCard from "../../ui/CourseCard";
 import { Box, Pagination, Stack, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import type { ICourse } from "../../interfaces/course";
-import { useAppSelector } from "../../store/hooks";
-import { toast } from "sonner";
 
 type InstructorCoursesProps = {
   selectedSemester: string;
@@ -35,7 +33,7 @@ function InstructorCourses({
   const items = data?.data.items || [];
   const { totalPages } = data?.data || {};
   const showPagination = totalPages && totalPages > 1 && selectedSemester;
-  const { email: userEmail } = useAppSelector((state) => state.user);
+  // const { email: userEmail } = useAppSelector((state) => state.user);
 
   const { mutate: deleteCourse } = useDeleteCourse();
 
@@ -44,8 +42,8 @@ function InstructorCourses({
   }
 
   function handleDeleteCourse(courseId: string) {
-    if (userEmail === "instructor_demo@lms.com")
-      return toast.error("Course cannot be deleted, due to user restrictions!");
+    // if (userEmail === "instructor_demo@lms.com")
+    //   return toast.error("Course cannot be deleted, due to user restrictions!");
     showAlert(() => deleteCourse(courseId));
   }
 
