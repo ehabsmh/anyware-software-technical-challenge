@@ -24,7 +24,7 @@ app.use(
         ? "https://coligo-lms-app.vercel.app"
         : "http://localhost:5173",
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 app.use(cookieParser());
@@ -38,15 +38,14 @@ app.get("/api/health", (req, res) => {
 
 app.use(errorHandler);
 
-const startServer = async () => {
-  try {
-    await connectDB(MONGO_URI);
-    app.listen(PORT || 5000, () =>
-      log.success(`Server running on port ${PORT || 5000}`)
-    );
-  } catch (err) {
-    log.error(`Failed to start server: ${err}`);
-  }
-};
+function startServer() {
+  app.listen(PORT || 5000, () => {
+    log.success(`Server running on port ${PORT || 5000}`);
+  });
+
+  connectDB(MONGO_URI)
+    .then(() => log.success("DB connected"))
+    .catch((err) => log.error(`DB connection failed: ${err}`));
+}
 
 startServer();
